@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\UI">
+      <UniqueIdentifier>{161c90e2-c4f3-4781-8593-df22935f34f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\program">
+      <UniqueIdentifier>{dae7bcb6-388b-4426-9ab1-68de0bfa872b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\program\textAny">
+      <UniqueIdentifier>{4615aa9f-2d44-4db2-b60f-97c0210e2fe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Shader">
+      <UniqueIdentifier>{bb3cc2a1-06cc-4a9a-9df7-dd6d3c672916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Controls">
+      <UniqueIdentifier>{1504a6ad-871c-4e3a-a041-d791783dc4da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\UI">
+      <UniqueIdentifier>{8e6346d4-3e4f-41dc-a347-3744ca9aff51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Engine">
+      <UniqueIdentifier>{09ddb3fc-224f-436e-9d24-9f7bcc56605a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Contorls">
+      <UniqueIdentifier>{9a0f4bd1-cf33-4822-ad6f-3b13fdcf6d0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Engine">
+      <UniqueIdentifier>{e6eb2ea6-4321-45c9-bad1-666f7736f00f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MVVM">
+      <UniqueIdentifier>{08cec246-5709-429c-9dcf-9f3fac704af0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Events">
+      <UniqueIdentifier>{6479d6d0-a82c-4c6d-b7ea-3aae8d0e7032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Mathematics">
+      <UniqueIdentifier>{ddebb810-873e-4b1f-9dad-bc37d1090f6e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UIElement.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentControl.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlStyle.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIElementCollection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EControl.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>源文件\Contorls</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>源文件\Contorls</Filter>
+    </ClCompile>
+    <ClCompile Include="PaintDevice.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="TedPanel.cpp">
+      <Filter>源文件\Contorls</Filter>
+    </ClCompile>
+    <ClCompile Include="RowDefinition.cpp">
+      <Filter>源文件\Contorls</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>源文件\Contorls</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderEngine.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="TextAnalysis.h">
+      <Filter>头文件\program\textAny</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentControl.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualTree.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElementCollection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlStyle.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="castd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="EControl.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PaintDevice.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderEngine.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="RowDefinition.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Coordinate.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="TedPanel.h">
+      <Filter>头文件\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Draw.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Property.hpp">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Changed.h">
+      <Filter>头文件\MVVM</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>头文件\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders.sha">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>
