@@ -18,7 +18,8 @@ int main() {
 
 	if (CAIEngine.initial())
 		return -1;
-	MainWindow mWindow;
+	MainWindow mWindow(1000,800);
+	mWindow.init();
 	CAIEngine.addRenderWindow(&mWindow);
 	CAIEngine.start();
 	return 0;

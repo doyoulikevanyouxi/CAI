@@ -69,6 +69,7 @@ bool RenderEngine::windowClose(GLFWwindow* win)
 void RenderEngine::activateWindow(GLFWwindow* win)
 {
 	glfwMakeContextCurrent(win);
+	
 }
 
 void RenderEngine::addRenderWindow(Window* win)
@@ -96,7 +97,7 @@ void RenderEngine::renderLoop(void)
 		return;
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.f,0.f,0.f,0.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 		

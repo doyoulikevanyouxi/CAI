@@ -13,11 +13,13 @@ class Window : public ContentControl
 {
 public:
 	Window() noexcept;
+	Window(int width, int height) noexcept;
 	virtual ~Window() noexcept;
 public:
 	void activited();
 	void show();
 	GLFWwindow* getWinHD() noexcept;
+	void init() noexcept;
 public:
 	void setSize(int width, int height) noexcept;
 protected:

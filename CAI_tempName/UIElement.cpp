@@ -58,39 +58,39 @@ void UIElement::setParent(UIElement* parent)
 void UIElement::setHeight(float value)
 {
 	height.set(value);
-	setActualHeight();
+	//setActualHeight();
 	
 }
 
 void UIElement::setWidth(float value)
 {
 	width.set(value);
-	setActualWidth();
+	//setActualWidth();
 	
 }
 
 void UIElement::setMinHeight(float value)
 {
 	minHeight.set(value);
-	setActualHeight();
+	//setActualHeight();
 }
 
 void UIElement::setMinWidth(float value)
 {
 	minWidth.set(value);
-	setActualWidth();
+	//setActualWidth();
 }
 
 void UIElement::setMaxHeight(float value)
 {
 	maxHeight.set(value);
-	setActualHeight();
+	//setActualHeight();
 }
 
 void UIElement::setMaxWidth(float value)
 {
 	maxWidth.set(value);
-	setActualWidth();
+	//setActualWidth();
 }
 
 void UIElement::setBackground(const Draw::Brush& color)
@@ -109,6 +109,12 @@ Size UIElement::measure(const Size& size) noexcept
 {
 	setActualHeight();
 	setActualWidth();
+	if (actualHeight > size.Height())
+		actualHeight = size.Height();
+	if (actualWidth >= size.Width())
+		actualWidth = size.Width();
+	style->size.Width() = actualWidth;
+	style->size.Height() = actualHeight;
 	//接着将根据给定的父变换矩阵来设置控件自身的变换矩阵
 	Math::SquareMatrix<4> tMatrix = {
 									1,0,0,size.X(),
@@ -154,7 +160,6 @@ void UIElement::setActualWidth()
 		actualWidth = minWidth.get();
 	else if (actualWidth > maxWidth.get() && !maxWidth.isInvalid())
 		actualWidth = maxWidth.get();
-	style->size.Width() = actualWidth;
 }
 
 void UIElement::setActualHeight()
@@ -182,7 +187,11 @@ void UIElement::setActualHeight()
 		actualHeight = minHeight.get();
 	else if (actualHeight > maxHeight.get() && !maxHeight.isInvalid())
 		actualHeight = maxHeight.get();
-	style->size.Height() = actualHeight;
+}
+
+Size& UIElement::getSize()
+{
+	return style->size;
 }
 
 

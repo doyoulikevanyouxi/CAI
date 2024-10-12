@@ -17,7 +17,6 @@ void TedPanel::aeasure(const Size& size) noexcept
 	for (auto& child : style->visualTree) {
 		transMatrix[0][3] = xIncrement;
 		tmp.TransMatrix() = size.TransMatrix()* transMatrix;
-		//tmp.setX(size.X() + xIncrement);
 		child->beginInit(tmp);
 		xIncrement += child->getActualWidth()+10;
 	}

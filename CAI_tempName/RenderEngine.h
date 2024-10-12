@@ -8,6 +8,7 @@
 #pragma once
 #include "Object.h"
 #include <vector>
+#include "Event.h"
 struct GLFWwindow;
 class Shader;
 class Window;

@@ -1,58 +1,55 @@
 #pragma once
 #include"Window.h"
 #include"Button.h"
-#include "TedPanel.h"
+#include "Grid.h"
 static int w = 100;
 static int h = 40;
 class MainWindow : public Window
 {
 public:
-	MainWindow() noexcept {
-
-		/*TedPanel* P = new TedPanel();
-		Button* bt1 = new Button();
-		Button* bt2 = new Button();
-		bt1->setHeight(30);
-		bt1->setWidth(100);
-		bt1->setBackground(Brush(0xff00ff00));
-		bt2->setHeight(30);
-		bt2->setWidth(100);
-		bt2->setBackground(Brush(0xff00ff00));
-		P->addChild(*bt1);
-		P->addChild(*bt2);
-		setContent(*P);*/
+	MainWindow(int width=800,int height=600) noexcept :Window(width, height) {
 		initializeComponents();
-		
-
+		/*Grid* grid = new Grid();
+		grid->addRowDefinition(RowDefinition());
+		grid->addRowDefinition(RowDefinition());
+		grid->addRowDefinition(RowDefinition());
+		grid->addColumDefinition(ColumDefinition());
+		grid->addColumDefinition(ColumDefinition());
+		grid->addColumDefinition(ColumDefinition());
+		grid->setBackground(Brush(0xFFF5F5F5));
+		setContent(*grid);
+		Grid* grid2 = new Grid();
+		Grid* grid3 = new Grid();
+		Grid* grid4 = new Grid();
+		Grid* grid5 = new Grid();
+		Grid* grid6 = new Grid();
+		Grid* grid7 = new Grid();
+		grid2->setBackground(Brush(0xffff0000));
+		grid3->setBackground(Brush(0xff00ff00));
+		grid4->setBackground(Brush(0xff0000ff));
+		grid5->setBackground(Brush(0xffffff00));
+		grid6->setBackground(Brush(0xff00ffff));
+		grid7->setBackground(Brush(0xffff00ff));
+		grid->addChild(*grid2);
+		grid->addChild(*grid3);
+		grid->addChild(*grid4);
+		grid->addChild(*grid5);
+		grid->addChild(*grid6);
+		grid->addChild(*grid7);
+		grid->setRC(grid2, 0, 0);
+		grid->setRC(grid3, 0, 1);
+		grid->setRC(grid4, 0, 2);
+		grid->setRC(grid5, 1, 0);
+		grid->setRC(grid6, 1, 1);
+		grid->setRC(grid7, 1, 2);*/
+	
 	}
 	~MainWindow() noexcept {
 	}
 private:
 	void initializeComponents(void) {
+		//以下设置每个窗口都会有一个，其目的是将坐标映射到标准设备坐标
 		name = "MainWindow";
-		setSize(1000,800 );
-		float DPH = 1 / height.get()*2;
-		float DPW = 1 / width.get()*2;
-
-		//原点坐标平移矩阵
-		Math::SquareMatrix<4> moveMatrix = {
-			1,0,0,-width.get() / 2,
-			0,1,0,-height.get() / 2,
-			0,0,1,0,
-			0,0,0,1
-		};
-		//长度映射矩阵
-		Math::SquareMatrix<4> scalMatrix = {
-			DPW,0,0,0,
-			0,DPH,0,0,
-			0,0,1,0,
-			0,0,0,1
-		};
-		
-		Size size(0,0,width.get(),height.get(),DPH,DPW);
-		size.TransMatrix()=scalMatrix*moveMatrix;
-		beginInit(size);
-		int d = 10;
 	}
 	
 };

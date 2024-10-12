@@ -19,6 +19,12 @@ Window::Window() noexcept :winHd(NULL)
 	style->getData().setInvalid(true);
 }
 
+Window::Window(int width, int height) noexcept:Window()
+{
+	setWidth(width);
+	setHeight(height);
+}
+
 Window::~Window() noexcept
 {
 }
@@ -31,6 +37,33 @@ void Window::activited()
 GLFWwindow* Window::getWinHD() noexcept
 {
 	return winHd;
+}
+
+void Window::init() noexcept
+{
+	setSize(width.get(),height.get() );
+	float DPH = 1 / height.get() * 2;
+	float DPW = 1 / width.get() * 2;
+
+	//原点坐标平移矩阵
+	Math::SquareMatrix<4> moveMatrix = {
+		1,0,0,-width.get() / 2,
+		0,1,0,-height.get() / 2,
+		0,0,1,0,
+		0,0,0,1
+	};
+	//长度映射矩阵
+	Math::SquareMatrix<4> scalMatrix = {
+		DPW,0,0,0,
+		0,DPH,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
+
+	Size sizeT(0, 0, width.get(), height.get(), DPH, DPW);
+	this->size = sizeT;
+	size.TransMatrix() = scalMatrix * moveMatrix;
+	beginInit(size);
 }
 
 void Window::setSize(int width, int height) noexcept

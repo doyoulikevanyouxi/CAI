@@ -39,21 +39,6 @@ public:
 		dataIndex.assign(daIndex, daIndex + 6);
 		invalid = false;
 	}
-	void test() {
-		float dataf[24] = {
-			-0.5,0.5,1.f,0.5,0.f,0.f,
-			0.5,0.5,1.f,0.5,0.f,0.f,
-			-0.5,-0.5,1.f,0.5,0.f,0.f,
-			0.5,-0.5,1.f,0.5,0.f,0.f,
-		};
-		unsigned int daIndex[6] = {
-			0,1,2,
-			1,2,3
-		};
-		data.assign(dataf, dataf + 24);
-		dataIndex.assign(daIndex, daIndex + 6);
-		invalid = false;
-	}
 private:
 	std::vector<float> data;
 	std::vector<unsigned int> dataIndex;

@@ -13,7 +13,7 @@ class Size;
 class UIElement : public Element
 {
 public:
-	UIElement(UIElement* parent=nullptr) noexcept;
+	UIElement(UIElement* parent = nullptr) noexcept;
 	UIElement(const UIElement& other) noexcept;
 	virtual ~UIElement() noexcept;
 public:
@@ -25,28 +25,30 @@ public:
 public:
 	//会有一个属性继承关系
 	void setParent(UIElement* parent);
-	void setHeight(float value);
-	void setWidth(float value);
+	virtual void setHeight(float value);
+	virtual void setWidth(float value);
 	void setMinHeight(float value);
 	void setMinWidth(float value);
 	void setMaxHeight(float value);
 	void setMaxWidth(float value);
 	void setBackground(const Draw::Brush& color);
-	inline float getActualWidth() const noexcept{ return actualWidth; }
-	inline float getActualHeight() const noexcept{ return actualHeight; }
+	inline float getActualWidth() const noexcept { return actualWidth; }
+	inline float getActualHeight() const noexcept { return actualHeight; }
 	//void setProperty();
 public:
 	//为自己测量控件大小和位置
 	void beginInit(const Size& size) noexcept;
+	Size& getSize();
 protected:
 	virtual Size measure(const Size& size) noexcept;
 	virtual void aeasure(const Size& size) noexcept;
 private:
 	void setActualWidth();
 	void setActualHeight();
+
 public:
-	DependencyProperty<float> width{"Width"};
-	DependencyProperty<float> height{"Height"};
+	DependencyProperty<float> width{ "Width" };
+	DependencyProperty<float> height{ "Height" };
 	DependencyProperty<float> minWidth{ "MinWidth" };
 	DependencyProperty<float> minHeight{ "MinHeight" };
 	DependencyProperty<float> maxWidth{ "MaxWidth" };
@@ -54,7 +56,6 @@ public:
 	DependencyProperty<Draw::Brush> background{ "Background" };
 protected:
 	ControlStyle* style;
-private:
 	/// <summary>
 	/// 控件的实际渲染长度
 	/// </summary>
@@ -64,6 +65,7 @@ private:
 	/// </summary>
 	float actualHeight;
 	UIElement* parent;
+
 	//以下是openGL所用到资源
 protected:
 	PaintDevice* pDevice;
