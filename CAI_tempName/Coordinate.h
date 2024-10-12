@@ -46,6 +46,16 @@ public:
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
+	Size(const Size& other) noexcept{
+		width = other.width;
+		height = other.height;
+		x = other.x;
+		y = other.y;
+		dph = other.dph;
+		dpw = other.dpw;
+		standarMatrix = other.standarMatrix;
+		sizeCoord = other.sizeCoord;
+	}
 public:
 	void trans() noexcept {
 		sizeCoord = standarMatrix * sizeCoord;

@@ -6,6 +6,8 @@
 #include<string>
 class Property : public Object
 {
+public:
+	Property() noexcept { invalid = true; }
 };
 
 template<typename _Ty>
@@ -14,7 +16,7 @@ public:
 	DependencyProperty() = delete;
 	DependencyProperty(const std::string& name) noexcept:name(name) {}
 public:
-	void set(const _Ty& value) noexcept { this->value = value; }
+	void set(const _Ty& value) noexcept { this->value = value; invalid = false; }
 	_Ty& get() const noexcept{ return value; }
 public:
 	DependencyProperty<_Ty>& operator=(const _Ty& value) { this->value = value; return *this; }

@@ -13,13 +13,16 @@ public:
 		invalid = true;
 		name = "VisualData"; 
 	}
+	VisualData(const VisualData& other) noexcept {
+		data = other.data;
+		dataIndex = other.dataIndex;
+	}
 	~VisualData() noexcept{}
 public:
 	size_t dataSize() const { return data.size(); }
 	size_t dataIndexSize() const { return dataIndex.size(); }
 	const float* Data() const { return &data.front(); }
 	const unsigned* DataIndex() const { return &dataIndex.front(); }
-	void setInvalid(bool isInvalid) noexcept { invalid = isInvalid; }
 	void setData(Size& size,Draw::Brush& brush, Draw::Type type=Draw::TRIANGLES) {
 		size.trans();
 		float dataf[24] = {

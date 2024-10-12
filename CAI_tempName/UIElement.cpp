@@ -1,22 +1,34 @@
 #include "UIElement.h"
 #include "ControlStyle.h"
 #include "VisualTree.h"
-#include"UIElementCollection.h"
+#include"Collection.h"
 #include"coordinate.h"
 #include<glad/glad.h>
 #include"PaintDevice.h"
 UIElement::UIElement(UIElement* parent) noexcept :style(new ControlStyle()), parent(parent), pDevice(new PaintDevice())
 {
-	width = 0.f;
-	height = 0.f;
-	maxWidth = -1.f;
-	maxHeight = -1.f;
-	/*actualWidth = size->Width();
-	actualHeight = size->Height();*/
+	actualWidth = 0.f;
+	actualHeight = 0.f;
 	pDevice->setWindow(nullptr);
 	pDevice->setPen(Brush(0xff000000));
 	style->brush = Brush(0xff000000);
 	style->size.setCoordinat(0, 0);
+}
+
+UIElement::UIElement(const UIElement& other) noexcept :UIElement(nullptr)
+{
+	width = other.width.get();
+	height = other.height.get();
+	maxWidth = other.maxWidth.get();
+	maxHeight = other.maxHeight.get();
+	minWidth = other.minWidth.get();
+	minHeight = other.minHeight.get();
+	actualWidth = other.actualWidth;
+	actualHeight = other.actualHeight;
+	background = other.background.get();
+	pDevice->setWindow(nullptr);
+	pDevice->setPen(other.pDevice->getPen());
+	*style = *other.style;
 }
 
 UIElement::~UIElement() noexcept
@@ -27,7 +39,6 @@ UIElement::~UIElement() noexcept
 
 void UIElement::render() noexcept
 {
-	//pDevice->DrawRect(Point(0, 0), 0.5, 0.5);
 	pDevice->Draw(style);
 	for (auto& element : style->visualTree) {
 		element->render();
@@ -47,13 +58,39 @@ void UIElement::setParent(UIElement* parent)
 void UIElement::setHeight(float value)
 {
 	height.set(value);
-	style->size.Height() = value;
+	setActualHeight();
+	
 }
 
 void UIElement::setWidth(float value)
 {
 	width.set(value);
-	style->size.Width() = value;
+	setActualWidth();
+	
+}
+
+void UIElement::setMinHeight(float value)
+{
+	minHeight.set(value);
+	setActualHeight();
+}
+
+void UIElement::setMinWidth(float value)
+{
+	minWidth.set(value);
+	setActualWidth();
+}
+
+void UIElement::setMaxHeight(float value)
+{
+	maxHeight.set(value);
+	setActualHeight();
+}
+
+void UIElement::setMaxWidth(float value)
+{
+	maxWidth.set(value);
+	setActualWidth();
 }
 
 void UIElement::setBackground(const Draw::Brush& color)
@@ -62,8 +99,16 @@ void UIElement::setBackground(const Draw::Brush& color)
 	style->brush = color;
 }
 
-void UIElement::measure(const Size& size) noexcept
+void UIElement::beginInit(const Size& size) noexcept
 {
+	aeasure(measure(size));
+	style->init();
+}
+
+Size UIElement::measure(const Size& size) noexcept
+{
+	setActualHeight();
+	setActualWidth();
 	//接着将根据给定的父变换矩阵来设置控件自身的变换矩阵
 	Math::SquareMatrix<4> tMatrix = {
 									1,0,0,size.X(),
@@ -74,10 +119,70 @@ void UIElement::measure(const Size& size) noexcept
 	style->size.DPH() = size.DPH();
 	style->size.DPW() = size.DPW();
 	style->size.TransMatrix() = size.TransMatrix() * tMatrix;
-	style->init();
-	//style->vData.test();
+	return style->size;
+}
+
+void UIElement::aeasure(const Size& size) noexcept
+{
 	for (auto& child : style->visualTree) {
-		child->measure(style->size);
+		child->beginInit(size);
 	}
 }
+
+void UIElement::setActualWidth()
+{
+	if (width.isInvalid()) {
+		if (parent != nullptr) {
+			width = actualWidth = parent->actualWidth;
+		}
+		else {
+			if (!minWidth.isInvalid()) {
+				actualWidth = minWidth.get();
+				style->size.Width() = actualWidth;
+				return;
+			}
+			else {
+				actualWidth = 0.f;
+			}
+
+		}
+	}
+	else {
+		actualWidth = width.get();
+	}
+	if (actualWidth < minWidth.get() && !minWidth.isInvalid())
+		actualWidth = minWidth.get();
+	else if (actualWidth > maxWidth.get() && !maxWidth.isInvalid())
+		actualWidth = maxWidth.get();
+	style->size.Width() = actualWidth;
+}
+
+void UIElement::setActualHeight()
+{
+	if (height.isInvalid()) {
+		if (parent != nullptr) {
+			height=actualHeight = parent->actualHeight;
+		}
+		else {
+			if (!minHeight.isInvalid()) {
+				actualHeight = minHeight.get();
+				style->size.Height() = actualHeight;
+				return;
+			}
+			else {
+				actualHeight = 0.f;
+			}
+				
+		}
+	}
+	else {
+		actualHeight = height.get();
+	}
+	if (actualHeight < minHeight.get() && !minHeight.isInvalid())
+		actualHeight = minHeight.get();
+	else if (actualHeight > maxHeight.get() && !maxHeight.isInvalid())
+		actualHeight = maxHeight.get();
+	style->size.Height() = actualHeight;
+}
+
 

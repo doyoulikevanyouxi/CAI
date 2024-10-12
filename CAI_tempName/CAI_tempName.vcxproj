@@ -145,7 +145,6 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TedPanel.cpp" />
     <ClCompile Include="UIElement.cpp" />
-    <ClCompile Include="UIElementCollection.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +171,7 @@
     <ClInclude Include="TedPanel.h" />
     <ClInclude Include="TextAnalysis.h" />
     <ClInclude Include="UIElement.h" />
-    <ClInclude Include="UIElementCollection.h" />
+    <ClInclude Include="Collection.h" />
     <ClInclude Include="VisualTree.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

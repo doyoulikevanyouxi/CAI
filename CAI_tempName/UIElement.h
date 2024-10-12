@@ -5,10 +5,16 @@
 class PaintDevice;
 class ControlStyle;
 class Size;
+/// <summary>
+/// 所有可视化元素的基类，定义了可视化元素必须的量：位置，大小，颜色
+/// 位置和大小采用了矩阵运算，目前矩阵是在cpu上计算，后续将矩阵迁移至
+/// GPU进行计算
+/// </summary>
 class UIElement : public Element
 {
 public:
 	UIElement(UIElement* parent=nullptr) noexcept;
+	UIElement(const UIElement& other) noexcept;
 	virtual ~UIElement() noexcept;
 public:
 	/// <summary>
@@ -17,16 +23,27 @@ public:
 	virtual void render() noexcept;
 	void setControlStyeData() noexcept;
 public:
+	//会有一个属性继承关系
 	void setParent(UIElement* parent);
 	void setHeight(float value);
 	void setWidth(float value);
+	void setMinHeight(float value);
+	void setMinWidth(float value);
+	void setMaxHeight(float value);
+	void setMaxWidth(float value);
 	void setBackground(const Draw::Brush& color);
 	inline float getActualWidth() const noexcept{ return actualWidth; }
 	inline float getActualHeight() const noexcept{ return actualHeight; }
 	//void setProperty();
 public:
 	//为自己测量控件大小和位置
-	virtual void measure(const Size& size) noexcept;
+	void beginInit(const Size& size) noexcept;
+protected:
+	virtual Size measure(const Size& size) noexcept;
+	virtual void aeasure(const Size& size) noexcept;
+private:
+	void setActualWidth();
+	void setActualHeight();
 public:
 	DependencyProperty<float> width{"Width"};
 	DependencyProperty<float> height{"Height"};

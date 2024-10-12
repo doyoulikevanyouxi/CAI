@@ -1,17 +1,29 @@
 #pragma once
 #include"Window.h"
 #include"Button.h"
-#include"ControlStyle.h"
+#include "TedPanel.h"
+static int w = 100;
+static int h = 40;
 class MainWindow : public Window
 {
 public:
 	MainWindow() noexcept {
-		Button* bt = new Button();
-		setContent(*bt);
-		bt->setHeight(200);
-		bt->setWidth(300);
-		bt->setBackground(Brush(0xff00ff00));
+
+		/*TedPanel* P = new TedPanel();
+		Button* bt1 = new Button();
+		Button* bt2 = new Button();
+		bt1->setHeight(30);
+		bt1->setWidth(100);
+		bt1->setBackground(Brush(0xff00ff00));
+		bt2->setHeight(30);
+		bt2->setWidth(100);
+		bt2->setBackground(Brush(0xff00ff00));
+		P->addChild(*bt1);
+		P->addChild(*bt2);
+		setContent(*P);*/
 		initializeComponents();
+		
+
 	}
 	~MainWindow() noexcept {
 	}
@@ -21,6 +33,7 @@ private:
 		setSize(1000,800 );
 		float DPH = 1 / height.get()*2;
 		float DPW = 1 / width.get()*2;
+
 		//原点坐标平移矩阵
 		Math::SquareMatrix<4> moveMatrix = {
 			1,0,0,-width.get() / 2,
@@ -38,8 +51,8 @@ private:
 		
 		Size size(0,0,width.get(),height.get(),DPH,DPW);
 		size.TransMatrix()=scalMatrix*moveMatrix;
-		measure(size);
-		style->getData().setInvalid(true);
+		beginInit(size);
+		int d = 10;
 	}
 	
 };

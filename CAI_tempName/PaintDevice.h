@@ -16,6 +16,7 @@ public:
 public:
 	void setWindow(Window* wnd) noexcept;
 	void setPen(const Brush& pen) noexcept;
+	const Brush& getPen() const noexcept { return *pen; }
 	void fillWith(Brush& bs) noexcept;
 public:
 	void DrawLine(const Point& initial,Point& end) noexcept;

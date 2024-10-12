@@ -18,6 +18,8 @@ public:
 		*this = other;
 	}
 public:
+	void setInvalid(bool isInvalid) { invalid = isInvalid; }
+public:
 	Object& operator=(const Object& other) { 
 		invalid = other.invalid;
 		if (!valueSize)

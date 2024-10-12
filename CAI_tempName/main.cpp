@@ -5,6 +5,7 @@
 #include "MainWindow.hpp"
 #include "RenderEngine.h"
 #include<iostream>
+#include"Grid.h"
 //帧率 实时计算法
 void callFre() {
 	static std::chrono::high_resolution_clock::time_point pre = std::chrono::high_resolution_clock::now();
@@ -13,6 +14,8 @@ void callFre() {
 	pre = nowTime;
 }
 int main() {
+	
+
 	if (CAIEngine.initial())
 		return -1;
 	MainWindow mWindow;

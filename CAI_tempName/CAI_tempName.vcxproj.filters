@@ -69,9 +69,6 @@
     <ClCompile Include="ControlStyle.cpp">
       <Filter>源文件\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UIElementCollection.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Panel.cpp">
       <Filter>源文件\UI</Filter>
     </ClCompile>
@@ -134,7 +131,7 @@
     <ClInclude Include="Window.h">
       <Filter>头文件\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="UIElementCollection.h">
+    <ClInclude Include="Collection.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ControlStyle.h">

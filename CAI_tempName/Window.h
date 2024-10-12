@@ -8,7 +8,7 @@
 #pragma once
 #include "ContentControl.h"
 #include "Coordinate.h"
-class GLFWwindow;
+struct GLFWwindow;
 class Window : public ContentControl
 {
 public:

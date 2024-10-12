@@ -35,7 +35,7 @@ void PaintDevice::setWindow(Window* wnd) noexcept
 
 void PaintDevice::setPen(const Brush& pen) noexcept
 {
-	*this->pen = pen;
+	*(this->pen) = pen;
 }
 
 void PaintDevice::fillWith(Brush& bs) noexcept

@@ -60,6 +60,17 @@ namespace Math {
 			return *this;
 		}
 
+		Matrix& operator=(const std::initializer_list<float>& list) {
+			int i = 0;
+			for (auto& item : list) {
+				if (i == size)
+					break;
+				data[i] = item;
+				++i;
+			}
+			return *this;
+		}
+
 		float* operator[](int row) const {
 			return data + row * colums;
 		}
@@ -124,6 +135,7 @@ namespace Math {
 	/// <typeparam name="m">m为方阵的行</typeparam>
 	template<int m>
 	using SquareMatrix = Matrix<m, m>;
+	using TransMatrix = Matrix<4, 4>;
 	/// <summary>
 	/// 具有3个分量的向量
 	/// </summary>

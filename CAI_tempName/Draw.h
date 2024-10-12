@@ -62,6 +62,7 @@ namespace Draw {
 	class Brush {
 	public:
 		Brush() noexcept :mixProportion(1.0), color(Color::BLACK), bitPic(nullptr){setData();}
+		Brush(const Brush& other) { *this = other; }
 		explicit Brush(Color& color) noexcept :mixProportion(1.0), color(color), bitPic(nullptr) { setData(); }
 		explicit Brush(uint32_t color16) noexcept :mixProportion(1.0), color(color16), bitPic(nullptr) { setData(); }
 	public:

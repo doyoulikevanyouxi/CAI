@@ -1,15 +1,20 @@
 #pragma once
 #include "Panel.h"
+#include "RowDefinition.h"
+using RowDefinitionCollection = Collection<RowDefinition>;
+
 class Grid : public Panel
 {
 public:
 	Grid() noexcept;
 	virtual ~Grid() noexcept;
 public:
-	//RowDefinitionCollection rowDeinition;
+	void addRowDefinition(const RowDefinition& rowDefine);
 public:
-	DependencyProperty<int> colum{ "Colum" };
-	DependencyProperty<int> row{ "Colum" };
+	RowDefinitionCollection rowDeinitions;
+public:
+	DependencyProperty<int> colums{ "Colums" };
+	DependencyProperty<int> rows{ "Rows" };
 
 };
 

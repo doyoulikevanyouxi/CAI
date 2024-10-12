@@ -16,6 +16,7 @@ Window::Window() noexcept :winHd(NULL)
 		0,0,1,0,
 		0,0,0,1
 	};
+	style->getData().setInvalid(true);
 }
 
 Window::~Window() noexcept
@@ -35,8 +36,8 @@ GLFWwindow* Window::getWinHD() noexcept
 void Window::setSize(int width, int height) noexcept
 {
 	CAIEngine.setWindowSize(winHd, width, height);
-	this->height = height;
-	this->width = width;
+	setHeight(height);
+	setWidth(width);
 }
 
 

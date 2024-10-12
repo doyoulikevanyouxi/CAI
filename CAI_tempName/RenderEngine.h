@@ -8,7 +8,7 @@
 #pragma once
 #include "Object.h"
 #include <vector>
-class GLFWwindow;
+struct GLFWwindow;
 class Shader;
 class Window;
 class RenderEngine final : public Object
