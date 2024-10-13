@@ -52,6 +52,12 @@
     <Filter Include="源文件\Events">
       <UniqueIdentifier>{20584d60-f690-4f5c-bbab-2ba14ac54121}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Fonts">
+      <UniqueIdentifier>{a7bf93e6-1011-41c5-8c83-b2344c10d242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Fonts">
+      <UniqueIdentifier>{0e501814-fa3e-413f-aae4-a9e905973744}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="RenderEngine.cpp">
       <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +191,9 @@
     <ClInclude Include="MainWindow.hpp">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders.sha">
@@ -189,8 +201,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf">
+      <Filter>资源文件</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
     <Xsd Include="开发日志.Rd">
-      <Filter>头文件</Filter>
+      <Filter>源文件</Filter>
     </Xsd>
   </ItemGroup>
 </Project>

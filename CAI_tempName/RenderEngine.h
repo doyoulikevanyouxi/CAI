@@ -9,6 +9,7 @@
 #include "Object.h"
 #include <vector>
 #include "Event.h"
+#include "Character.h"
 struct GLFWwindow;
 class Shader;
 class Window;
@@ -17,6 +18,7 @@ class RenderEngine final : public Object
 public:
 	RenderEngine() noexcept;
 	~RenderEngine() noexcept;
+	
 public:
 	uint32_t initial(void);
 	void start(void);
@@ -28,6 +30,8 @@ public:
 	void setWindowPossition(GLFWwindow* win, int x, int y);
 	void setWindowSize(GLFWwindow* win,int width,int height);
 private:
+	//将渲染循环统一起来是很麻烦的事
+	//必须有一个窗口接受数据更新，否则会出先bug
 	void renderLoop(void);
 private:
 	GLFWwindow* mainWinHd;

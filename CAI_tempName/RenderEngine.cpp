@@ -8,7 +8,6 @@ using namespace std;
 RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), shd(nullptr), alreadyOn(false), mainWHasToken(false)
 {
 	name = "RenderEngine";
-
 }
 
 RenderEngine::~RenderEngine() noexcept
@@ -91,21 +90,23 @@ void RenderEngine::setWindowSize(GLFWwindow* win, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+
 void RenderEngine::renderLoop(void)
 {
 	if (!alreadyOn)
 		return;
+	Font ftp;
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
 		glClearColor(0.f,0.f,0.f,0.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//glClear(GL_COLOR_BUFFER_BIT);
-		
+		ftp.Load(L"A");
 		for (auto& win : windows) {
 			glfwMakeContextCurrent(win->getWinHD());
 			win->render();
 			glfwSwapBuffers(win->getWinHD());
 		}
+		glfwSwapBuffers(mainWinHd);
 		glfwPollEvents();
 	}
 }
