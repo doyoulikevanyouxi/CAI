@@ -37,6 +37,14 @@ void Grid::setRC(UIElement* target, int row, int colum)
 	this->colum.get().insert({ target,colum });
 }
 
+void Grid::setGridRCCollection(unsigned int rowCount, unsigned int columnCount) noexcept
+{
+	for (unsigned int i = 0; i < rowCount; ++i)
+		addRowDefinition(RowDefinition());
+	for (unsigned int i = 0; i < columnCount; ++i)
+		addColumDefinition(ColumDefinition());
+}
+
 void Grid::aeasure(const Size& size) noexcept
 {
 	float he = actualHeight / rowDeinitions.Size();
@@ -58,6 +66,7 @@ void Grid::aeasure(const Size& size) noexcept
 	auto Ro = row.get();
 	auto Co = colum.get();
 	for (auto& child : style->visualTree) {
+
 		int r = Ro[child];
 		int c = Co[child];
 		RowDefinition& Rod = rowDeinitions[r];

@@ -36,7 +36,10 @@ public:
 		other.vertexData = nullptr;
 		return *this;
 	}*/
+public:
+	bool isDataHasBeenPushToGpu;
 private:
+	friend class PaintDevice;
 	mutable Size* areaSize;
 	mutable Draw::Brush* areaBrush;
 	mutable float* vertexData;
@@ -45,4 +48,5 @@ private:
 	mutable int colorStride;
 	mutable unsigned int vertexSize;
 	mutable unsigned int indexSize;
+	mutable unsigned int texture;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include<initializer_list>
 #include<array>
+#include <string>
 #include"castd.h"
 namespace Draw {
 	enum Type {
@@ -23,7 +24,8 @@ namespace Draw {
 			BLACK = 0xffffffff,
 			RED = 0xffff0000,
 			GREEN = 0xff00ff00,
-			BLUE = 0xff0000ff
+			BLUE = 0xff0000ff,
+			WHITE = 0xffffffff
 		};
 	public:
 		Byte& A() const noexcept{ return aColor; }
@@ -56,30 +58,23 @@ namespace Draw {
 		mutable Byte bColor;
 		mutable Byte aColor;
 	};
+
 	class Brush {
 	public:
-		Brush() noexcept:bColor(Color::BLACK), bBitmap(nullptr){}
-		explicit Brush(uint32_t color_v) noexcept:bBitmap(nullptr){
-			bColor = color_v;
-		}
-		~Brush()
-		{
-			if (bBitmap != nullptr)
-				delete[] bBitmap;
-		}
-		Brush(const Brush& other){
-			bColor = other.bColor;
-			bBitmap = nullptr;
-		}
+		Brush() noexcept;
+		explicit Brush(uint32_t color_v) noexcept;
+		explicit Brush(const std::string& filePath) noexcept;
+		~Brush() noexcept;
+		Brush(const Brush& other) noexcept;
 	public:
+		void setTexturePath(const std::string& filePath);
 		Color& BColor() const noexcept{ return bColor; }
+		std::string& TexturePath() const noexcept{ return texturePath; }
+		bool hasTexture();
 	public:
-		Brush& operator=(const Brush& other) noexcept{
-			bColor = other.bColor;
-			return *this;
-		}
+		Brush& operator=(const Brush& other) noexcept;
 	private:
 		mutable Color bColor;
-		Byte* bBitmap;
+		mutable std::string texturePath;
 	};
 }

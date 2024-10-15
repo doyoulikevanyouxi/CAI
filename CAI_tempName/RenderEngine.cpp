@@ -55,6 +55,7 @@ uint32_t RenderEngine::initial(void)
 	font = new Font();
 	squareShader->use();
 	alreadyOn = true;
+	
 	return 0;
 }
 
@@ -119,9 +120,11 @@ void RenderEngine::renderLoop(void)
 {
 	if (!alreadyOn)
 		return;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
-		glClearColor(0.f,0.f,0.f,0.f);
+		glClearColor(1.f,1.f,1.f,1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto& win : windows) {
 

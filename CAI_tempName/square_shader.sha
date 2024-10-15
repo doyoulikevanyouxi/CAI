@@ -2,15 +2,16 @@
 #version 330 core
 layout (location = 0) in vec3 vertex;
 layout (location = 1) in vec3 color;
+layout (location = 2) in vec2 textureCor;	//纹理坐标
 out vec4 verColor;
-
+out vec2 textCor;
 uniform mat4 model;		//模型矩阵
-//uniform mat4 view;		//观察矩阵
 uniform mat4 projection; //投影矩阵
 
 void main(){
 	gl_Position = projection  * model * vec4(vertex,1.0f);
 	verColor =  vec4(color,1.0f);
+	textCor = textureCor;
 }
 
 
@@ -18,8 +19,14 @@ void main(){
 #version 330 core
 out vec4 fragColor;
 in vec4 verColor;
-
+in vec2 textCor;
+uniform sampler2D sampl;
 uniform mat4 projection_color; //颜色投影矩阵
 void main(){
-	fragColor = projection_color * verColor;
+    vec4 vertColor = projection_color * verColor;
+	if(textCor.x < 0 || textCor.y <0){
+		fragColor = vertColor;
+	}else{
+		fragColor = texture(sampl,textCor);	
+	}
 }

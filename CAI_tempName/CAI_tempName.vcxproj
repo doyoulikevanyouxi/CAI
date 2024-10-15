@@ -133,6 +133,7 @@
     <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Draw.cpp" />
     <ClCompile Include="EControl.cpp" />
     <ClCompile Include="ControlStyle.cpp" />
     <ClCompile Include="Element.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="RowDefinition.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="TedPanel.cpp" />
     <ClCompile Include="TextBlock.cpp" />
     <ClCompile Include="UIElement.cpp" />
@@ -172,6 +174,7 @@
     <ClInclude Include="RowDefinition.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Coordinate.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="TedPanel.h" />
     <ClInclude Include="TextAnalysis.h" />
     <ClInclude Include="TextBlock.h" />
@@ -185,15 +188,12 @@
     <None Include="square_shader.sha" />
   </ItemGroup>
   <ItemGroup>
-    <Xsd Include="开发日志.Rd">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Xsd>
+    <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf" />
+    <Image Include="resources\icons\close.png" />
+    <Image Include="resources\icons\minimize.png" />
+    <Image Include="resources\icons\minus.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

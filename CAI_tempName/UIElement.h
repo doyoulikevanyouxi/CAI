@@ -27,6 +27,7 @@ public:
 	void setParent(UIElement* parent);
 	virtual void setHeight(float value);
 	virtual void setWidth(float value);
+	void setWidthAndHeight(float width, float height);
 	void setMinHeight(float value);
 	void setMinWidth(float value);
 	void setMaxHeight(float value);

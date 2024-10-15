@@ -59,27 +59,27 @@ void UIElement::setParent(UIElement* parent)
 void UIElement::setHeight(float value)
 {
 	height.set(value);
-	//setActualHeight();
-	
 }
 
 void UIElement::setWidth(float value)
 {
 	width.set(value);
-	//setActualWidth();
-	
+}
+
+void UIElement::setWidthAndHeight(float width, float height)
+{
+	this->width.set(width);
+	this->height.set(height);
 }
 
 void UIElement::setMinHeight(float value)
 {
 	minHeight.set(value);
-	//setActualHeight();
 }
 
 void UIElement::setMinWidth(float value)
 {
 	minWidth.set(value);
-	//setActualWidth();
 }
 
 void UIElement::setMaxHeight(float value)

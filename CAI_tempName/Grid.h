@@ -19,6 +19,7 @@ public:
 	void setRow(UIElement* target, int row);
 	void setColum(UIElement* target, int colum);
 	void setRC(UIElement* target, int row, int colum);
+	void setGridRCCollection(unsigned int rowCount, unsigned int columnCount) noexcept;
 protected:
 	virtual void aeasure(const Size& size) noexcept override;
 public:

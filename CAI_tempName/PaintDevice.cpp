@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "RenderEngine.h"
 #include "Shader.h"
+#include "stb_image.h"
 #include <iostream>
 PaintDevice::PaintDevice() noexcept : pen(new Draw::Brush(Draw::Color::BLACK)),fill(new Draw::Brush(Draw::Color::BLACK)), hd(nullptr), VAO(0), VBO(0), EBO(0), areadySet(false)
 {
@@ -48,9 +49,6 @@ void PaintDevice::fillWith(Brush& bs) noexcept
 
 void PaintDevice::DrawText(const std::wstring& str, const Size& size) noexcept
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 	Font* ft = CAIEngine.getFont();
 	unsigned int fontSize = ft->fontSize;
 	CAIEngine.fontShader->use();
@@ -128,12 +126,47 @@ volatile void PaintDevice::Draw(ControlStyle* style) noexcept
 		return;
 	CAIEngine.squareShader->setMat4("model", data.AreaSize().TransMatrix());
 	glBindVertexArray(VAO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* data.VertexSize(), data.VertexData(), GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * data.IndexSize(), data.VertexIndexData(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	if (!style->vData.isDataHasBeenPushToGpu) {
+		Brush* areaBrush = &(style->vData.AreaBrush());
+		if (areaBrush->hasTexture()) {
+			int width, height;
+			int channel;
+			Byte* data = stbi_load(areaBrush->TexturePath().c_str(), &width, &height, &channel, 0);
+			if (data == NULL)
+				std::cout << "can not load texture ,path:" << areaBrush->TexturePath().c_str() << std::endl;
+			unsigned int texture;
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(
+				GL_TEXTURE_2D,
+				0,
+				GL_RGBA,
+				width,
+				height,
+				0,
+				GL_RGBA,
+				GL_UNSIGNED_BYTE,
+				data
+			);
+			
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			style->vData.texture = texture;
+			stbi_image_free(data);
+		}
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.VertexSize(), data.VertexData(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * data.IndexSize(), data.VertexIndexData(), GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+		style->vData.isDataHasBeenPushToGpu = true;
+	}
+	
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

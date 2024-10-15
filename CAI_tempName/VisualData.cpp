@@ -1,9 +1,11 @@
 #include "VisualData.h"
 #include "Coordinate.h"
 #include "Draw.h"
-VisualData::VisualData() noexcept :areaSize(new Size()), areaBrush(new Draw::Brush()), vertexData(nullptr),
-							    vertexIndexData(nullptr),vertexStride(0),colorStride(0),vertexSize(0),
-								indexSize(0)
+#include <glad/glad.h>
+#include "stb_image.h"
+VisualData::VisualData() noexcept :isDataHasBeenPushToGpu(false), areaSize(new Size()), areaBrush(new Draw::Brush()), vertexData(nullptr),
+vertexIndexData(nullptr), vertexStride(0), colorStride(0), vertexSize(0),
+indexSize(0), texture(0)
 {
 }
 
@@ -32,27 +34,46 @@ VisualData::~VisualData() noexcept
 float* VisualData::VertexData() const noexcept
 {
 	if (vertexData == nullptr) {
-		float tmp[24] = {
-			//左上
-				areaSize->x, areaSize->y, 0.f,areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),
-			//右上
-				areaSize->x + areaSize->width, areaSize->y, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),
-			//左下
-				areaSize->x, areaSize->y + areaSize->height, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),
-			//右下
-				areaSize->x + areaSize->width, areaSize->y + areaSize->height, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f()
-		};
-	
+		float* tmp;
+		if (!areaBrush->hasTexture()) {
+			float tmp1[36] = {
+					//左上
+					areaSize->x, areaSize->y, 0.f,areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),-1,-1,
+					//右上
+					areaSize->x + areaSize->width, areaSize->y, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),-1,-1,
+					//左下
+					areaSize->x, areaSize->y + areaSize->height, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),-1,-1,
+					//右下
+					areaSize->x + areaSize->width, areaSize->y + areaSize->height, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),-1,-1
+			};
+		
+			tmp = tmp1;
+		}
+		else {
+			float tmp2[36] = {
+				//左上
+				areaSize->x, areaSize->y, 0,0,0,0,1,0,0,
+				//右上
+				areaSize->x + areaSize->width, areaSize->y, 0,0,0,0,1,1,0,
+				//左下										
+				areaSize->x, areaSize->y + areaSize->height, 0,0,0,0,1,0,1,
+				//右下
+				areaSize->x + areaSize->width, areaSize->y + areaSize->height, 0,0,0,0,1,1,1
+			};
+			tmp = tmp2;
+		}
+
+
 		unsigned int tmpIndex[6] = {
 			0,1,2,
 			1,2,3
 		};
-		vertexData = new float[24];
+		vertexData = new float[36];
 		vertexIndexData = new unsigned int[6];
 		vertexStride = colorStride = 6;
-		vertexSize = 24;
+		vertexSize = 36;
 		indexSize = 6;
-		memcpy(vertexData, tmp, sizeof(float) * 24);
+		memcpy(vertexData, tmp, sizeof(float) * 36);
 		memcpy(vertexIndexData, tmpIndex, sizeof(unsigned int) * 6);
 	}
 	return vertexData;
