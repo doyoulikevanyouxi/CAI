@@ -27,8 +27,9 @@ public:
 	Font() noexcept;
 	~Font() noexcept;
 public:
-	void Load(const wchar_t * ch);
+	void Load(const wchar_t& ch);
 	void Load();
+	Character& character(unsigned int unicode) noexcept;
 public:
 	unsigned int fontSize; //字体期望大小
 	//Draw::Color fontColor;
@@ -39,6 +40,5 @@ private:
 	friend class PaintDevice;
 	GLuint VAO;
 	GLuint VBO;
-	
 };
 

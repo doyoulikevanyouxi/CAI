@@ -6,7 +6,8 @@
 #include <iostream>
 #include "Window.h"
 using namespace std;
-RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), font(nullptr), alreadyOn(false), mainWHasToken(false)
+RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), 
+									font(nullptr), alreadyOn(false), mainWHasToken(false)
 {
 	name = "RenderEngine";
 }
@@ -51,8 +52,7 @@ uint32_t RenderEngine::initial(void)
 	std::cout << "Maximum  of vertex attributes supported: " << nrAttributes << std::endl;
 	squareShader = new Shader("./square_shader.sha");
 	fontShader = new Shader("./text_shader.sha");
-	//font = new Font();
-	//fontShader->use();
+	font = new Font();
 	squareShader->use();
 	alreadyOn = true;
 	return 0;
@@ -121,7 +121,6 @@ void RenderEngine::renderLoop(void)
 		return;
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
-		
 		glClearColor(0.f,0.f,0.f,0.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (auto& win : windows) {
@@ -131,7 +130,6 @@ void RenderEngine::renderLoop(void)
 			win->render();
 			glfwSwapBuffers(win->getWinHD());
 		}
-		//glfwSwapBuffers(mainWinHd);
 		glfwPollEvents();
 	}
 }

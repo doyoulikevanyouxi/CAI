@@ -72,9 +72,6 @@
     <ClCompile Include="Element.cpp">
       <Filter>源文件\UI</Filter>
     </ClCompile>
-    <ClCompile Include="ContentControl.cpp">
-      <Filter>源文件\UI</Filter>
-    </ClCompile>
     <ClCompile Include="ControlStyle.cpp">
       <Filter>源文件\UI</Filter>
     </ClCompile>
@@ -113,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="VisualData.cpp">
       <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBlock.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TextBlock.h">
+      <Filter>头文件\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

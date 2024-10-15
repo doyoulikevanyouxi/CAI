@@ -22,5 +22,4 @@ in vec4 verColor;
 uniform mat4 projection_color; //ÑÕÉ«Í¶Ó°¾ØÕó
 void main(){
 	fragColor = projection_color * verColor;
-	//fragColor = vec4(1.0,1.0,1.0,1.0);
 }

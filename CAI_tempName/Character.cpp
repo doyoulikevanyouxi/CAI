@@ -12,7 +12,7 @@ Font::Font() noexcept
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 		return;
 	}
-	fontSize =10*64;
+	fontSize =48;
 	VAO = 0;
 	VBO = 0;
 	glGenVertexArrays(1, &VAO); 
@@ -37,18 +37,18 @@ Font::~Font() noexcept
 		glDeleteTextures(1, &(chr.second.textureID));
 	}
 }
-void Font::Load(const wchar_t * ch)
+void Font::Load(const wchar_t& ch)
 {
 	FT_Set_Pixel_Sizes(face, 0, fontSize);
-	//只缓存单个字体
-	if (FT_Load_Char(face, *ch, FT_LOAD_RENDER)) {
-		std::cout << "wor";
-	}
 	//缓存字符已经有了该字符
-	if (characters.find(*ch) != characters.end())
+	if (characters.find(ch) != characters.end())
 		return;
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//只缓存单个字体
+	if (FT_Load_Char(face, ch, FT_LOAD_RENDER)) {
+		std::cout << "wor";
+		return;
+	}
+	
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glBindVertexArray(VAO);
 	
@@ -79,7 +79,7 @@ void Font::Load(const wchar_t * ch)
 			face->glyph->bitmap_top,
 			face->glyph->advance.x
 	};
-	characters[*ch] = chr;
+	characters[ch] = chr;
 	glBindVertexArray(0);
 }
 
@@ -90,6 +90,7 @@ void Font::Load()
 	FT_UInt   gindex;
 	charcode =  FT_Get_First_Char(face, &gindex);
 	glBindVertexArray(VAO);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	unsigned int texture;
 	while (gindex) {
 		
@@ -123,8 +124,14 @@ void Font::Load()
 		charcode=FT_Get_Next_Char(face, charcode, &gindex);
 	}
 	glBindVertexArray(0);
-	FT_Done_Face(face);
-	FT_Done_FreeType(ft);
+}
+
+Character& Font::character(unsigned int unicode)  noexcept
+{
+	//缓存字符已经有了该字符
+	if (characters.find(unicode) == characters.end())
+		Load(unicode);
+	return characters[unicode];;
 }
 
 

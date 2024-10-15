@@ -48,22 +48,45 @@ void PaintDevice::fillWith(Brush& bs) noexcept
 
 void PaintDevice::DrawText(const std::wstring& str, const Size& size) noexcept
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	Font* ft = CAIEngine.getFont();
+	unsigned int fontSize = ft->fontSize;
+	CAIEngine.fontShader->use();
+	CAIEngine.fontShader->setMat4("model", size.TransMatrix());
+	CAIEngine.fontShader->setVec3("textColor", 1.0, 0.0, 0.0);
 	glBindVertexArray(ft->VAO);
-	float vertices[6][4] = {};
+	float x = size.X();
+	float y = size.Y()+fontSize;
 	for (auto& chr : str) {
+		
+		auto& charac = ft->character(chr);
+		float xpos = x + charac.bearingX;
+		float ypos = y-charac.bearingY;
+		float vertices[6][4] = {
+			{xpos,ypos,0,0},
+			{xpos+charac.width,ypos,1,0},
+			{xpos,ypos+charac.height,0,1},
 
-		glBindTexture(GL_TEXTURE_2D, ft->characters[chr].textureID);
+			{xpos + charac.width,ypos,1,0},
+			{xpos,ypos + charac.height,0,1},
+			{xpos+charac.width,ypos+charac.height,1,1}
+		};
+		x += (charac.Advance >>6 );
+		glBindTexture(GL_TEXTURE_2D, charac.textureID);
 		glBindBuffer(GL_ARRAY_BUFFER, ft->VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void PaintDevice::DrawLine(const Point& initial, Point& end) noexcept
 {
 	glBindVertexArray(VAO);
-	//glBufferData(GL_ARRAY_BUFFER,)
 }
 
 void PaintDevice::DrawLines(const Point points[], size_t lineNum) noexcept

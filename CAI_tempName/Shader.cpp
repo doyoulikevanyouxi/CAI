@@ -84,6 +84,14 @@ void Shader::use() const
 	glUseProgram(ID);
 }
 
+void Shader::setVec3(const std::string& name, float value, float value2, float value3) const
+{
+	use();
+	glUniform3f(glGetUniformLocation(ID, name.c_str()), value, value2, value3);
+}
+
+
+
 void Shader::setMat4(const std::string& name, const Math::TransMatrix& mat) const
 {
 	use();

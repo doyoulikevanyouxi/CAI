@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "RenderEngine.h"
 #include "ControlStyle.h"
+#include <glad/glad.h>
+#include <glfw3.h>
 #include <iostream>
 Window::Window() noexcept :winHd(NULL)
 {
@@ -75,6 +77,20 @@ void Window::setSize(int width, int height) noexcept
 	CAIEngine.setWindowSize(winHd, width, height);
 	setHeight(height);
 	setWidth(width);
+}
+
+void Window::renderLoop() noexcept
+{
+	glfwMakeContextCurrent(this->winHd);
+	while (!glfwWindowShouldClose(this->winHd))
+	{
+		glClearColor(0.f, 0.f, 0.f, 0.f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		render();
+		glfwSwapBuffers(this->winHd);
+		//glfwSwapBuffers(mainWinHd);
+		glfwPollEvents();
+	}
 }
 
 

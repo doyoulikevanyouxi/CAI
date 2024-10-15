@@ -6,7 +6,6 @@
 #include "RenderEngine.h"
 #include<iostream>
 
-
 //帧率 实时计算法
 void callFre() {
 	static std::chrono::high_resolution_clock::time_point pre = std::chrono::high_resolution_clock::now();
