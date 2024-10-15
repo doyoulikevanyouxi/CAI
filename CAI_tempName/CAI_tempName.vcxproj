@@ -146,6 +146,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TedPanel.cpp" />
     <ClCompile Include="UIElement.cpp" />
+    <ClCompile Include="VisualData.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +168,7 @@
     <ClInclude Include="Panel.h" />
     <ClInclude Include="Property.hpp" />
     <ClInclude Include="RenderEngine.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RowDefinition.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Coordinate.h" />
@@ -174,11 +176,12 @@
     <ClInclude Include="TextAnalysis.h" />
     <ClInclude Include="UIElement.h" />
     <ClInclude Include="Collection.h" />
-    <ClInclude Include="VisualTree.h" />
+    <ClInclude Include="VisualData.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders.sha" />
+    <None Include="text_shader.sha" />
+    <None Include="square_shader.sha" />
   </ItemGroup>
   <ItemGroup>
     <Xsd Include="开发日志.Rd">

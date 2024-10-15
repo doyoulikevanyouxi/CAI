@@ -9,12 +9,14 @@
 #include "Object.h"
 #include <vector>
 #include "Event.h"
-#include "Character.h"
+#include "Math.hpp"
 struct GLFWwindow;
 class Shader;
+class Font;
 class Window;
 class RenderEngine final : public Object
 {
+	friend class PaintDevice;
 public:
 	RenderEngine() noexcept;
 	~RenderEngine() noexcept;
@@ -24,18 +26,24 @@ public:
 	void start(void);
 	GLFWwindow* creatWindow(int width, int height, const char* title);
 	inline GLFWwindow* getMainWindow() { return alreadyOn && !mainWHasToken ? mainWinHd : NULL; }
+	inline Font* getFont() noexcept { return font; }
 	bool windowClose(GLFWwindow* win);
 	void activateWindow(GLFWwindow* win);
 	void addRenderWindow(Window* win);
 	void setWindowPossition(GLFWwindow* win, int x, int y);
 	void setWindowSize(GLFWwindow* win,int width,int height);
+	void setWindowProjection(const Math::TransMatrix& mt);
+	void setColorProjection(const Math::TransMatrix& mt);
+	void setColorProjection(float* mt);
 private:
 	//将渲染循环统一起来是很麻烦的事
 	//必须有一个窗口接受数据更新，否则会出先bug
 	void renderLoop(void);
 private:
 	GLFWwindow* mainWinHd;
-	Shader* shd;
+	Shader* squareShader;
+	Shader* fontShader;
+	Font* font;
 	std::vector<Window*> windows;
 public:
 	bool alreadyOn;

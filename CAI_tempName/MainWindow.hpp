@@ -10,6 +10,9 @@ public:
 	MainWindow(int width=800,int height=600) noexcept :Window(width, height) {
 		initializeComponents();
 		/*Grid* grid = new Grid();
+		setContent(*grid);
+		grid->setBackground(Brush(Draw::Color::RED));*/
+	/*	Grid* grid = new Grid();
 		grid->addRowDefinition(RowDefinition());
 		grid->addRowDefinition(RowDefinition());
 		grid->addRowDefinition(RowDefinition());

@@ -21,9 +21,9 @@ int main() {
 	if (CAIEngine.initial())
 		return -1;
 	
-	/*MainWindow mWindow(1000,800);
+	MainWindow mWindow(1000,800);
 	mWindow.init();
-	CAIEngine.addRenderWindow(&mWindow);*/
+	CAIEngine.addRenderWindow(&mWindow);
 	CAIEngine.start();
 	return 0;
 }

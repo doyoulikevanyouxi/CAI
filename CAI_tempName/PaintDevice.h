@@ -19,10 +19,11 @@ public:
 	const Brush& getPen() const noexcept { return *pen; }
 	void fillWith(Brush& bs) noexcept;
 public:
+	void DrawText(const std::wstring& str,const Size& size) noexcept;
 	void DrawLine(const Point& initial,Point& end) noexcept;
 	void DrawLines(const Point points[], size_t lineNum) noexcept;
 	void DrawRect(const Point& initial, float width, float height) noexcept;
-	void Draw(ControlStyle* style) noexcept;
+	volatile void Draw(ControlStyle* style) noexcept;
 private:
 	Brush* pen;
 	Brush* fill;

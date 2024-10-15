@@ -1,9 +1,7 @@
 #pragma once
 #include"Object.h"
-#include "VisualTree.h"
 #include "Collection.h"
-#include "Draw.h"
-#include "Coordinate.h"
+#include "VisualData.h"
 /// <summary>
 /// 决定图形的绘制表现,包括了自身的绘制属性和直接子孩子的集合
 /// </summary>
@@ -13,21 +11,18 @@ public:
 	ControlStyle() noexcept;
 	ControlStyle(const ControlStyle& other) {
 		visualTree = other.visualTree;
-		size = other.size;
-		brush = other.brush;
+		vData = other.vData;
 	}
 	virtual ~ControlStyle() noexcept;
 public:
 	void addChildToVisual(UIElement& child) { visualTree.addChild(&child); }
-	void setCoor(float x,float y) {}
-	const VisualData& getData() const { return vData; }
-	VisualData& getData()  { return vData; }
-	void init() { vData.setData(size, brush); }
+	VisualData& styleData() noexcept { return vData; }
 public:
 	ControlStyle& operator=(const ControlStyle& other) {
+		if (&other == this)
+			return *this;
 		visualTree = other.visualTree;
-		size = other.size;
-		brush = other.brush;
+		vData = other.vData;
 		return *this;
 	}
 public:
@@ -35,7 +30,6 @@ public:
 private:
 	friend class UIElement;
 	friend class Panel;
+	friend class PaintDevice;
 	VisualData vData;
-	Size size;
-	Draw::Brush brush;
 };

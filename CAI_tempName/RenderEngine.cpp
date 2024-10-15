@@ -2,18 +2,23 @@
 #include <glad/glad.h>
 #include <glfw3.h>
 #include "Shader.h"
+#include "Character.h"
 #include <iostream>
 #include "Window.h"
 using namespace std;
-RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), shd(nullptr), alreadyOn(false), mainWHasToken(false)
+RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), font(nullptr), alreadyOn(false), mainWHasToken(false)
 {
 	name = "RenderEngine";
 }
 
 RenderEngine::~RenderEngine() noexcept
 {
-	if (shd != nullptr)
-		delete shd;
+	if (squareShader != nullptr)
+		delete squareShader;
+	if (fontShader != nullptr)
+		delete fontShader;
+	if (font != nullptr)
+		delete font;
 	glfwTerminate();
 }
 
@@ -44,8 +49,11 @@ uint32_t RenderEngine::initial(void)
 	int nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 	std::cout << "Maximum  of vertex attributes supported: " << nrAttributes << std::endl;
-	shd = new Shader("./shaders.sha");
-	shd->use();
+	squareShader = new Shader("./square_shader.sha");
+	fontShader = new Shader("./text_shader.sha");
+	//font = new Font();
+	//fontShader->use();
+	squareShader->use();
 	alreadyOn = true;
 	return 0;
 }
@@ -90,23 +98,40 @@ void RenderEngine::setWindowSize(GLFWwindow* win, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+void RenderEngine::setWindowProjection(const Math::TransMatrix& mt)
+{
+	squareShader->setMat4("projection", mt);
+	fontShader->setMat4("projection", mt);
+}
+
+void RenderEngine::setColorProjection(const Math::TransMatrix& mt)
+{
+	squareShader->setMat4("projection_color", mt);
+}
+
+void RenderEngine::setColorProjection(float* mt)
+{
+	squareShader->setMat4("projection_color", mt);
+}
+
 
 void RenderEngine::renderLoop(void)
 {
 	if (!alreadyOn)
 		return;
-	Font ftp;
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
+		
 		glClearColor(0.f,0.f,0.f,0.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		ftp.Load(L"A");
 		for (auto& win : windows) {
+
 			glfwMakeContextCurrent(win->getWinHD());
+			squareShader->use();
 			win->render();
 			glfwSwapBuffers(win->getWinHD());
 		}
-		glfwSwapBuffers(mainWinHd);
+		//glfwSwapBuffers(mainWinHd);
 		glfwPollEvents();
 	}
 }

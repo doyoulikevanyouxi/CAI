@@ -109,7 +109,10 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualData.cpp">
+      <Filter>源文件\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,7 +137,7 @@
     <ClInclude Include="ContentControl.h">
       <Filter>头文件\UI</Filter>
     </ClInclude>
-    <ClInclude Include="VisualTree.h">
+    <ClInclude Include="VisualData.h">
       <Filter>头文件\UI</Filter>
     </ClInclude>
     <ClInclude Include="Panel.h">
@@ -185,18 +188,24 @@
     <ClInclude Include="Event.h">
       <Filter>头文件\Events</Filter>
     </ClInclude>
-    <ClInclude Include="Math.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MainWindow.hpp">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
+      <Filter>头文件\Fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.hpp">
+      <Filter>头文件\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders.sha">
+    <None Include="text_shader.sha">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="square_shader.sha">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

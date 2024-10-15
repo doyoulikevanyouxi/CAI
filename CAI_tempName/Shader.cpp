@@ -1,8 +1,9 @@
 #include "Shader.h"
 #include<glad/glad.h>
+#include"Math.hpp"
 #include<fstream>
 #include<iostream>
-const static std::string filePath = "./shaders.sha";
+
 Shader::Shader():isLoad(false),ID(0)
 {
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -24,7 +25,7 @@ bool Shader::load(const std::string& shashaFilePathStr)
 	std::string* fileTraget = nullptr;
 	std::ifstream fstream(shashaFilePathStr);
 	if (!fstream.is_open()) {
-		std::cout << "there is no such file:" << filePath << std::endl;
+		std::cout << "there is no such file:" << shashaFilePathStr << std::endl;
 		return false;
 	}
 
@@ -57,7 +58,7 @@ bool Shader::load(const std::string& shashaFilePathStr)
 	// 打印编译错误（如果有的话）
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
-		std::cout << "vertex shader compiled fail" << std::endl;
+		std::cout << shashaFilePathStr <<":vertex shader compiled fail" << std::endl;
 		return false;
 	}
 	glCompileShader(fragmentShader);
@@ -78,8 +79,24 @@ bool Shader::load(const std::string& shashaFilePathStr)
 	return true;
 }
 
-void Shader::use()
+void Shader::use() const
 {
 	glUseProgram(ID);
 }
 
+void Shader::setMat4(const std::string& name, const Math::TransMatrix& mat) const
+{
+	use();
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+void Shader::setMat4(const std::string& name, const float* mat) const
+{
+	use();
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, mat);
+}
+
+float* Shader::getMat4(const std::string& name)
+{
+	return nullptr;
+}

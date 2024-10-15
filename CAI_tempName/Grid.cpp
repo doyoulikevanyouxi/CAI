@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "ControlStyle.h"
+#include "Coordinate.h"
 Grid::Grid() noexcept :rFixedNum(0),cFixedNum(0)
 {
 	name = "Grid";

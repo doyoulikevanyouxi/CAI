@@ -1,6 +1,6 @@
 #include "UIElement.h"
 #include "ControlStyle.h"
-#include "VisualTree.h"
+
 #include"Collection.h"
 #include"coordinate.h"
 #include<glad/glad.h>
@@ -11,8 +11,9 @@ UIElement::UIElement(UIElement* parent) noexcept :style(new ControlStyle()), par
 	actualHeight = 0.f;
 	pDevice->setWindow(nullptr);
 	pDevice->setPen(Brush(0xff000000));
-	style->brush = Brush(0xff000000);
-	style->size.setCoordinat(0, 0);
+	style->vData.AreaBrush() = Brush(0xff000000);
+	style->vData.AreaSize().setX(0);
+	style->vData.AreaSize().setY(0);
 }
 
 UIElement::UIElement(const UIElement& other) noexcept :UIElement(nullptr)
@@ -96,13 +97,12 @@ void UIElement::setMaxWidth(float value)
 void UIElement::setBackground(const Draw::Brush& color)
 {
 	background.set(color);
-	style->brush = color;
+	style->vData.AreaBrush() = color;
 }
 
 void UIElement::beginInit(const Size& size) noexcept
 {
 	aeasure(measure(size));
-	style->init();
 }
 
 Size UIElement::measure(const Size& size) noexcept
@@ -113,19 +113,17 @@ Size UIElement::measure(const Size& size) noexcept
 		actualHeight = size.Height();
 	if (actualWidth >= size.Width())
 		actualWidth = size.Width();
-	style->size.Width() = actualWidth;
-	style->size.Height() = actualHeight;
+	style->vData.AreaSize().setWidth(actualWidth);
+	style->vData.AreaSize().setHeight(actualHeight);
 	//接着将根据给定的父变换矩阵来设置控件自身的变换矩阵
 	Math::SquareMatrix<4> tMatrix = {
-									1,0,0,size.X(),
-									0,1,0,size.Y(),
+									1,0,0,0,
+									0,1,0,0,
 									0,0,1,0,
-									0,0,0,1
+									size.X(),size.Y(),0,1
 	};
-	style->size.DPH() = size.DPH();
-	style->size.DPW() = size.DPW();
-	style->size.TransMatrix() = size.TransMatrix() * tMatrix;
-	return style->size;
+	style->vData.AreaSize().TransMatrix() = size.TransMatrix() * tMatrix;
+	return style->vData.AreaSize();
 }
 
 void UIElement::aeasure(const Size& size) noexcept
@@ -144,7 +142,7 @@ void UIElement::setActualWidth()
 		else {
 			if (!minWidth.isInvalid()) {
 				actualWidth = minWidth.get();
-				style->size.Width() = actualWidth;
+				style->vData.AreaSize().setWidth(actualWidth);
 				return;
 			}
 			else {
@@ -171,7 +169,8 @@ void UIElement::setActualHeight()
 		else {
 			if (!minHeight.isInvalid()) {
 				actualHeight = minHeight.get();
-				style->size.Height() = actualHeight;
+				style->vData.AreaSize().setHeight(actualHeight);
+
 				return;
 			}
 			else {
@@ -191,7 +190,7 @@ void UIElement::setActualHeight()
 
 Size& UIElement::getSize()
 {
-	return style->size;
+	return style->vData.AreaSize();
 }
 
 

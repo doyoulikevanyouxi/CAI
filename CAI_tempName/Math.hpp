@@ -51,7 +51,7 @@ namespace Math {
 			Matrix<C, R> tmp;
 			for (int i = 0; i < R; ++i)
 				for (int j = 0; j < C; ++j)
-					tmp[C][R] = (*this)[R][C];
+					tmp[j][i] = (*this)[i][j];
 			return tmp;
 		}
 	public:

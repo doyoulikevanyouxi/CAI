@@ -12,12 +12,10 @@ Font::Font() noexcept
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 		return;
 	}
-	fontSize =15*64;
+	fontSize =10*64;
 	VAO = 0;
 	VBO = 0;
 	glGenVertexArrays(1, &VAO); 
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
 	glGenBuffers(1, &VBO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -33,19 +31,30 @@ Font::~Font() noexcept
 	FT_Done_Face(face);
 	// 释放库
 	FT_Done_FreeType(ft);
-	
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1,&VBO);
+	for (auto& chr : characters) {
+		glDeleteTextures(1, &(chr.second.textureID));
+	}
 }
 void Font::Load(const wchar_t * ch)
 {
 	FT_Set_Pixel_Sizes(face, 0, fontSize);
 	//只缓存单个字体
-	if(FT_Load_Char(face, L'你', FT_LOAD_RENDER))
-		std::cout<<"wor";
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glBindVertexArray(VAO);
+	if (FT_Load_Char(face, *ch, FT_LOAD_RENDER)) {
+		std::cout << "wor";
+	}
+	//缓存字符已经有了该字符
+	if (characters.find(*ch) != characters.end())
+		return;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glBindVertexArray(VAO);
 	
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
@@ -62,31 +71,60 @@ void Font::Load(const wchar_t * ch)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	unsigned int width = face->glyph->bitmap.width;
-	unsigned int rows = face->glyph->bitmap.rows;
-
-	GLfloat vertices[6][4] = {
-		{0,0,0,0},		//左上
-		{width,0,1.0,0},  //右上
-		{0,rows,0,1.0},	//左下
-
-		{width,0,1.0,0},  //右上
-		{0,rows,0,1.0},	//左下
-		{width,rows,1.0,1.0}//右下
+	Character chr = {
+			texture,
+			face->glyph->bitmap.width,
+			face->glyph->bitmap.rows,
+			face->glyph->bitmap_left,
+			face->glyph->bitmap_top,
+			face->glyph->advance.x
 	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	characters[*ch] = chr;
 	glBindVertexArray(0);
-	///将所有字体全部缓存
-	//FT_ULong  charcode;
-	//FT_UInt   gindex;
-	//charcode =  FT_Get_First_Char(face, &gindex);
-	//while (gindex) {
-	//	//
-	//	FT_Load_Glyph(face, gindex, FT_LOAD_RENDER);
-	//	charcode=FT_Get_Next_Char(face, charcode, &gindex);
-	//}
 }
+
+void Font::Load()
+{
+	//将所有字体全部缓存
+	wchar_t  charcode;
+	FT_UInt   gindex;
+	charcode =  FT_Get_First_Char(face, &gindex);
+	glBindVertexArray(VAO);
+	unsigned int texture;
+	while (gindex) {
+		
+		FT_Load_Glyph(face, gindex, FT_LOAD_RENDER);
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			face->glyph->bitmap.width,
+			face->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			face->glyph->bitmap.buffer
+		);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		Character chr = {
+			texture,
+			face->glyph->bitmap.width,
+			face->glyph->bitmap.rows,
+			face->glyph->bitmap_left,
+			face->glyph->bitmap_top,
+			face->glyph->advance.x
+		};
+		characters[charcode] = chr;
+		charcode=FT_Get_Next_Char(face, charcode, &gindex);
+	}
+	glBindVertexArray(0);
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
+}
+
+

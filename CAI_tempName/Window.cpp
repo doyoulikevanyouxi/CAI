@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "RenderEngine.h"
 #include "ControlStyle.h"
+#include <iostream>
 Window::Window() noexcept :winHd(NULL)
 {
 	if (CAIEngine.mainWHasToken) {
@@ -10,13 +11,7 @@ Window::Window() noexcept :winHd(NULL)
 		this->winHd = CAIEngine.getMainWindow();
 		CAIEngine.mainWHasToken = true;
 	}
-	size.TransMatrix() = {
-		1,0,0,-width.get(),
-		0,1,0,-height.get(),
-		0,0,1,0,
-		0,0,0,1
-	};
-	style->getData().setInvalid(true);
+	style->styleData().setInvalid(true);
 }
 
 Window::Window(int width, int height) noexcept:Window()
@@ -44,25 +39,34 @@ void Window::init() noexcept
 	setSize(width.get(),height.get() );
 	float DPH = 1 / height.get() * 2;
 	float DPW = 1 / width.get() * 2;
-
-	//原点坐标平移矩阵
-	Math::SquareMatrix<4> moveMatrix = {
-		1,0,0,-width.get() / 2,
-		0,1,0,-height.get() / 2,
-		0,0,1,0,
-		0,0,0,1
-	};
-	//长度映射矩阵
-	Math::SquareMatrix<4> scalMatrix = {
+	//投影矩阵
+	Math::SquareMatrix<4> projection = {
 		DPW,0,0,0,
-		0,DPH,0,0,
+		0,-DPH,0,0,
+		0,0,1,0,
+		-1,1,0,1
+	};
+	//颜色投影矩阵
+	float colorProjection[] = {
+		1.f / 255,0,0,0,
+		0,1.f / 255,0,0,
+		0,0,1.f / 255,0,
+		0,0,0,1.f / 255
+	};
+	//模型矩阵
+	Math::TransMatrix mt = {
+		1,0,0,0,
+		0,1,0,0,
 		0,0,1,0,
 		0,0,0,1
 	};
-
-	Size sizeT(0, 0, width.get(), height.get(), DPH, DPW);
+	
+	Size sizeT(0, 0, width.get(), height.get());
 	this->size = sizeT;
-	size.TransMatrix() = scalMatrix * moveMatrix;
+	CAIEngine.setColorProjection(colorProjection);
+	CAIEngine.setWindowProjection(projection);
+
+	size.TransMatrix() = mt;
 	beginInit(size);
 }
 

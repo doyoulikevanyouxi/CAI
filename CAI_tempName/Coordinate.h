@@ -27,64 +27,66 @@ private:
 
 class Size : public Object {
 public:
-	Size() noexcept : width(0.f), height(0.f),x(0.f),y(0.f),dph(0.f),dpw(0.f) {
-		invalid = true; 
+	Size() noexcept : width(0.f), height(0.f), x(0.f), y(0.f){
+		invalid = true;
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
-	Size(const Point& point, float width, float height,float dph,float dpw) noexcept :width(width), height(height), x(point.X()), y(point.Y()), dph(dph), dpw(dpw) {
+	Size(const Point& point, float width, float height) noexcept :width(width), height(height), x(point.X()), y(point.Y()){
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
-	Size(float x, float y, float width, float height, float dph, float dpw) noexcept : width(width), height(height), x(x), y(y) ,dph(dph),dpw(dpw){
+	Size(float x, float y, float width, float height) noexcept : width(width), height(height), x(x), y(y){
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
-	Size(const Size& other) noexcept{
+	Size(const Size& other) noexcept {
 		width = other.width;
 		height = other.height;
 		x = other.x;
 		y = other.y;
-		dph = other.dph;
-		dpw = other.dpw;
-		standarMatrix = other.standarMatrix;
+		mode = other.mode;
 		sizeCoord = other.sizeCoord;
 	}
 public:
-	void trans() noexcept {
-		sizeCoord = standarMatrix * sizeCoord;
-		x = sizeCoord[0][0];
-		y = -sizeCoord[1][0];
-		height *= dph;
-		width *= dpw;
-	}
 	void setX(float value) { x = value; sizeCoord[0][0] = x; }
 	void setY(float value) { y = value; sizeCoord[1][0] = y; }
-	float& DPH() const { return dph; }
-	float& DPW() const { return dpw; }
 	void setCoordinat(float x, float y) { this->x = x; this->y = y; sizeCoord[0][0] = 0; sizeCoord[1][0] = y; }
-	const float& X() const { return x; }
-	const float& Y() const { return y; }
-	float& Width() const { return width; }
-	float& Height() const { return height; }
-	Math::SquareMatrix<4>& TransMatrix() const { return standarMatrix; }
+	float X() const { return x; }
+	float Y() const { return y; }
+	float Width() const { return width; }
+	float Height() const { return height; }
+	Math::SquareMatrix<4>& TransMatrix() const { return mode; }
 	void setWidth(const float value) { width = value; }
 	void setHeight(const float value) { height = value; }
+public:
+	Size& operator=(const Size& other) {
+		width = other.width;
+		height = other.height;
+		x = other.x;
+		y = other.y;
+		mode = other.mode;
+		sizeCoord = other.sizeCoord;
+		return *this;
+	}
 private:
 	friend class VisualData;
-	mutable float width;
-	mutable float height;
+	//可视化的空间宽度
+	float width;
+	//可视化的空间高度
+	float height;
+	//局部坐标X，空间左上角
 	float x;
+	//局部坐标Y，空间左上角
 	float y;
-	mutable float dph;
-	mutable float dpw;
-	//标准矩阵--该矩阵用于将数据从自有坐标系变换成Opengl的坐标系
-	mutable Math::SquareMatrix<4> standarMatrix;
+	//模型矩阵--用于将自身的坐标转换成全局坐标
+	mutable Math::TransMatrix mode;
+	//由x,y组成的向量
 	mutable Math::vec4 sizeCoord;
 };
