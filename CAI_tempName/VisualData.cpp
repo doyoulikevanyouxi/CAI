@@ -52,13 +52,13 @@ float* VisualData::VertexData() const noexcept
 		else {
 			float tmp2[36] = {
 				//左上
-				areaSize->x, areaSize->y, 0,0,0,0,1,0,0,
-				//右上
-				areaSize->x + areaSize->width, areaSize->y, 0,0,0,0,1,1,0,
-				//左下										
-				areaSize->x, areaSize->y + areaSize->height, 0,0,0,0,1,0,1,
-				//右下
-				areaSize->x + areaSize->width, areaSize->y + areaSize->height, 0,0,0,0,1,1,1
+						areaSize->x, areaSize->y, 0.f,areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),0,0,
+						//右上
+						areaSize->x + areaSize->width, areaSize->y, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),1,0,
+						//左下
+						areaSize->x, areaSize->y + areaSize->height, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),0,1,
+						//右下
+						areaSize->x + areaSize->width, areaSize->y + areaSize->height, 0.f, areaBrush->BColor().R_f(), areaBrush->BColor().G_f(), areaBrush->BColor().B_f(),areaBrush->BColor().A_f(),1,1
 			};
 			tmp = tmp2;
 		}

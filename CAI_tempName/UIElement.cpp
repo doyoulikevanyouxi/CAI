@@ -5,13 +5,13 @@
 #include"coordinate.h"
 #include<glad/glad.h>
 #include"PaintDevice.h"
-UIElement::UIElement(UIElement* parent) noexcept :style(new ControlStyle()), parent(parent), pDevice(new PaintDevice())
+UIElement::UIElement(UIElement* parent) noexcept :style(new ControlTemplate()), parent(parent), pDevice(new PaintDevice())
 {
 	actualWidth = 0.f;
 	actualHeight = 0.f;
 	pDevice->setWindow(nullptr);
 	pDevice->setPen(Brush(0xff000000));
-	style->vData.AreaBrush() = Brush(0xff000000);
+	style->vData.AreaBrush() = Brush(0x00000000);
 	style->vData.AreaSize().setX(0);
 	style->vData.AreaSize().setY(0);
 }
@@ -131,6 +131,16 @@ void UIElement::aeasure(const Size& size) noexcept
 	for (auto& child : style->visualTree) {
 		child->beginInit(size);
 	}
+}
+
+void UIElement::setActualWidth(float value)
+{
+	actualWidth = value;
+}
+
+void UIElement::setActualHeight(float value)
+{
+	actualHeight = value;
 }
 
 void UIElement::setActualWidth()

@@ -15,6 +15,8 @@ public:
 	size_t Size() noexcept { return childs.size(); }
 	auto begin() { return childs.begin(); }
 	auto end() { return childs.end(); }
+	_Ty& last() { return childs.back(); }
+	bool empty() { return childs.empty(); }
 public:
 	_Ty& operator[](size_t index) { return childs[index]; }
 	Collection& operator=(const Collection& other) {

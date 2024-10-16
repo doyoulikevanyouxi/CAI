@@ -49,6 +49,8 @@ void PaintDevice::fillWith(Brush& bs) noexcept
 
 void PaintDevice::DrawText(const std::wstring& str, const Size& size) noexcept
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Font* ft = CAIEngine.getFont();
 	unsigned int fontSize = ft->fontSize;
 	CAIEngine.fontShader->use();
@@ -80,6 +82,7 @@ void PaintDevice::DrawText(const std::wstring& str, const Size& size) noexcept
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_BLEND);
 }
 
 void PaintDevice::DrawLine(const Point& initial, Point& end) noexcept
@@ -119,12 +122,12 @@ void PaintDevice::DrawRect(const Point& initial, float width, float height) noex
 	glBindVertexArray(0);
 }
 
-volatile void PaintDevice::Draw(ControlStyle* style) noexcept
+volatile void PaintDevice::Draw(ControlTemplate* style) noexcept
 {
 	const VisualData& data = style->vData;
 	if (data.isInvalid())
 		return;
-	CAIEngine.squareShader->setMat4("model", data.AreaSize().TransMatrix());
+	//std::cout << data.AreaSize().Width() <<":" << std::endl;std::cout<< data.AreaSize().TransMatrix().toString() << std::endl;
 	glBindVertexArray(VAO);
 	if (!style->vData.isDataHasBeenPushToGpu) {
 		Brush* areaBrush = &(style->vData.AreaBrush());
@@ -156,6 +159,7 @@ volatile void PaintDevice::Draw(ControlStyle* style) noexcept
 			style->vData.texture = texture;
 			stbi_image_free(data);
 		}
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.VertexSize(), data.VertexData(), GL_STATIC_DRAW);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * data.IndexSize(), data.VertexIndexData(), GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
@@ -164,9 +168,12 @@ volatile void PaintDevice::Draw(ControlStyle* style) noexcept
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
 		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
 		style->vData.isDataHasBeenPushToGpu = true;
 	}
-	
+	CAIEngine.squareShader->setMat4("model", data.AreaSize().TransMatrix());
+
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Coordinate.h"
-class ControlStyle;
+class ControlTemplate;
 namespace Draw {
 	class Brush;
 }
@@ -23,7 +23,7 @@ public:
 	void DrawLine(const Point& initial,Point& end) noexcept;
 	void DrawLines(const Point points[], size_t lineNum) noexcept;
 	void DrawRect(const Point& initial, float width, float height) noexcept;
-	volatile void Draw(ControlStyle* style) noexcept;
+	volatile void Draw(ControlTemplate* style) noexcept;
 private:
 	Brush* pen;
 	Brush* fill;

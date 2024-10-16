@@ -8,20 +8,23 @@ class MainWindow : public Window
 public:
 	MainWindow(int width=800,int height=600) noexcept :Window(width, height) {
 		initializeComponents();
-		/*Grid* grid = new Grid();
-		grid->setBackground(Brush(0xffffffff));
-		setContent(*grid);*/
-		Button* bt = new Button();
-		bt->setWidthAndHeight(40, 40);
-		bt->setBackground(Brush(0xffff0000));
-		setContent(*bt);
-		bt->setBackground(Brush("resources/icons/close.png"));
-	/*	Grid* pGrid = new Grid();
-		pGrid->setBackground(Brush(0xffffffff));
-		pGrid->setGridRCCollection(2, 1);
-		Grid* hGrid = new Grid();
-		pGrid->setRC(hGrid, 0, 0);
-		pGrid->addChild(*hGrid);*/
+
+		///²âÊÔ´úÂë
+		Grid* grid = new Grid();
+		//grid->setGridRCCollection(3, 3);
+		grid->setBackground(Brush(Draw::Color::BLUE));
+		setContent(*grid);
+		Grid* grid2 = new Grid();
+		grid2->setBackground(Brush(0xffffeeef));
+		grid->setRC(grid2, 3, 3);
+		Button* btn = new Button();
+		btn->setWidth(100);
+		btn->setHeight(20);
+		btn->setContent(L"ÄãºÃ");
+		grid2->addChild(*btn);
+		btn->setBackground(Brush(Draw::Color::GREEN));
+		grid->addChild(*grid2);
+		///
 	}
 	~MainWindow() noexcept {
 	}

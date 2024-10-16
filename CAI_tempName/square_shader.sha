@@ -1,7 +1,7 @@
 [vertex_shader]
 #version 330 core
 layout (location = 0) in vec3 vertex;
-layout (location = 1) in vec3 color;
+layout (location = 1) in vec4 color;
 layout (location = 2) in vec2 textureCor;	//纹理坐标
 out vec4 verColor;
 out vec2 textCor;
@@ -10,7 +10,7 @@ uniform mat4 projection; //投影矩阵
 
 void main(){
 	gl_Position = projection  * model * vec4(vertex,1.0f);
-	verColor =  vec4(color,1.0f);
+	verColor =  color;
 	textCor = textureCor;
 }
 
@@ -25,8 +25,14 @@ uniform mat4 projection_color; //颜色投影矩阵
 void main(){
     vec4 vertColor = projection_color * verColor;
 	if(textCor.x < 0 || textCor.y <0){
+		if(vertColor.w <0.1)
+			discard;
 		fragColor = vertColor;
 	}else{
-		fragColor = texture(sampl,textCor);	
+		vec4 tColor = texture(sampl,textCor);
+		if(tColor.a<0.1)
+			fragColor = vertColor;
+		else
+			fragColor = tColor;
 	}
 }

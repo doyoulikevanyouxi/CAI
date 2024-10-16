@@ -1,9 +1,9 @@
 #include "ControlStyle.h"
 
-ControlStyle::ControlStyle() noexcept
+ControlTemplate::ControlTemplate() noexcept
 {
 }
 
-ControlStyle::~ControlStyle() noexcept
+ControlTemplate::~ControlTemplate() noexcept
 {
 }

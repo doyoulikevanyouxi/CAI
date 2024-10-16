@@ -3,7 +3,7 @@
 #include"Draw.h"
 #include "Property.hpp"
 class PaintDevice;
-class ControlStyle;
+class ControlTemplate;
 class Size;
 /// <summary>
 /// 所有可视化元素的基类，定义了可视化元素必须的量：位置，大小，颜色
@@ -35,6 +35,7 @@ public:
 	void setBackground(const Draw::Brush& color);
 	inline float getActualWidth() const noexcept { return actualWidth; }
 	inline float getActualHeight() const noexcept { return actualHeight; }
+	ControlTemplate& getControlTemplate() { return *style; }
 	//void setProperty();
 public:
 	//为自己测量控件大小和位置
@@ -43,6 +44,13 @@ public:
 protected:
 	virtual Size measure(const Size& size) noexcept;
 	virtual void aeasure(const Size& size) noexcept;
+public:
+	/// <summary>
+	/// 注意的是，以下两个函数是给不进行绘制但参与布局的控件使用的
+	/// </summary>
+	/// <param name="value"></param>
+	void setActualWidth(float value);
+	void setActualHeight(float value);
 private:
 	void setActualWidth();
 	void setActualHeight();
@@ -56,7 +64,7 @@ public:
 	DependencyProperty<float> maxHeight{ "MaxHeight" };
 	DependencyProperty<Draw::Brush> background{ "Background" };
 protected:
-	ControlStyle* style;
+	ControlTemplate* style;
 	/// <summary>
 	/// 控件的实际渲染长度
 	/// </summary>
