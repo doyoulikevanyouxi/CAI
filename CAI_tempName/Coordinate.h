@@ -27,23 +27,23 @@ private:
 
 class Size : public Object {
 public:
-	Size() noexcept : width(0.f), height(0.f), x(0.f), y(0.f){
+	Size() noexcept : width(0.f), height(0.f), x(0.f), y(0.f),z(0.f){
 		invalid = true;
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
-	Size(const Point& point, float width, float height) noexcept :width(width), height(height), x(point.X()), y(point.Y()){
+	Size(const Point& point, float width, float height) noexcept :width(width), height(height), x(point.X()), y(point.Y()),z(0.f){
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
-	Size(float x, float y, float width, float height) noexcept : width(width), height(height), x(x), y(y){
+	Size(float x, float y, float z,float width, float height) noexcept : width(width), height(height), x(x), y(y),z(z){
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
-		sizeCoord[2][0] = 1;
+		sizeCoord[2][0] = z;
 		sizeCoord[3][0] = 1;
 	}
 	Size(const Size& other) noexcept {
@@ -51,15 +51,18 @@ public:
 		height = other.height;
 		x = other.x;
 		y = other.y;
+		z = other.z;
 		mode = other.mode;
 		sizeCoord = other.sizeCoord;
 	}
 public:
 	void setX(float value) { x = value; sizeCoord[0][0] = x; }
 	void setY(float value) { y = value; sizeCoord[1][0] = y; }
+	void setZ(float value) { z = value; sizeCoord[2][0] = z; }
 	void setCoordinat(float x, float y) { this->x = x; this->y = y; sizeCoord[0][0] = 0; sizeCoord[1][0] = y; }
 	float X() const { return x; }
 	float Y() const { return y; }
+	float Z() const { return z; }
 	float Width() const { return width; }
 	float Height() const { return height; }
 	Math::SquareMatrix<4>& TransMatrix() const { return mode; }
@@ -71,6 +74,7 @@ public:
 		height = other.height;
 		x = other.x;
 		y = other.y;
+		z = other.z;
 		mode = other.mode;
 		sizeCoord = other.sizeCoord;
 		return *this;
@@ -85,6 +89,7 @@ private:
 	float x;
 	//局部坐标Y，空间左上角
 	float y;
+	float z;
 	//模型矩阵--用于将自身的坐标转换成全局坐标
 	mutable Math::TransMatrix mode;
 	//由x,y组成的向量

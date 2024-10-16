@@ -1,10 +1,10 @@
 #include "UIElement.h"
 #include "ControlStyle.h"
-
 #include"Collection.h"
 #include"coordinate.h"
 #include<glad/glad.h>
 #include"PaintDevice.h"
+float zmax = 1;
 UIElement::UIElement(UIElement* parent) noexcept :style(new ControlTemplate()), parent(parent), pDevice(new PaintDevice())
 {
 	actualWidth = 0.f;
@@ -66,6 +66,12 @@ void UIElement::setWidth(float value)
 	width.set(value);
 }
 
+void UIElement::setZindex(float value)
+{
+	zIndex.set(value);
+	style->vData.AreaSize().setZ(value);
+}
+
 void UIElement::setWidthAndHeight(float width, float height)
 {
 	this->width.set(width);
@@ -85,13 +91,11 @@ void UIElement::setMinWidth(float value)
 void UIElement::setMaxHeight(float value)
 {
 	maxHeight.set(value);
-	//setActualHeight();
 }
 
 void UIElement::setMaxWidth(float value)
 {
 	maxWidth.set(value);
-	//setActualWidth();
 }
 
 void UIElement::setBackground(const Draw::Brush& color)
@@ -122,7 +126,11 @@ Size UIElement::measure(const Size& size) noexcept
 									0,0,1,0,
 									size.X(),size.Y(),0,1
 	};
+	if(zIndex.isInvalid())
+		style->vData.AreaSize().setZ(size.Z()+1);
 	style->vData.AreaSize().TransMatrix() = size.TransMatrix() * tMatrix;
+	if (zmax < style->vData.AreaSize().Z())
+		zmax = style->vData.AreaSize().Z();
 	return style->vData.AreaSize();
 }
 

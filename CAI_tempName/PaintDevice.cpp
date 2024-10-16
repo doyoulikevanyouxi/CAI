@@ -122,12 +122,11 @@ void PaintDevice::DrawRect(const Point& initial, float width, float height) noex
 	glBindVertexArray(0);
 }
 
-volatile void PaintDevice::Draw(ControlTemplate* style) noexcept
+void PaintDevice::Draw(ControlTemplate* style) noexcept
 {
 	const VisualData& data = style->vData;
 	if (data.isInvalid())
 		return;
-	//std::cout << data.AreaSize().Width() <<":" << std::endl;std::cout<< data.AreaSize().TransMatrix().toString() << std::endl;
 	glBindVertexArray(VAO);
 	if (!style->vData.isDataHasBeenPushToGpu) {
 		Brush* areaBrush = &(style->vData.AreaBrush());
@@ -173,7 +172,6 @@ volatile void PaintDevice::Draw(ControlTemplate* style) noexcept
 		style->vData.isDataHasBeenPushToGpu = true;
 	}
 	CAIEngine.squareShader->setMat4("model", data.AreaSize().TransMatrix());
-
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

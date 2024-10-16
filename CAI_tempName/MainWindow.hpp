@@ -11,16 +11,17 @@ public:
 
 		///²âÊÔ´úÂë
 		Grid* grid = new Grid();
-		//grid->setGridRCCollection(3, 3);
+		grid->setGridRCCollection(3, 3);
 		grid->setBackground(Brush(Draw::Color::BLUE));
 		setContent(*grid);
 		Grid* grid2 = new Grid();
-		grid2->setBackground(Brush(0xffffeeef));
-		grid->setRC(grid2, 3, 3);
+		grid2->setBackground(Brush(0xffff00ff));
+		grid->setRC(grid2, 1, 0);
 		Button* btn = new Button();
 		btn->setWidth(100);
 		btn->setHeight(20);
-		btn->setContent(L"ÄãºÃ");
+		btn->setZindex(12);
+		//btn->setContent(L"ÄãºÃ");
 		grid2->addChild(*btn);
 		btn->setBackground(Brush(Draw::Color::GREEN));
 		grid->addChild(*grid2);

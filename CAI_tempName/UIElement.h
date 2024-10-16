@@ -5,6 +5,7 @@
 class PaintDevice;
 class ControlTemplate;
 class Size;
+extern float zmax;
 /// <summary>
 /// 所有可视化元素的基类，定义了可视化元素必须的量：位置，大小，颜色
 /// 位置和大小采用了矩阵运算，目前矩阵是在cpu上计算，后续将矩阵迁移至
@@ -27,6 +28,7 @@ public:
 	void setParent(UIElement* parent);
 	virtual void setHeight(float value);
 	virtual void setWidth(float value);
+	virtual void setZindex(float value);
 	void setWidthAndHeight(float width, float height);
 	void setMinHeight(float value);
 	void setMinWidth(float value);
@@ -62,6 +64,7 @@ public:
 	DependencyProperty<float> minHeight{ "MinHeight" };
 	DependencyProperty<float> maxWidth{ "MaxWidth" };
 	DependencyProperty<float> maxHeight{ "MaxHeight" };
+	DependencyProperty<float> zIndex{ "Z-index" };
 	DependencyProperty<Draw::Brush> background{ "Background" };
 protected:
 	ControlTemplate* style;

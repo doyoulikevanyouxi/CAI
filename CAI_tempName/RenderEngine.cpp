@@ -120,7 +120,8 @@ void RenderEngine::renderLoop(void)
 {
 	if (!alreadyOn)
 		return;
-
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
 		glClearColor(1.f,1.f,1.f,1.f);

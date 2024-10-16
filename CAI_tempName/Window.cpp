@@ -3,6 +3,7 @@
 #include "ControlStyle.h"
 #include <glad/glad.h>
 #include <glfw3.h>
+#include "PaintDevice.h"
 #include <iostream>
 Window::Window() noexcept :winHd(NULL)
 {
@@ -63,13 +64,16 @@ void Window::init() noexcept
 		0,0,0,1
 	};
 	
-	Size sizeT(0, 0, width.get(), height.get());
+	Size sizeT(0, 0,0, width.get(), height.get());
 	this->size = sizeT;
+	size.TransMatrix() = mt;
+	beginInit(size);
+	projection[2][2] =- 1.f / zmax;
+	projection[3][2] = 1;
 	CAIEngine.setColorProjection(colorProjection);
 	CAIEngine.setWindowProjection(projection);
 
-	size.TransMatrix() = mt;
-	beginInit(size);
+	
 }
 
 void Window::setSize(int width, int height) noexcept
