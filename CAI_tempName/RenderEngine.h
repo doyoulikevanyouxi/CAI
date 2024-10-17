@@ -43,6 +43,7 @@ private:
 	GLFWwindow* mainWinHd;
 	Shader* squareShader;
 	Shader* fontShader;
+	Shader* templateShader;
 	Font* font;
 	std::vector<Window*> windows;
 public:

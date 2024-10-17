@@ -2,6 +2,7 @@
 #include<utility>
 #include"Object.h"
 #include"Math.hpp"
+
 class Point : public Object {
 public:
 	Point() noexcept :x(0.f), y(0.f) {}
@@ -63,6 +64,14 @@ public:
 	float X() const { return x; }
 	float Y() const { return y; }
 	float Z() const { return z; }
+	Size transto() {
+		Size tmp(*this);
+		tmp.mode = tmp.mode.Transpose();
+		tmp.sizeCoord =  tmp.mode* tmp.sizeCoord;
+		tmp.x = tmp.sizeCoord[0][0];
+		tmp.y = tmp.sizeCoord[1][0];
+		return tmp;
+	}
 	float Width() const { return width; }
 	float Height() const { return height; }
 	Math::SquareMatrix<4>& TransMatrix() const { return mode; }

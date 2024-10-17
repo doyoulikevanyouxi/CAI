@@ -155,8 +155,13 @@ void Grid::setGridRCCollection(unsigned int rowCount, unsigned int columnCount) 
 
 void Grid::aeasure(const Size& size) noexcept
 {
+	//平均行高度
 	float avRowHeight;
+	//平均行高度的计算是减去固定高度总和的剩下高度由剩下的行平分
 	float heigthLeft = height.get() - totalFixedHeight;
+	//如果存在边框，那么剩下的高度还要减去2倍边框大小
+	if (!borderSize.isInvalid())
+		heigthLeft -= 2 * borderSize.get();
 	if (heigthLeft <= 0)
 		avRowHeight = 0;
 	else
@@ -169,8 +174,11 @@ void Grid::aeasure(const Size& size) noexcept
 		yi += avRowHeight;
 	}
 
+	//平均列宽度同上
 	float avColumWidth;
 	float widthLeft = width.get() - totalFixedWidth;
+	if (!borderSize.isInvalid())
+		widthLeft -= 2 * borderSize.get();
 	if (widthLeft <= 0)
 		avColumWidth = 0;
 	else
@@ -182,12 +190,15 @@ void Grid::aeasure(const Size& size) noexcept
 		colum.x = xi;
 		xi += avColumWidth;
 	}
+	//初始化子控件在grid下的x，y
 	float x = 0;
 	float y = 0;
 
 	int rCount = rowDeinitions.Size();
 	int cCount = columDeinitions.Size();
+	//遍历所有可视化树：子控件也在可视化树中
 	for (auto& child : style->visualTree) {
+		//初始化控件的行列数据和占几行占几列的数据
 		int R = 0;
 		int Rspan = 1;
 		int C = 0;
@@ -210,10 +221,10 @@ void Grid::aeasure(const Size& size) noexcept
 		float sizeH = 0;
 		float sizeW = 0;
 		//当控件不存在行的设置
-		//那么将子控件的x坐标对齐父控件的左上角，并且其绘制空间变更为父控件的实际大小
+		//那么将子控件的y坐标对齐size绘制空间的y,高度也设置成该数据
 		if (rowDeinitions.empty()) {
-			y = 0;
-			sizeH = getActualHeight();
+			y = size.Y();
+			sizeH = size.Height();
 		}
 		else {
 			//将大于行数的数据重置为第1行
@@ -227,10 +238,10 @@ void Grid::aeasure(const Size& size) noexcept
 			}
 			y = rowDeinitions[R].y;
 		}
-
+		//如果列设置为空，同上
 		if (columDeinitions.empty()) {
-			x = 0;
-			sizeW = getActualWidth();
+			x = size.X();
+			sizeW = size.Width();
 		}
 		else {
 			if (C >= cCount)
@@ -242,7 +253,7 @@ void Grid::aeasure(const Size& size) noexcept
 			}
 			x = columDeinitions[C].x;
 		}
-
+		
 		Size tmp(x, y,size.Z(), sizeW, sizeH);
 		tmp.TransMatrix() = style->styleData().AreaSize().TransMatrix();
 		child->beginInit(tmp);

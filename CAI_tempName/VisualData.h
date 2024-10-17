@@ -4,6 +4,9 @@ class Size;
 namespace Draw {
 	class Brush;
 }
+/// <summary>
+/// 包含了一个控件的所有绘制数据
+/// </summary>
 class VisualData final : public Object {
 public:
 	VisualData() noexcept;
@@ -12,10 +15,13 @@ public:
 	~VisualData()	noexcept;
 public:
 	inline Size& AreaSize() const noexcept { return *areaSize; }
+	inline Size& ContentSize() const noexcept { return *contentSize; }
 	inline Draw::Brush& AreaBrush() const noexcept { return *areaBrush; }
 	inline unsigned int VertexSize() const noexcept { return vertexSize; }
 	inline unsigned int IndexSize() const noexcept { return indexSize; }
+	void setBorderSize(float value) noexcept;
 	float* VertexData() const noexcept;
+	void initData();
 	unsigned int* VertexIndexData() const noexcept;
 
 public:
@@ -38,15 +44,28 @@ public:
 	}*/
 public:
 	bool isDataHasBeenPushToGpu;
+	bool hasBorder;
 private:
 	friend class PaintDevice;
+	//绘制区域大小
 	mutable Size* areaSize;
+	//边框大小
+	mutable float borderSize;
+	//除去边框的内容大小---所有子控件将在此区域内绘制
+	mutable Size* contentSize;
+	//绘制区域颜色刷
 	mutable Draw::Brush* areaBrush;
+	mutable Draw::Brush* borderBrush;
+	//绘制顶点数据
 	mutable float* vertexData;
+	mutable float* borderData;
+	//顶点索引数据
 	mutable unsigned int* vertexIndexData;
-	mutable int vertexStride;
-	mutable int colorStride;
+
+	//顶点数据个数
 	mutable unsigned int vertexSize;
+	//锁定数据个数
 	mutable unsigned int indexSize;
+	//材质ID
 	mutable unsigned int texture;
 };

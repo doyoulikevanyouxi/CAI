@@ -4,6 +4,9 @@
 #include"coordinate.h"
 #include<glad/glad.h>
 #include"PaintDevice.h"
+
+#include"Shader.h"
+#include"RenderEngine.h"
 float zmax = 1;
 UIElement::UIElement(UIElement* parent) noexcept :style(new ControlTemplate()), parent(parent), pDevice(new PaintDevice())
 {
@@ -40,10 +43,15 @@ UIElement::~UIElement() noexcept
 
 void UIElement::render() noexcept
 {
-	pDevice->Draw(style);
+	pDevice->Draw(style);	
+	//裁剪测试，由于float精度问题，可能存在裁剪过后存在间隙
+	glEnable(GL_SCISSOR_TEST);
+	Size sz = style->vData.ContentSize().transto();
+	glScissor(sz.X(), sz.Y(), sz.Width(), sz.Height());
 	for (auto& element : style->visualTree) {
 		element->render();
 	}
+	glDisable(GL_SCISSOR_TEST);
 }
 
 void UIElement::setControlStyeData() noexcept
@@ -70,6 +78,12 @@ void UIElement::setZindex(float value)
 {
 	zIndex.set(value);
 	style->vData.AreaSize().setZ(value);
+}
+
+void UIElement::setBorderSize(float value)
+{
+	borderSize.set(value);
+	style->vData.setBorderSize(value);
 }
 
 void UIElement::setWidthAndHeight(float width, float height)
@@ -113,9 +127,9 @@ Size UIElement::measure(const Size& size) noexcept
 {
 	setActualHeight();
 	setActualWidth();
-	if (actualHeight > size.Height())
+	if (actualHeight > size.Height() && height.isInvalid())
 		actualHeight = size.Height();
-	if (actualWidth >= size.Width())
+	if (actualWidth >= size.Width() && width.isInvalid())
 		actualWidth = size.Width();
 	style->vData.AreaSize().setWidth(actualWidth);
 	style->vData.AreaSize().setHeight(actualHeight);
@@ -126,12 +140,13 @@ Size UIElement::measure(const Size& size) noexcept
 									0,0,1,0,
 									size.X(),size.Y(),0,1
 	};
-	if(zIndex.isInvalid())
-		style->vData.AreaSize().setZ(size.Z()+1);
+	if (zIndex.isInvalid())
+		style->vData.AreaSize().setZ(size.Z() + 1);
 	style->vData.AreaSize().TransMatrix() = size.TransMatrix() * tMatrix;
 	if (zmax < style->vData.AreaSize().Z())
 		zmax = style->vData.AreaSize().Z();
-	return style->vData.AreaSize();
+	style->vData.initData();
+	return style->vData.ContentSize();
 }
 
 void UIElement::aeasure(const Size& size) noexcept
@@ -160,7 +175,6 @@ void UIElement::setActualWidth()
 		else {
 			if (!minWidth.isInvalid()) {
 				actualWidth = minWidth.get();
-				style->vData.AreaSize().setWidth(actualWidth);
 				return;
 			}
 			else {
@@ -182,19 +196,17 @@ void UIElement::setActualHeight()
 {
 	if (height.isInvalid()) {
 		if (parent != nullptr) {
-			height=actualHeight = parent->actualHeight;
+			height = actualHeight = parent->actualHeight;
 		}
 		else {
 			if (!minHeight.isInvalid()) {
 				actualHeight = minHeight.get();
-				style->vData.AreaSize().setHeight(actualHeight);
-
 				return;
 			}
 			else {
 				actualHeight = 0.f;
 			}
-				
+
 		}
 	}
 	else {

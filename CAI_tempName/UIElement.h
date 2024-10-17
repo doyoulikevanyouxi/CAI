@@ -29,6 +29,7 @@ public:
 	virtual void setHeight(float value);
 	virtual void setWidth(float value);
 	virtual void setZindex(float value);
+	void setBorderSize(float value);
 	void setWidthAndHeight(float width, float height);
 	void setMinHeight(float value);
 	void setMinWidth(float value);
@@ -66,6 +67,7 @@ public:
 	DependencyProperty<float> maxHeight{ "MaxHeight" };
 	DependencyProperty<float> zIndex{ "Z-index" };
 	DependencyProperty<Draw::Brush> background{ "Background" };
+	DependencyProperty<float> borderSize{ "Border-Size" };
 protected:
 	ControlTemplate* style;
 	/// <summary>
@@ -78,6 +80,7 @@ protected:
 	float actualHeight;
 	UIElement* parent;
 
+	
 	//以下是openGL所用到资源
 protected:
 	PaintDevice* pDevice;

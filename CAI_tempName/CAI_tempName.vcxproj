@@ -131,8 +131,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c" />
+    <ClCompile Include="Border.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Decoration.cpp" />
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="EControl.cpp" />
     <ClCompile Include="ControlStyle.cpp" />
@@ -152,11 +154,13 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Border.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="castd.h" />
     <ClInclude Include="Changed.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="ContentControl.h" />
+    <ClInclude Include="Decoration.h" />
     <ClInclude Include="EControl.h" />
     <ClInclude Include="ControlStyle.h" />
     <ClInclude Include="Draw.h" />
@@ -170,7 +174,6 @@
     <ClInclude Include="Panel.h" />
     <ClInclude Include="Property.hpp" />
     <ClInclude Include="RenderEngine.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="RowDefinition.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Coordinate.h" />
@@ -184,6 +187,7 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="templatetest.sha" />
     <None Include="text_shader.sha" />
     <None Include="square_shader.sha" />
   </ItemGroup>

@@ -6,7 +6,7 @@
 #include <iostream>
 #include "Window.h"
 using namespace std;
-RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), 
+RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), templateShader(nullptr),
 									font(nullptr), alreadyOn(false), mainWHasToken(false)
 {
 	name = "RenderEngine";
@@ -18,6 +18,8 @@ RenderEngine::~RenderEngine() noexcept
 		delete squareShader;
 	if (fontShader != nullptr)
 		delete fontShader;
+	if (templateShader != nullptr)
+		delete templateShader;
 	if (font != nullptr)
 		delete font;
 	glfwTerminate();
@@ -52,6 +54,7 @@ uint32_t RenderEngine::initial(void)
 	std::cout << "Maximum  of vertex attributes supported: " << nrAttributes << std::endl;
 	squareShader = new Shader("./square_shader.sha");
 	fontShader = new Shader("./text_shader.sha");
+	templateShader = new Shader("./templatetest.sha");
 	font = new Font();
 	squareShader->use();
 	alreadyOn = true;
@@ -103,6 +106,7 @@ void RenderEngine::setWindowProjection(const Math::TransMatrix& mt)
 {
 	squareShader->setMat4("projection", mt);
 	fontShader->setMat4("projection", mt);
+	templateShader->setMat4("projection", mt);
 }
 
 void RenderEngine::setColorProjection(const Math::TransMatrix& mt)
@@ -122,10 +126,15 @@ void RenderEngine::renderLoop(void)
 		return;
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+
+	glEnable(GL_STENCIL);
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
 		glClearColor(1.f,1.f,1.f,1.f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		for (auto& win : windows) {
 
 			glfwMakeContextCurrent(win->getWinHD());

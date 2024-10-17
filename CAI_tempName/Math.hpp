@@ -144,5 +144,6 @@ namespace Math {
 	/// 具有4个分量的向量
 	/// </summary>
 	using vec4 = Matrix<4, 1>;
+	using vec4_t = Matrix<1, 4>;
 	using vec2 = Matrix<2, 1>;
 }

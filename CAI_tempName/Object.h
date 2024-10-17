@@ -1,5 +1,6 @@
 #pragma once
 //所有UI的基类
+#include<iostream>
 #include<string>
 class Object 
 {

@@ -127,6 +127,7 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 	const VisualData& data = style->vData;
 	if (data.isInvalid())
 		return;
+		
 	glBindVertexArray(VAO);
 	if (!style->vData.isDataHasBeenPushToGpu) {
 		Brush* areaBrush = &(style->vData.AreaBrush());
@@ -172,6 +173,27 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 		style->vData.isDataHasBeenPushToGpu = true;
 	}
 	CAIEngine.squareShader->setMat4("model", data.AreaSize().TransMatrix());
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	if (data.hasBorder) {
+		glStencilFunc(GL_ALWAYS, 1, 0xff);
+		glStencilMask(0xff);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * data.VertexSize(), data.VertexData());
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		CAIEngine.templateShader->setMat4("model", data.AreaSize().TransMatrix());
+		glStencilFunc(GL_NOTEQUAL, 1, 0xff);
+		glStencilMask(0x00);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * data.VertexSize(), data.borderData);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glStencilFunc(GL_ALWAYS, 0, 0xFF);
+		glStencilMask(0x00);
+	}
+	else {
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
+
 	glBindVertexArray(0);
 }
+
