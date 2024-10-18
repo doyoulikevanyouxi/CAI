@@ -118,9 +118,15 @@ void UIElement::setBackground(const Draw::Brush& color)
 	style->vData.AreaBrush() = color;
 }
 
+void UIElement::setBorderBrush(const Draw::Brush& color)
+{
+	*(style->vData.borderBrush) = color;
+}
+
 void UIElement::beginInit(const Size& size) noexcept
 {
 	aeasure(measure(size));
+	style->vData.initData();
 }
 
 Size UIElement::measure(const Size& size) noexcept
@@ -145,7 +151,7 @@ Size UIElement::measure(const Size& size) noexcept
 	style->vData.AreaSize().TransMatrix() = size.TransMatrix() * tMatrix;
 	if (zmax < style->vData.AreaSize().Z())
 		zmax = style->vData.AreaSize().Z();
-	style->vData.initData();
+	
 	return style->vData.ContentSize();
 }
 

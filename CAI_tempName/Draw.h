@@ -46,6 +46,8 @@ namespace Draw {
 			return *this;
 		}
 		Color& operator=(const Color& cl) {
+			if (this == &cl)
+				return *this;
 			aColor = cl.aColor;
 			rColor = cl.rColor;
 			gColor = cl.gColor;
@@ -73,6 +75,7 @@ namespace Draw {
 		bool hasTexture();
 	public:
 		Brush& operator=(const Brush& other) noexcept;
+		Brush& operator=(const Color& color) noexcept;
 	private:
 		mutable Color bColor;
 		mutable std::string texturePath;

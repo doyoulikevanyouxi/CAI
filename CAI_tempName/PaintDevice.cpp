@@ -33,6 +33,7 @@ void PaintDevice::setWindow(Window* wnd) noexcept
 	glGenBuffers(1, &EBO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36, NULL, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBindVertexArray(0);
 	areadySet = true;
@@ -160,13 +161,15 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 			stbi_image_free(data);
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.VertexSize(), data.VertexData(), GL_STATIC_DRAW);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 12, data.vertexData);
+		glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 12,sizeof(float)*16, data.vertexColorData);
+		glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 12+sizeof(float) * 16, sizeof(float) *8, data.textureIndexData);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * data.IndexSize(), data.VertexIndexData(), GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(12 * sizeof(float)));
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(28 * sizeof(float)));
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
@@ -177,14 +180,14 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 		glStencilFunc(GL_ALWAYS, 1, 0xff);
 		glStencilMask(0xff);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * data.VertexSize(), data.VertexData());
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 12, data.vertexData);
+		glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 12, sizeof(float) * 16, data.vertexColorData);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		CAIEngine.templateShader->setMat4("model", data.AreaSize().TransMatrix());
 		glStencilFunc(GL_NOTEQUAL, 1, 0xff);
 		glStencilMask(0x00);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * data.VertexSize(), data.borderData);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float)*12, data.borderVertexData);
+		glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 12, sizeof(float)*16, data.borderVertexColorData);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glStencilFunc(GL_ALWAYS, 0, 0xFF);

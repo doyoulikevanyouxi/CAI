@@ -36,6 +36,7 @@ public:
 	void setMaxHeight(float value);
 	void setMaxWidth(float value);
 	void setBackground(const Draw::Brush& color);
+	void setBorderBrush(const Draw::Brush& color);
 	inline float getActualWidth() const noexcept { return actualWidth; }
 	inline float getActualHeight() const noexcept { return actualHeight; }
 	ControlTemplate& getControlTemplate() { return *style; }
@@ -68,6 +69,7 @@ public:
 	DependencyProperty<float> zIndex{ "Z-index" };
 	DependencyProperty<Draw::Brush> background{ "Background" };
 	DependencyProperty<float> borderSize{ "Border-Size" };
+	DependencyProperty<float> shadow{ "Border-Size" };
 protected:
 	ControlTemplate* style;
 	/// <summary>

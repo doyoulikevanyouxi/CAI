@@ -21,9 +21,11 @@ public:
 		btn->setWidth(500);
 		btn->setHeight(20);
 		btn->setZindex(12);
+		//btn->setMargin(20,30,0,0);
 		//btn->setContent(L"ÄãºÃ");
 		grid2->addChild(*btn);
 		grid2->setBorderSize(10);
+		grid2->setBorderBrush(Brush(0xff00fefe));
 		btn->setBackground(Brush(Draw::Color::GREEN));
 		grid->addChild(*grid2);
 		///

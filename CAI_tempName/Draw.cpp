@@ -37,7 +37,15 @@ bool Draw::Brush::hasTexture()
 
 Draw::Brush& Draw::Brush::operator=(const Brush& other) noexcept
 {
+	if (this == &other)
+		return *this;
 	bColor = other.bColor;
 	texturePath = other.texturePath;
+	return *this;
+}
+
+Draw::Brush& Draw::Brush::operator=(const Color& color) noexcept
+{
+	bColor = bColor;
 	return *this;
 }
