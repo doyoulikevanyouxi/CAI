@@ -172,6 +172,32 @@ void UIElement::setActualHeight(float value)
 	actualHeight = value;
 }
 
+void UIElement::OnMouseOver(CAI::MouseMoveEvent& e)
+{
+	e.handled = false;
+}
+
+void UIElement::OnEvent( CAI::EventAbstract& e)
+{
+	switch (e.GetEventType())
+	{
+	case	CAI::EventSubType::MouseMoveEvent: {
+		OnMouseOver((CAI::MouseMoveEvent&)e);
+	}
+	
+		break;
+	default:
+		break;
+	}
+	if (e.handled)
+		return;
+	for (auto& child : style->visualTree) {
+		child->OnEvent(e);
+		if (e.handled)
+			return;
+	}
+}
+
 void UIElement::setActualWidth()
 {
 	if (width.isInvalid()) {

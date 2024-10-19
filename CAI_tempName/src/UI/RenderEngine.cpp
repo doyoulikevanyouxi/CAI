@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Character.h"
 #include "Controls/ContentControls/Window.h"
+#include "Events/Events.h"
 using namespace std;
 RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), templateShader(nullptr),
 									font(nullptr), alreadyOn(false), mainWHasToken(false)
@@ -58,7 +59,6 @@ uint32_t RenderEngine::initial(void)
 	font = new Font();
 	squareShader->use();
 	alreadyOn = true;
-	
 	return 0;
 }
 
@@ -86,6 +86,7 @@ void RenderEngine::activateWindow(GLFWwindow* win)
 void RenderEngine::addRenderWindow(Window* win)
 {
 	windows.emplace_back(win);
+	glfwSetWindowUserPointer(win->getWinHD(), win);
 }
 
 void RenderEngine::setWindowPossition(GLFWwindow* win, int x, int y)
@@ -130,6 +131,11 @@ void RenderEngine::renderLoop(void)
 	glEnable(GL_STENCIL);
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glfwSetCursorPosCallback(mainWinHd, [](GLFWwindow* window, double xpos, double ypos) {
+		Window* win =  (Window*)glfwGetWindowUserPointer(window);
+		CAI::MouseMoveEvent e(xpos, ypos);
+		win->OnEvent(e);
+	});
 
 	while (!glfwWindowShouldClose(mainWinHd))
 	{

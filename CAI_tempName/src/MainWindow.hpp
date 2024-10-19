@@ -4,6 +4,14 @@
 #include "Controls/PanelControls/Grid.h"
 //#include"UI/Draw.h"
 using Brush = Draw::Brush;
+class GG :public Grid {
+
+protected:
+	virtual void OnMouseOver(CAI::MouseMoveEvent& e) override {
+		std::cout << e.ToString() << std::endl;
+		e.handled = true;
+	}
+};
 class MainWindow : public Window
 {
 public:
@@ -11,7 +19,7 @@ public:
 		initializeComponents();
 
 		///测试代码
-		Grid* grid = new Grid();
+		GG* grid = new GG();
 		grid->setGridRCCollection(3, 3);
 		grid->setBackground(Brush(Draw::Color::BLUE));
 		setContent(*grid);
@@ -33,6 +41,7 @@ public:
 	}
 	~MainWindow() noexcept {
 	}
+
 private:
 	void initializeComponents(void) {
 		//以下设置每个窗口都会有一个，其目的是将坐标映射到标准设备坐标

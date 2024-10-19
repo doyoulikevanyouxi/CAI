@@ -1,5 +1,7 @@
 #pragma once
 #include "UI/UIElement.h"
+
+
 enum RelativeLocation
 {
 	Center,
@@ -29,5 +31,6 @@ public:
 	DependencyProperty<RelativeLocation> verticalAlignment{ "VerticalAlignment" };
 public:
 	void show();
+
 };
 

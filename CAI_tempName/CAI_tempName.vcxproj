@@ -107,8 +107,10 @@
     <ClCompile Include="src\Controls\ContentControls\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Events\EventAbstract.h" />
     <ClInclude Include="src\Controls\ContentControls\Button.h" />
     <ClInclude Include="src\caipch.h" />
+    <ClInclude Include="src\Events\Events.h" />
     <ClInclude Include="src\UI\Character.h" />
     <ClInclude Include="src\Controls\ContentControl.h" />
     <ClInclude Include="src\Controls\Decoration.h" />

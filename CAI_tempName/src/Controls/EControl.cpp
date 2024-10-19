@@ -2,7 +2,8 @@
 #include "EControl.h"
 #include "Datas/ControlStyle.h"
 #include "Datas/Coordinate.h"
-Control::Control() noexcept
+
+Control::Control() noexcept 
 {
 	horizontAlalignment.set(Center);
 	verticalAlignment.set(Center);
@@ -97,7 +98,3 @@ Size Control::measure(const Size& size) noexcept
 	return sz;
 }
 
-
-void Control::show()
-{
-}

@@ -55,6 +55,15 @@ public:
 	/// <param name="value"></param>
 	void setActualWidth(float value);
 	void setActualHeight(float value);
+protected:
+	/*virtual void OnResize() override;
+	virtual void OnRender() override;
+	virtual void OnMouseOver() override;
+	virtual void OnMouseLeftButtonPress() override;
+	virtual void OnMouseLeftButtonUp() override;*/
+	friend class RenderEngine;
+	virtual void OnMouseOver( CAI::MouseMoveEvent& e) override;
+	virtual void OnEvent( CAI::EventAbstract& e) override;
 private:
 	void setActualWidth();
 	void setActualHeight();

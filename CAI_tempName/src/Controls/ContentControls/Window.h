@@ -15,6 +15,10 @@ public:
 	Window() noexcept;
 	Window(int width, int height) noexcept;
 	virtual ~Window() noexcept;
+
+	void test(GLFWwindow* window, double xpos, double ypos) {
+
+	}
 public:
 	void activited();
 	void show();

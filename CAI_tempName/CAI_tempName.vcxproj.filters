@@ -197,6 +197,12 @@
     <ClInclude Include="src\Controls\Decoration.h">
       <Filter>头文件\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="src\Events\EventAbstract.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\Events.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\text_shader.sha">
