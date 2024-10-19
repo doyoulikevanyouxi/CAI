@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -26,19 +18,6 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -57,12 +36,6 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -70,41 +43,20 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\bin-data\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\openglLIB\glfw\include\GLFW;D:\openglLIB\glad\include;D:\openglLIB\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;D:\openglLIB\glfw\include\GLFW;D:\openglLIB\glad\include;D:\openglLIB\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>caipch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,66 +82,62 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c" />
-    <ClCompile Include="Border.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Character.cpp" />
-    <ClCompile Include="Decoration.cpp" />
-    <ClCompile Include="Draw.cpp" />
-    <ClCompile Include="EControl.cpp" />
-    <ClCompile Include="ControlStyle.cpp" />
-    <ClCompile Include="Element.cpp" />
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="PaintDevice.cpp" />
-    <ClCompile Include="Panel.cpp" />
-    <ClCompile Include="RenderEngine.cpp" />
-    <ClCompile Include="RowDefinition.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="TedPanel.cpp" />
-    <ClCompile Include="TextBlock.cpp" />
-    <ClCompile Include="UIElement.cpp" />
-    <ClCompile Include="VisualData.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\caipch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Controls\ContentControls\Button.cpp" />
+    <ClCompile Include="src\UI\Character.cpp" />
+    <ClCompile Include="src\Controls\Decoration.cpp" />
+    <ClCompile Include="src\UI\Draw.cpp" />
+    <ClCompile Include="src\Controls\EControl.cpp" />
+    <ClCompile Include="src\UI\Element.cpp" />
+    <ClCompile Include="src\Controls\PanelControls\Grid.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\UI\PaintDevice.cpp" />
+    <ClCompile Include="src\Controls\PanelControls\Panel.cpp" />
+    <ClCompile Include="src\UI\RenderEngine.cpp" />
+    <ClCompile Include="src\UI\Shader.cpp" />
+    <ClCompile Include="src\stbimge\stb_image.cpp" />
+    <ClCompile Include="src\Controls\ContentControls\TextBlock.cpp" />
+    <ClCompile Include="src\UI\UIElement.cpp" />
+    <ClCompile Include="src\Datas\VisualData.cpp" />
+    <ClCompile Include="src\Controls\ContentControls\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Border.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="castd.h" />
-    <ClInclude Include="Changed.h" />
-    <ClInclude Include="Character.h" />
-    <ClInclude Include="ContentControl.h" />
-    <ClInclude Include="Decoration.h" />
-    <ClInclude Include="EControl.h" />
-    <ClInclude Include="ControlStyle.h" />
-    <ClInclude Include="Draw.h" />
-    <ClInclude Include="Element.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="MainWindow.hpp" />
-    <ClInclude Include="Math.hpp" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="PaintDevice.h" />
-    <ClInclude Include="Panel.h" />
-    <ClInclude Include="Property.hpp" />
-    <ClInclude Include="RenderEngine.h" />
-    <ClInclude Include="RowDefinition.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Coordinate.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="TedPanel.h" />
-    <ClInclude Include="TextAnalysis.h" />
-    <ClInclude Include="TextBlock.h" />
-    <ClInclude Include="UIElement.h" />
-    <ClInclude Include="Collection.h" />
-    <ClInclude Include="VisualData.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="src\Controls\ContentControls\Button.h" />
+    <ClInclude Include="src\caipch.h" />
+    <ClInclude Include="src\UI\Character.h" />
+    <ClInclude Include="src\Controls\ContentControl.h" />
+    <ClInclude Include="src\Controls\Decoration.h" />
+    <ClInclude Include="src\Controls\EControl.h" />
+    <ClInclude Include="src\Datas\ControlStyle.h" />
+    <ClInclude Include="src\UI\Draw.h" />
+    <ClInclude Include="src\UI\Element.h" />
+    <ClInclude Include="src\Controls\PanelControls\Grid.h" />
+    <ClInclude Include="src\MainWindow.hpp" />
+    <ClInclude Include="src\Mathmatics\Math.hpp" />
+    <ClInclude Include="src\Object.h" />
+    <ClInclude Include="src\UI\PaintDevice.h" />
+    <ClInclude Include="src\Controls\PanelControls\Panel.h" />
+    <ClInclude Include="src\Datas\Property.hpp" />
+    <ClInclude Include="src\UI\RenderEngine.h" />
+    <ClInclude Include="src\Datas\RowDefinition.h" />
+    <ClInclude Include="src\UI\Shader.h" />
+    <ClInclude Include="src\Datas\Coordinate.h" />
+    <ClInclude Include="src\stbimge\stb_image.h" />
+    <ClInclude Include="src\Controls\ContentControls\TextBlock.h" />
+    <ClInclude Include="src\UI\UIElement.h" />
+    <ClInclude Include="src\Datas\Collection.h" />
+    <ClInclude Include="src\Datas\VisualData.h" />
+    <ClInclude Include="src\Controls\ContentControls\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="templatetest.sha" />
-    <None Include="text_shader.sha" />
-    <None Include="square_shader.sha" />
+    <None Include="resources\Shaders\templatetest.sha" />
+    <None Include="resources\Shaders\text_shader.sha" />
+    <None Include="resources\Shaders\square_shader.sha" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf" />
