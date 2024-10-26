@@ -172,17 +172,17 @@ void UIElement::setActualHeight(float value)
 	actualHeight = value;
 }
 
-void UIElement::OnMouseOver(CAI::MouseMoveEvent& e)
+void UIElement::OnMouseOver(CAITF::MouseMoveEvent& e)
 {
 	e.handled = false;
 }
 
-void UIElement::OnEvent( CAI::EventAbstract& e)
+void UIElement::OnEvent( CAITF::EventAbstract& e)
 {
 	switch (e.GetEventType())
 	{
-	case	CAI::EventSubType::MouseMoveEvent: {
-		OnMouseOver((CAI::MouseMoveEvent&)e);
+	case	CAITF::EventSubType::MouseMoveEvent: {
+		OnMouseOver((CAITF::MouseMoveEvent&)e);
 	}
 	
 		break;

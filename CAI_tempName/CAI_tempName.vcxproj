@@ -46,14 +46,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\bin-data\</IntDir>
+    <LibraryPath>$(SolutionDir)$(ProjectName)\CLog\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CLOG_PLATFORM_WINDOWS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;D:\openglLIB\glfw\include\GLFW;D:\openglLIB\glad\include;D:\openglLIB\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\CLog\include;src;D:\openglLIB\glfw\include\GLFW;D:\openglLIB\glad\include;D:\openglLIB\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>caipch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -62,7 +63,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\openglLIB\glfw;D:\openglLIB\freetype;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;freetype.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CLog.lib;glfw3.lib;freetype.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -85,6 +86,7 @@
     <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\log\Log.cpp" />
     <ClCompile Include="src\caipch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -107,10 +109,12 @@
     <ClCompile Include="src\Controls\ContentControls\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\log\Log.h" />
     <ClInclude Include="src\Events\EventAbstract.h" />
     <ClInclude Include="src\Controls\ContentControls\Button.h" />
     <ClInclude Include="src\caipch.h" />
     <ClInclude Include="src\Events\Events.h" />
+    <ClInclude Include="src\Shapes.h" />
     <ClInclude Include="src\UI\Character.h" />
     <ClInclude Include="src\Controls\ContentControl.h" />
     <ClInclude Include="src\Controls\Decoration.h" />

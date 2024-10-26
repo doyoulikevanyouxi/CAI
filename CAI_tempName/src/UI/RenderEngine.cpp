@@ -35,7 +35,7 @@ uint32_t RenderEngine::initial(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	mainWinHd = glfwCreateWindow(800, 600, "CAI(TEMP)", NULL, NULL);
+	mainWinHd = glfwCreateWindow(800, 600, "CAITF(TEMP)", NULL, NULL);
 	if (mainWinHd == NULL)
 	{
 		cout << "Failed to create GLFW window" << std::endl;
@@ -133,7 +133,7 @@ void RenderEngine::renderLoop(void)
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	glfwSetCursorPosCallback(mainWinHd, [](GLFWwindow* window, double xpos, double ypos) {
 		Window* win =  (Window*)glfwGetWindowUserPointer(window);
-		CAI::MouseMoveEvent e(xpos, ypos);
+		CAITF::MouseMoveEvent e(xpos, ypos);
 		win->OnEvent(e);
 	});
 

@@ -1,5 +1,5 @@
 #pragma once
-namespace CAI {
+namespace CAITF {
 	enum	 EventType {
 		KeybordEvent,
 		MouseButtonEvent,

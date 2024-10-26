@@ -1,13 +1,12 @@
 #pragma once
-#include"Controls/ContentControls/Window.h"
-#include"Controls/ContentControls/Button.h"
-#include "Controls/PanelControls/Grid.h"
-//#include"UI/Draw.h"
+#include "Shapes.h"
+#include "log/Log.h"
+#include <Events/Events.h>
 using Brush = Draw::Brush;
 class GG :public Grid {
 
 protected:
-	virtual void OnMouseOver(CAI::MouseMoveEvent& e) override {
+	virtual void OnMouseOver(CAITF::MouseMoveEvent& e) override {
 		std::cout << e.ToString() << std::endl;
 		e.handled = true;
 	}
@@ -15,9 +14,10 @@ protected:
 class MainWindow : public Window
 {
 public:
-	MainWindow(int width=800,int height=600) noexcept :Window(width, height) {
+	MainWindow(int width = 800, int height = 600) noexcept :Window(width, height) {
+		CAITF::Log::init();
 		initializeComponents();
-
+		
 		///²âÊÔ´úÂë
 		GG* grid = new GG();
 		grid->setGridRCCollection(3, 3);
@@ -37,7 +37,8 @@ public:
 		grid2->setBorderBrush(Brush(0xff00fefe));
 		btn->setBackground(Brush(Draw::Color::GREEN));
 		grid->addChild(*grid2);
-		///
+		LogNotice("system init finish{0}","--x");
+		LogError("system error check,{1}", 10, "we");
 	}
 	~MainWindow() noexcept {
 	}

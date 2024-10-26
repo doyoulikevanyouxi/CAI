@@ -1,6 +1,6 @@
 #pragma once
 #include "EventAbstract.h"
-namespace CAI {
+namespace CAITF {
 	class WindowsEvent :public EventAbstract {};
 	class KeybordEvent :public EventAbstract {
 	public:

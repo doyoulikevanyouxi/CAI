@@ -117,6 +117,9 @@
     <ClCompile Include="src\caipch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\log\Log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object.h">
@@ -201,6 +204,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Events\Events.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\log\Log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shapes.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
