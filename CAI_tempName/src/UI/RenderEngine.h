@@ -12,9 +12,18 @@ struct GLFWwindow;
 class Shader;
 class Font;
 class Window;
+namespace CAITF {
+	class EventAbstract;
+}
 class RenderEngine final : public Object
 {
 	friend class PaintDevice;
+public:
+	struct EventArgs
+	{
+		CAITF::EventAbstract* event;
+		GLFWwindow* winHD;
+	};
 public:
 	RenderEngine() noexcept;
 	~RenderEngine() noexcept;
@@ -33,6 +42,10 @@ public:
 	void setWindowProjection(const Math::TransMatrix& mt);
 	void setColorProjection(const Math::TransMatrix& mt);
 	void setColorProjection(float* mt);
+	void EventDistribute(EventArgs& eArgs);
+	void EventReDistribute(CAITF::EventAbstract& event);
+private:
+	Window* findWindowByHD(GLFWwindow* HD);
 private:
 	//将渲染循环统一起来是很麻烦的事
 	//必须有一个窗口接受数据更新，否则会出先bug
@@ -44,6 +57,7 @@ private:
 	Shader* templateShader;
 	Font* font;
 	std::vector<Window*> windows;
+	EventArgs* eventArgs;
 public:
 	bool alreadyOn;
 	bool mainWHasToken;

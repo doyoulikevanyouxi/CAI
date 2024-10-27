@@ -109,6 +109,7 @@
     <ClCompile Include="src\Controls\ContentControls\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\MVVM\AbstractNotifyPropertyChanged.h" />
     <ClInclude Include="src\log\Log.h" />
     <ClInclude Include="src\Events\EventAbstract.h" />
     <ClInclude Include="src\Controls\ContentControls\Button.h" />

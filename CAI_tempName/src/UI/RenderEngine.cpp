@@ -8,7 +8,7 @@
 #include "Events/Events.h"
 using namespace std;
 RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), templateShader(nullptr),
-									font(nullptr), alreadyOn(false), mainWHasToken(false)
+									font(nullptr), alreadyOn(false), mainWHasToken(false), eventArgs(new EventArgs)
 {
 	name = "RenderEngine";
 }
@@ -23,6 +23,8 @@ RenderEngine::~RenderEngine() noexcept
 		delete templateShader;
 	if (font != nullptr)
 		delete font;
+	if (eventArgs != nullptr)
+		delete eventArgs;
 	glfwTerminate();
 }
 
@@ -86,7 +88,16 @@ void RenderEngine::activateWindow(GLFWwindow* win)
 void RenderEngine::addRenderWindow(Window* win)
 {
 	windows.emplace_back(win);
-	glfwSetWindowUserPointer(win->getWinHD(), win);
+	glfwSetWindowUserPointer(win->getWinHD(), this);
+	glfwSetCursorPosCallback(mainWinHd, [](GLFWwindow* window, double xpos, double ypos) {
+		RenderEngine* ev = (RenderEngine*)glfwGetWindowUserPointer(window);
+		CAITF::MouseMoveEvent e(xpos, ypos);
+		EventArgs eArgs;
+		eArgs.event = (CAITF::EventAbstract*)&e;
+		eArgs.winHD = window;
+		ev->EventDistribute(eArgs);
+		});
+
 }
 
 void RenderEngine::setWindowPossition(GLFWwindow* win, int x, int y)
@@ -120,6 +131,29 @@ void RenderEngine::setColorProjection(float* mt)
 	squareShader->setMat4("projection_color", mt);
 }
 
+void RenderEngine::EventDistribute(EventArgs& eArgs)
+{
+	Window* win = findWindowByHD(eArgs.winHD);
+	if (win == nullptr)
+		return;
+	win->RaiseEvent(*(eArgs.event));
+}
+
+void RenderEngine::EventReDistribute(CAITF::EventAbstract& event)
+{
+	if (event.target == nullptr)
+		return;
+	((UIElement*)event.target)->RaiseEvent(event);
+}
+
+Window* RenderEngine::findWindowByHD(GLFWwindow* HD)
+{
+	for(auto& win : windows){
+		if (win->getWinHD() == HD)
+			return win;
+	}
+	return nullptr;
+}
 
 void RenderEngine::renderLoop(void)
 {
@@ -131,12 +165,7 @@ void RenderEngine::renderLoop(void)
 	glEnable(GL_STENCIL);
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glfwSetCursorPosCallback(mainWinHd, [](GLFWwindow* window, double xpos, double ypos) {
-		Window* win =  (Window*)glfwGetWindowUserPointer(window);
-		CAITF::MouseMoveEvent e(xpos, ypos);
-		win->OnEvent(e);
-	});
-
+	
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
 		glClearColor(1.f,1.f,1.f,1.f);

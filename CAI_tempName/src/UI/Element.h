@@ -13,7 +13,8 @@ protected:
 	//virtual void OnMouseLeftButtonPress();
 	//virtual void OnMouseLeftButtonUp();
 	virtual void OnMouseOver( CAITF::MouseMoveEvent& e) =0;
-	virtual void OnEvent( CAITF::EventAbstract& e) = 0;
+	virtual void OnEvent(CAITF::EventAbstract& e) = 0;
+	virtual void RaiseEvent(CAITF::EventAbstract& e) = 0;
 protected:
 	CAITF::EventDispatcher eventDispatcher;
 };

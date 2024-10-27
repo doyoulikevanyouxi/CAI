@@ -1,10 +1,12 @@
 #pragma once
+
 #include "EventAbstract.h"
 namespace CAITF {
 	class WindowsEvent :public EventAbstract {};
 	class KeybordEvent :public EventAbstract {
 	public:
 		inline int KeyCode() const noexcept { return key; }
+		Event_Class_PreType(EventType::KeybordEvent)
 	protected:
 		KeybordEvent(int key) noexcept : key(key) {}
 	protected:
@@ -64,6 +66,7 @@ namespace CAITF {
 		MouseMoveEvent(unsigned int x, unsigned int y):x(x),y(y){
 
 		}
+		Event_Class_PreType(EventType::Defualt)
 	public:
 		unsigned int X() const noexcept { return x; }
 		unsigned int Y() const noexcept { return y; }
@@ -85,6 +88,7 @@ namespace CAITF {
 			std::string str = "MouseButtonPressedEvent:" + std::to_string(button) + std::to_string(repeat);
 			return str;
 		}
+		Event_Class_PreType(EventType::MouseButtonEvent)
 		Event_Class_Type(MouseButtonPressedEvent)
 	private:
 		bool repeat;
@@ -102,4 +106,14 @@ namespace CAITF {
 		bool repeat;
 	};
 
+	
+	class PropertyChangedEvent :public EventAbstract{
+	public:
+		PropertyChangedEvent(const char* propertyName) noexcept:propertyName(propertyName) { sType = EventSpreadType::Direct; }
+		Event_Class_Type(PropertyChangedEvent)
+	public:
+		std::string propertyName;
+		void* oldValue;
+		void* newValue;
+	};
 }

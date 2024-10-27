@@ -212,6 +212,9 @@
     <ClInclude Include="src\Shapes.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\MVVM\AbstractNotifyPropertyChanged.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\text_shader.sha">

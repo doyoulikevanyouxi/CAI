@@ -177,24 +177,60 @@ void UIElement::OnMouseOver(CAITF::MouseMoveEvent& e)
 	e.handled = false;
 }
 
-void UIElement::OnEvent( CAITF::EventAbstract& e)
+void UIElement::OnEvent(CAITF::EventAbstract& e)
 {
+	//Ìí¼Ó¹ýÂË£¬¹ýÂËµô±ÜÃâ¼ÌÐø´«µÝ
+	if (eventDispatcher.filter(e))
+		return;
 	switch (e.GetEventType())
 	{
 	case	CAITF::EventSubType::MouseMoveEvent: {
 		OnMouseOver((CAITF::MouseMoveEvent&)e);
 	}
-	
 		break;
 	default:
 		break;
 	}
 	if (e.handled)
 		return;
-	for (auto& child : style->visualTree) {
-		child->OnEvent(e);
-		if (e.handled)
-			return;
+	switch (e.sType)
+	{
+	case CAITF::EventSpreadType::Tunnel:
+		for (auto& child : style->visualTree) {
+			child->OnEvent(e);
+			if (e.handled)
+				return;
+		}
+		break;
+	case CAITF::EventSpreadType::Bubble:
+		parent->OnEvent(e);
+		break;
+	case CAITF::EventSpreadType::Direct:
+		break;
+	default:
+		break;
+	}
+	
+	
+}
+
+void UIElement::RaiseEvent(CAITF::EventAbstract& e)
+{
+	switch (e.sType)
+	{
+	case CAITF::EventSpreadType::Tunnel:
+		OnEvent(e);
+		break;
+	case CAITF::EventSpreadType::Bubble:
+		OnEvent(e);
+		break;
+	case CAITF::EventSpreadType::Direct:
+		if (e.source == nullptr || e.target == nullptr)
+			break;
+		((UIElement*)(e.target))->OnEvent(e);
+		break;
+	default:
+		break;
 	}
 }
 

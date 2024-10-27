@@ -63,7 +63,8 @@ protected:
 	virtual void OnMouseLeftButtonUp() override;*/
 	friend class RenderEngine;
 	virtual void OnMouseOver( CAITF::MouseMoveEvent& e) override;
-	virtual void OnEvent( CAITF::EventAbstract& e) override;
+	virtual void OnEvent(CAITF::EventAbstract& e) override;
+	virtual void RaiseEvent(CAITF::EventAbstract& e) override;
 private:
 	void setActualWidth();
 	void setActualHeight();
