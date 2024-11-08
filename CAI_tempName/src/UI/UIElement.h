@@ -63,6 +63,7 @@ protected:
 	virtual void OnMouseLeftButtonUp() override;*/
 	friend class RenderEngine;
 	virtual void OnMouseOver( CAITF::MouseMoveEvent& e) override;
+	virtual void OnInput(CAITF::InputEvent& e) override;
 	virtual void OnEvent(CAITF::EventAbstract& e) override;
 	virtual void RaiseEvent(CAITF::EventAbstract& e) override;
 private:
@@ -80,6 +81,10 @@ public:
 	DependencyProperty<Draw::Brush> background{ "Background" };
 	DependencyProperty<float> borderSize{ "Border-Size" };
 	DependencyProperty<float> shadow{ "Border-Size" };
+	DependencyProperty<float> fontSize{ "FontSize" };
+public:
+	bool focus = false;
+	bool needReRender = false;
 protected:
 	ControlTemplate* style;
 	/// <summary>

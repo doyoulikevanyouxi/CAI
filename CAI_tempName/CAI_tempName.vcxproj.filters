@@ -114,10 +114,16 @@
     <ClCompile Include="src\Controls\Decoration.cpp">
       <Filter>源文件\Contorls</Filter>
     </ClCompile>
-    <ClCompile Include="src\caipch.cpp">
+    <ClCompile Include="src\log\Log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\log\Log.cpp">
+    <ClCompile Include="src\Common\caipch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controls\ContentControls\TextBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input\Input.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -213,6 +219,21 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\MVVM\AbstractNotifyPropertyChanged.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Common\caipch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Common\Object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input\Input.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls\ContentControls\TextBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls\Shapes.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

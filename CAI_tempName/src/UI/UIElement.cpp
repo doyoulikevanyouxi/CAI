@@ -177,11 +177,23 @@ void UIElement::OnMouseOver(CAITF::MouseMoveEvent& e)
 	e.handled = false;
 }
 
+void UIElement::OnInput(CAITF::InputEvent& e)
+{
+}
+
 void UIElement::OnEvent(CAITF::EventAbstract& e)
 {
 	//添加过滤，过滤掉避免继续传递
 	if (eventDispatcher.filter(e))
 		return;
+	switch (e.GetEventPreType())
+	{
+	case	CAITF::EventType::InputEvent:
+		OnInput((CAITF::InputEvent&)e);
+		break;
+	default:
+		break;
+	}
 	switch (e.GetEventType())
 	{
 	case	CAITF::EventSubType::MouseMoveEvent: {

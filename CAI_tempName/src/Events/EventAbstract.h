@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 namespace CAITF {
-	enum	 EventType {
-		KeybordEvent = 1<<2,
+	enum	 class EventType {
+		InputEvent = 1<<2,
 		MouseButtonEvent = 1<<3,
 		ValueChangedEvent = 1 << 4,
 		Defualt 
@@ -11,7 +11,7 @@ namespace CAITF {
 	enum class EventSubType {
 		None = 0,
 		WindowResizeEvent,
-		KeyPressedEvent, KeyUpEvent,
+		KeyPressedEvent, KeyUpEvent, TextInputEvent,
 		MouseMoveEvent, MouseButtonPressedEvent, MouseButtonUpEvent,
 		PropertyChangedEvent,
 		Defualt

@@ -12,9 +12,12 @@ protected:
 	//virtual void OnMouseOver();
 	//virtual void OnMouseLeftButtonPress();
 	//virtual void OnMouseLeftButtonUp();
+	virtual void OnInput(CAITF::InputEvent& e) = 0;
 	virtual void OnMouseOver( CAITF::MouseMoveEvent& e) =0;
 	virtual void OnEvent(CAITF::EventAbstract& e) = 0;
 	virtual void RaiseEvent(CAITF::EventAbstract& e) = 0;
+public:
+	void* dataContext;
 protected:
 	CAITF::EventDispatcher eventDispatcher;
 };

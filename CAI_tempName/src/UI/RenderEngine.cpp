@@ -6,6 +6,7 @@
 #include "Character.h"
 #include "Controls/ContentControls/Window.h"
 #include "Events/Events.h"
+#include "Input/Input.h"
 using namespace std;
 RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), templateShader(nullptr),
 									font(nullptr), alreadyOn(false), mainWHasToken(false), eventArgs(new EventArgs)
@@ -51,10 +52,10 @@ uint32_t RenderEngine::initial(void)
 		cout << "Failed to initialize GLAD" << endl;
 		return 3;
 	}
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	/*std::cout << glGetString(GL_VERSION) << std::endl;
 	int nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-	std::cout << "Maximum  of vertex attributes supported: " << nrAttributes << std::endl;
+	std::cout << "Maximum  of vertex attributes supported: " << nrAttributes << std::endl;*/
 	squareShader = new Shader("resources/Shaders/square_shader.sha");
 	fontShader = new Shader("resources/Shaders/text_shader.sha");
 	templateShader = new Shader("resources/Shaders/templatetest.sha");
@@ -97,7 +98,8 @@ void RenderEngine::addRenderWindow(Window* win)
 		eArgs.winHD = window;
 		ev->EventDistribute(eArgs);
 		});
-
+	glfwSetCharCallback(mainWinHd, TextCallBack);
+	glfwSetKeyCallback(mainWinHd, KeyCallBack);
 }
 
 void RenderEngine::setWindowPossition(GLFWwindow* win, int x, int y)
@@ -159,8 +161,8 @@ void RenderEngine::renderLoop(void)
 {
 	if (!alreadyOn)
 		return;
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
 
 	glEnable(GL_STENCIL);
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);

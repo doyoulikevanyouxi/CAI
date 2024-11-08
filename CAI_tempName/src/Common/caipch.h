@@ -13,3 +13,5 @@
 #include <map>
 #include <unordered_map>
 using Byte = unsigned char;
+
+#define CAISTR(x) #x
