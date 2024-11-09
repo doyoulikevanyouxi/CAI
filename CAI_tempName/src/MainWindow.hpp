@@ -18,15 +18,13 @@ public:
 		initializeComponents();
 		///²âÊÔ´úÂë
 		GG* grid = new GG();
-		
 		grid->setGridRCCollection(3, 3);
-		//grid->setBackground(Brush(Draw::Color::BLUE));
+		grid->setBackground(Brush(Draw::Color::BLUE));
 		setContent(*grid);
-		/*TextBlock* tx = new TextBlock();
-		grid->addChild(*tx);
-		tx->setText(L"asfNiÄãºÃ");*/
 		TextBox* tx = new TextBox();
-
+		tx->fontBrush.set(Draw::Color(Draw::Color::GREEN));
+		tx->fontSize.set(20);
+		tx->setBackground(0xffccefda);
 		grid->addChild(*tx);
 		grid->setRC(tx, 1, 1);
 	

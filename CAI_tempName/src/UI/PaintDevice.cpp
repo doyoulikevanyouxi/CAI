@@ -49,36 +49,49 @@ void PaintDevice::fillWith(Brush& bs) noexcept
 {
 }
 
-void PaintDevice::DrawText(const std::wstring& str, const Size& size) noexcept
+void PaintDevice::DrawText(const std::wstring& str, const Size& size,const FontSetting& fontSet) noexcept
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Font* ft = CAIEngine.getFont();
-	unsigned int fontSize = ft->fontSize;
+	//缩放
+	float scal = fontSet.size /(float)ft->fontSize;
+
 	CAIEngine.fontShader->use();
 	CAIEngine.fontShader->setMat4("model", size.TransMatrix());
-	CAIEngine.fontShader->setVec3("textColor", 1.0, 0.0, 0.0);
+	const Draw::Color& color = fontSet.color;
+	CAIEngine.fontShader->setVec4("textColor", color.R_f(),color.G_f(),color.B_f(),255);
 	glBindVertexArray(ft->VAO);
 	float x = size.X();
-	float y = size.Y()+fontSize;
+	//为了将字符的基准线放置到同一水平面，需要固定高度，并将参照坐标移动至左下角
+	float y = size.Y()+fontSet.size;
 	for (auto& chr : str) {
 		
 		auto& charac = ft->character(chr);
-		float xpos = x + charac.bearingX;
-		float ypos = y-charac.bearingY;
-		float vertices[6][4] = {
-			{xpos,ypos,0,0},
-			{xpos+charac.width,ypos,1,0},
-			{xpos,ypos+charac.height,0,1},
 
-			{xpos + charac.width,ypos,1,0},
-			{xpos,ypos + charac.height,0,1},
-			{xpos+charac.width,ypos+charac.height,1,1}
+		float xpos = x + charac.bearingX*scal;
+		//基准坐标向上移动
+		float ypos = y-charac.bearingY*scal;
+		float w = charac.width * scal;
+		float h = charac.height * scal;
+		float vertices[] = {
+			xpos,ypos,size.Z(), 0,0,
+			xpos+w,ypos,size.Z(),1,0,
+			xpos,ypos+h,size.Z(),0,1,
+
+			xpos + w,ypos,size.Z(),1,0,
+			xpos,ypos + h,size.Z(),0,1,
+			xpos+w,ypos+h,size.Z(),1,1
 		};
-		x += (charac.Advance >>6 );
+		
+		x += (charac.Advance >>6 )*scal;
 		glBindTexture(GL_TEXTURE_2D, charac.textureID);
 		glBindBuffer(GL_ARRAY_BUFFER, ft->VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)));
+		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
@@ -129,8 +142,9 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 	const VisualData& data = style->vData;
 	if (data.isInvalid())
 		return;
-		
+	
 	glBindVertexArray(VAO);
+	//检查数据是否被送到了GPU处
 	if (!style->vData.isDataHasBeenPushToGpu) {
 		Brush* areaBrush = &(style->vData.AreaBrush());
 		if (areaBrush->hasTexture()) {
@@ -177,13 +191,18 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 		style->vData.isDataHasBeenPushToGpu = true;
 	}
 	CAIEngine.squareShader->setMat4("model", data.AreaSize().TransMatrix());
+	//检查是否存在边框，边框由模板测试实现，去除掉内容区域的绘制数据
 	if (data.hasBorder) {
+		//设置模板测试参数，允许该样式绘制的数据显示，并且将绘制区域模板数据设置为1
 		glStencilFunc(GL_ALWAYS, 1, 0xff);
 		glStencilMask(0xff);
+		//绘制样式
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 12, data.vertexData);
 		glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 12, sizeof(float) * 16, data.vertexColorData);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//设置模板参数，边框区域实际上是内容区域的放大版
+		//并且在模板数据非1处绘制
 		glStencilFunc(GL_NOTEQUAL, 1, 0xff);
 		glStencilMask(0x00);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -191,6 +210,7 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 		glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 12, sizeof(float)*16, data.borderVertexColorData);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//重置模板数据，使得后续所有绘制都通过，但是数据不写入模板中
 		glStencilFunc(GL_ALWAYS, 0, 0xFF);
 		glStencilMask(0x00);
 	}

@@ -126,11 +126,13 @@ void RenderEngine::setWindowProjection(const Math::TransMatrix& mt)
 void RenderEngine::setColorProjection(const Math::TransMatrix& mt)
 {
 	squareShader->setMat4("projection_color", mt);
+	fontShader->setMat4("projection_color", mt);
 }
 
 void RenderEngine::setColorProjection(float* mt)
 {
 	squareShader->setMat4("projection_color", mt);
+	fontShader->setMat4("projection_color", mt);
 }
 
 void RenderEngine::EventDistribute(EventArgs& eArgs)

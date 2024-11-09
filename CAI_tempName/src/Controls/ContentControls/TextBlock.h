@@ -13,5 +13,6 @@ public:
 public:
 	DependencyProperty<std::wstring> text{ "Text" };
 	DependencyProperty<unsigned int> fontSize{ "FontSize" };
+	DependencyProperty<Draw::Color> fontBrush{ "FontBrush" };
 };
 

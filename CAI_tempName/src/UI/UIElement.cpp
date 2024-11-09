@@ -118,6 +118,12 @@ void UIElement::setBackground(const Draw::Brush& color)
 	style->vData.AreaBrush() = color;
 }
 
+void UIElement::setBackground(const uint32_t color)
+{
+	background.set(Draw::Brush(color));
+	style->vData.AreaBrush() = Draw::Brush(color);
+}
+
 void UIElement::setBorderBrush(const Draw::Brush& color)
 {
 	*(style->vData.borderBrush) = color;

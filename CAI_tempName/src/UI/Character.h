@@ -1,9 +1,15 @@
 #pragma once
 #include "Object.h"
+#include "Draw.h"
 #include <glad/glad.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+struct FontSetting
+{
+	unsigned int size;
+	Draw::Color color;
+};
 
 struct Character
 {

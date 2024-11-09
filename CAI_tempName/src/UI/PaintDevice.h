@@ -5,8 +5,10 @@ class ControlTemplate;
 namespace Draw {
 	class Brush;
 }
+struct FontSetting;
 class Window;
 using Brush = Draw::Brush;
+
 class PaintDevice final: public Object
 {
 public:
@@ -19,7 +21,7 @@ public:
 	const Brush& getPen() const noexcept { return *pen; }
 	void fillWith(Brush& bs) noexcept;
 public:
-	void DrawText(const std::wstring& str,const Size& size) noexcept;
+	void DrawText(const std::wstring& str,const Size& size,const FontSetting& fontSet) noexcept;
 	void DrawLine(const Point& initial,Point& end) noexcept;
 	void DrawLines(const Point points[], size_t lineNum) noexcept;
 	void DrawRect(const Point& initial, float width, float height) noexcept;

@@ -18,7 +18,7 @@ namespace Draw {
 		Color(const Color& cl) noexcept { *this = cl; }
 	public:
 		enum {
-			BLACK = 0xffffffff,
+			BLACK = 0xff000000,
 			RED = 0xffff0000,
 			GREEN = 0xff00ff00,
 			BLUE = 0xff0000ff,

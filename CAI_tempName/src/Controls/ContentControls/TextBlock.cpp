@@ -2,8 +2,11 @@
 #include "TextBlock.h"
 #include "UI/PaintDevice.h"
 #include "Datas/ControlStyle.h"
+#include "UI/Character.h"
 TextBlock::TextBlock() noexcept
 {
+	fontSize.set(12);
+	fontBrush.set(Draw::Color(Draw::Color::BLACK));
 }
 TextBlock::TextBlock(const std::wstring& str) noexcept
 {
@@ -24,5 +27,6 @@ void TextBlock::render() noexcept
 	UIElement::render();
 	if (text.get().empty())
 		return;
-	pDevice->DrawText(text.get(), style->styleData().AreaSize());
+	
+	pDevice->DrawText(text.get(), style->styleData().AreaSize(), FontSetting(fontSize.get(),fontBrush.get()));
 }

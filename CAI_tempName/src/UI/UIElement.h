@@ -36,6 +36,7 @@ public:
 	void setMaxHeight(float value);
 	void setMaxWidth(float value);
 	void setBackground(const Draw::Brush& color);
+	void setBackground(const uint32_t color);
 	void setBorderBrush(const Draw::Brush& color);
 	inline float getActualWidth() const noexcept { return actualWidth; }
 	inline float getActualHeight() const noexcept { return actualHeight; }
