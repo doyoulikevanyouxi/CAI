@@ -126,6 +126,9 @@
     <ClCompile Include="src\Input\Input.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\TextInterpreter\XMLInterpreter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object.h">
@@ -234,6 +237,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Controls\Shapes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextInterpreter\AbstractExpression.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextInterpreter\XMLInterpreter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
