@@ -109,7 +109,6 @@
     <ClCompile Include="src\Datas\VisualData.cpp" />
     <ClCompile Include="src\Controls\ContentControls\Window.cpp" />
     <ClCompile Include="src\Controls\ContentControls\TextBox.cpp" />
-    <ClCompile Include="src\TextInterpreter\XMLInterpreter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common\caipch.h" />
@@ -123,7 +122,6 @@
     <ClInclude Include="src\caipch.h" />
     <ClInclude Include="src\Events\Events.h" />
     <ClInclude Include="src\Shapes.h" />
-    <ClInclude Include="src\TextInterpreter\AbstractExpression.h" />
     <ClInclude Include="src\UI\Character.h" />
     <ClInclude Include="src\Controls\ContentControl.h" />
     <ClInclude Include="src\Controls\Decoration.h" />
@@ -149,7 +147,6 @@
     <ClInclude Include="src\Datas\VisualData.h" />
     <ClInclude Include="src\Controls\ContentControls\Window.h" />
     <ClInclude Include="src\Controls\ContentControls\TextBox.h" />
-    <ClInclude Include="src\TextInterpreter\XMLInterpreter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\templatetest.sha" />
