@@ -16,10 +16,10 @@ public:
 	PaintDevice(Window* wnd) noexcept;
 	~PaintDevice() noexcept;
 public:
-	void setWindow(Window* wnd) noexcept;
-	void setPen(const Brush& pen) noexcept;
-	const Brush& getPen() const noexcept { return *pen; }
-	void fillWith(Brush& bs) noexcept;
+	void SetWindow(Window* wnd) noexcept;
+	void SetPen(const Brush& pen) noexcept;
+	const Brush& GetPen() const noexcept { return *pen; }
+	void FillWith(Brush& bs) noexcept;
 public:
 	void DrawText(const std::wstring& str,const Size& size,const FontSetting& fontSet) noexcept;
 	void DrawLine(const Point& initial,Point& end) noexcept;

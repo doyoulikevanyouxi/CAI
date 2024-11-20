@@ -14,7 +14,7 @@ PaintDevice::PaintDevice() noexcept : pen(new Draw::Brush(Draw::Color::BLACK)),f
 
 PaintDevice::PaintDevice(Window* wnd) noexcept : PaintDevice()
 {
-	setWindow(wnd);
+	SetWindow(wnd);
 }
 
 PaintDevice::~PaintDevice() noexcept
@@ -24,7 +24,7 @@ PaintDevice::~PaintDevice() noexcept
 	glDeleteBuffers(1, &EBO);
 }
 
-void PaintDevice::setWindow(Window* wnd) noexcept
+void PaintDevice::SetWindow(Window* wnd) noexcept
 {
 	if (areadySet)
 		return;
@@ -40,12 +40,12 @@ void PaintDevice::setWindow(Window* wnd) noexcept
 	areadySet = true;
 }
 
-void PaintDevice::setPen(const Brush& pen) noexcept
+void PaintDevice::SetPen(const Brush& pen) noexcept
 {
 	*(this->pen) = pen;
 }
 
-void PaintDevice::fillWith(Brush& bs) noexcept
+void PaintDevice::FillWith(Brush& bs) noexcept
 {
 }
 
@@ -53,21 +53,21 @@ void PaintDevice::DrawText(const std::wstring& str, const Size& size,const FontS
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	Font* ft = CAIEngine.getFont();
+	Font* ft = CAIEngine.GetFont();
 	//缩放
 	float scal = fontSet.size /(float)ft->fontSize;
 
-	CAIEngine.fontShader->use();
-	CAIEngine.fontShader->setMat4("model", size.TransMatrix());
+	CAIEngine.fontShader->Use();
+	CAIEngine.fontShader->SetMat4("model", size.TransMatrix());
 	const Draw::Color& color = fontSet.color;
-	CAIEngine.fontShader->setVec4("textColor", color.R_f(),color.G_f(),color.B_f(),255);
+	CAIEngine.fontShader->SetVec4("textColor", color.R_f(),color.G_f(),color.B_f(),255);
 	glBindVertexArray(ft->VAO);
 	float x = size.X();
 	//为了将字符的基准线放置到同一水平面，需要固定高度，并将参照坐标移动至左下角
 	float y = size.Y()+fontSet.size;
 	for (auto& chr : str) {
 		
-		auto& charac = ft->character(chr);
+		auto& charac = ft->GetCharacter(chr);
 
 		float xpos = x + charac.bearingX*scal;
 		//基准坐标向上移动
@@ -140,14 +140,14 @@ void PaintDevice::DrawRect(const Point& initial, float width, float height) noex
 void PaintDevice::Draw(ControlTemplate* style) noexcept
 {
 	const VisualData& data = style->vData;
-	if (data.isInvalid())
+	if (data.IsInvalid())
 		return;
 	
 	glBindVertexArray(VAO);
 	//检查数据是否被送到了GPU处
 	if (!style->vData.isDataHasBeenPushToGpu) {
 		Brush* areaBrush = &(style->vData.AreaBrush());
-		if (areaBrush->hasTexture()) {
+		if (areaBrush->HasTexture()) {
 			int width, height;
 			int channel;
 			Byte* data = stbi_load(areaBrush->TexturePath().c_str(), &width, &height, &channel, 0);
@@ -190,7 +190,7 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 		
 		style->vData.isDataHasBeenPushToGpu = true;
 	}
-	CAIEngine.squareShader->setMat4("model", data.AreaSize().TransMatrix());
+	CAIEngine.squareShader->SetMat4("model", data.AreaSize().TransMatrix());
 	//检查是否存在边框，边框由模板测试实现，去除掉内容区域的绘制数据
 	if (data.hasBorder) {
 		//设置模板测试参数，允许该样式绘制的数据显示，并且将绘制区域模板数据设置为1

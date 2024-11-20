@@ -21,6 +21,6 @@ void Panel::addChild(UIElement& child)
 	childs.addChild(&child);
 	//加入到可视化树中
 	style->visualTree.addChild(&child);
-	child.setParent(this);
+	child.SetParent(this);
 }
 

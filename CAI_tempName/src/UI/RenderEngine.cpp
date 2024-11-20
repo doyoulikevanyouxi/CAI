@@ -8,7 +8,7 @@
 #include "Events/Events.h"
 #include "Input/Input.h"
 using namespace std;
-RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr), templateShader(nullptr),
+RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr),
 									font(nullptr), alreadyOn(false), mainWHasToken(false), eventArgs(new EventArgs)
 {
 	name = "RenderEngine";
@@ -20,8 +20,6 @@ RenderEngine::~RenderEngine() noexcept
 		delete squareShader;
 	if (fontShader != nullptr)
 		delete fontShader;
-	if (templateShader != nullptr)
-		delete templateShader;
 	if (font != nullptr)
 		delete font;
 	if (eventArgs != nullptr)
@@ -29,7 +27,7 @@ RenderEngine::~RenderEngine() noexcept
 	glfwTerminate();
 }
 
-uint32_t RenderEngine::initial(void)
+uint32_t RenderEngine::Initial(void)
 {
 	if (glfwInit() == GLFW_FALSE) {
 		cout << "glfw init false" << endl;
@@ -56,37 +54,36 @@ uint32_t RenderEngine::initial(void)
 	int nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 	std::cout << "Maximum  of vertex attributes supported: " << nrAttributes << std::endl;*/
-	squareShader = new Shader("resources/Shaders/square_shader.sha");
-	fontShader = new Shader("resources/Shaders/text_shader.sha");
-	templateShader = new Shader("resources/Shaders/templatetest.sha");
+	squareShader = new Shader("resources/Shaders/RectVertexShader.glsl", "resources/Shaders/RectFragmentShader.glsl","");
+	fontShader = new Shader("resources/Shaders/TextVertexShader.glsl", "resources/Shaders/TextFragmentShader.glsl", "");
 	font = new Font();
-	squareShader->use();
+	squareShader->Use();
 	alreadyOn = true;
 	return 0;
 }
 
 
-void RenderEngine::start(void) {
-	renderLoop();
+void RenderEngine::Start(void) {
+	RenderLoop();
 }
 
-GLFWwindow* RenderEngine::creatWindow(int width, int height, const char* title)
+GLFWwindow* RenderEngine::CreatWindow(int width, int height, const char* title)
 {
 	return glfwCreateWindow(width, height, title, NULL, NULL);
 }
 
-bool RenderEngine::windowClose(GLFWwindow* win)
+bool RenderEngine::WindowClose(GLFWwindow* win)
 {
 	return glfwWindowShouldClose(win) ? true:false;
 }
 
-void RenderEngine::activateWindow(GLFWwindow* win)
+void RenderEngine::ActivateWindow(GLFWwindow* win)
 {
 	glfwMakeContextCurrent(win);
 	
 }
 
-void RenderEngine::addRenderWindow(Window* win)
+void RenderEngine::AddRenderWindow(Window* win)
 {
 	windows.emplace_back(win);
 	glfwSetWindowUserPointer(win->getWinHD(), this);
@@ -102,12 +99,12 @@ void RenderEngine::addRenderWindow(Window* win)
 	glfwSetKeyCallback(mainWinHd, KeyCallBack);
 }
 
-void RenderEngine::setWindowPossition(GLFWwindow* win, int x, int y)
+void RenderEngine::SetWindowPossition(GLFWwindow* win, int x, int y)
 {
 	glfwSetWindowPos(win, x, y);
 }
 
-void RenderEngine::setWindowSize(GLFWwindow* win, int width, int height)
+void RenderEngine::SetWindowSize(GLFWwindow* win, int width, int height)
 {
 	glfwSetWindowSize(win, width, height);
 	glfwMakeContextCurrent(win);
@@ -116,28 +113,27 @@ void RenderEngine::setWindowSize(GLFWwindow* win, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void RenderEngine::setWindowProjection(const Math::TransMatrix& mt)
+void RenderEngine::SetWindowProjection(const Math::TransMatrix& mt)
 {
-	squareShader->setMat4("projection", mt);
-	fontShader->setMat4("projection", mt);
-	templateShader->setMat4("projection", mt);
+	squareShader->SetMat4("projection", mt);
+	fontShader->SetMat4("projection", mt);
 }
 
-void RenderEngine::setColorProjection(const Math::TransMatrix& mt)
+void RenderEngine::SetColorProjection(const Math::TransMatrix& mt)
 {
-	squareShader->setMat4("projection_color", mt);
-	fontShader->setMat4("projection_color", mt);
+	squareShader->SetMat4("projection_color", mt);
+	fontShader->SetMat4("projection_color", mt);
 }
 
-void RenderEngine::setColorProjection(float* mt)
+void RenderEngine::SetColorProjection(float* mt)
 {
-	squareShader->setMat4("projection_color", mt);
-	fontShader->setMat4("projection_color", mt);
+	squareShader->SetMat4("projection_color", mt);
+	fontShader->SetMat4("projection_color", mt);
 }
 
 void RenderEngine::EventDistribute(EventArgs& eArgs)
 {
-	Window* win = findWindowByHD(eArgs.winHD);
+	Window* win = FindWindowByHD(eArgs.winHD);
 	if (win == nullptr)
 		return;
 	win->RaiseEvent(*(eArgs.event));
@@ -150,7 +146,7 @@ void RenderEngine::EventReDistribute(CAITF::EventAbstract& event)
 	((UIElement*)event.target)->RaiseEvent(event);
 }
 
-Window* RenderEngine::findWindowByHD(GLFWwindow* HD)
+Window* RenderEngine::FindWindowByHD(GLFWwindow* HD)
 {
 	for(auto& win : windows){
 		if (win->getWinHD() == HD)
@@ -159,7 +155,7 @@ Window* RenderEngine::findWindowByHD(GLFWwindow* HD)
 	return nullptr;
 }
 
-void RenderEngine::renderLoop(void)
+void RenderEngine::RenderLoop(void)
 {
 	if (!alreadyOn)
 		return;
@@ -177,8 +173,8 @@ void RenderEngine::renderLoop(void)
 		for (auto& win : windows) {
 
 			glfwMakeContextCurrent(win->getWinHD());
-			squareShader->use();
-			win->render();
+			squareShader->Use();
+			win->Render();
 			glfwSwapBuffers(win->getWinHD());
 		}
 		glfwPollEvents();

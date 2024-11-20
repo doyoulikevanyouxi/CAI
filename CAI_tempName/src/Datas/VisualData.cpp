@@ -45,7 +45,7 @@ VisualData::~VisualData() noexcept
 		delete[] vertexIndexData;
 }
 
-void VisualData::setBorderSize(float value) noexcept
+void VisualData::SetBorderSize(float value) noexcept
 {
 	if (value < 0.1)
 		return;
@@ -55,12 +55,9 @@ void VisualData::setBorderSize(float value) noexcept
 
 
 
-void VisualData::initData()
+void VisualData::InitData()
 {
 	*contentSize = *areaSize;
-
-
-
 	if (hasBorder) {
 		float x = contentSize->x;
 		float y = contentSize->y;
@@ -72,8 +69,8 @@ void VisualData::initData()
 		height = height - 2 * borderSize;
 		contentSize->setX(x);
 		contentSize->setY(y);
-		contentSize->setWidth(width);
-		contentSize->setHeight(height);
+		contentSize->SetWidth(width);
+		contentSize->SetHeight(height);
 		float vertData[12] = {
 			//×óÉÏ
 			areaSize->x, areaSize->y,areaSize->z,
@@ -120,7 +117,7 @@ void VisualData::initData()
 		1,2,3
 	};
 	memcpy(vertexIndexData, tmpIndex, sizeof(tmpIndex));
-	if (areaBrush->hasTexture()) {
+	if (areaBrush->HasTexture()) {
 		float textIndexData[8] = {
 		0,0,
 		1,0,

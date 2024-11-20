@@ -66,10 +66,10 @@ namespace Draw {
 		~Brush() noexcept;
 		Brush(const Brush& other) noexcept;
 	public:
-		void setTexturePath(const std::string& filePath);
+		void SetTexturePath(const std::string& filePath);
 		Color& BColor() const noexcept{ return bColor; }
 		std::string& TexturePath() const noexcept{ return texturePath; }
-		bool hasTexture();
+		bool HasTexture();
 	public:
 		Brush& operator=(const Brush& other) noexcept;
 		Brush& operator=(const Color& color) noexcept;

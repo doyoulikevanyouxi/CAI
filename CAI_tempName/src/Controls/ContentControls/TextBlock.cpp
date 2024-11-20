@@ -22,9 +22,9 @@ void TextBlock::setText(const std::wstring& str) noexcept
 	text.set(str);
 }
 
-void TextBlock::render() noexcept
+void TextBlock::Render() noexcept
 {
-	UIElement::render();
+	UIElement::Render();
 	if (text.get().empty())
 		return;
 	

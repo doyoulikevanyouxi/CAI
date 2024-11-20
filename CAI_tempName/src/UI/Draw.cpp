@@ -22,12 +22,12 @@ Draw::Brush::Brush(const Brush& other) noexcept
 	texturePath = other.texturePath;
 }
 
-void Draw::Brush::setTexturePath(const std::string& filePath)
+void Draw::Brush::SetTexturePath(const std::string& filePath)
 {
 	texturePath = filePath;
 }
 
-bool Draw::Brush::hasTexture()
+bool Draw::Brush::HasTexture()
 {
 	if(texturePath.empty())
 		return false;

@@ -2,9 +2,9 @@
 #include "Grid.h"
 #include "Datas/ControlStyle.h"
 #include "Datas/Coordinate.h"
-Grid::Grid() noexcept :rFixedNum(0), cFixedNum(0)
+Grid::Grid() noexcept :rNoneFixedNum(0), cNoneFixedNum(0),totalFixedHeight(0.f),totalFixedWidth(0.f)
 {
-	name = "Grid";
+	name = CAISTR(Grid);
 }
 
 Grid::~Grid() noexcept
@@ -15,54 +15,19 @@ Grid::~Grid() noexcept
 void Grid::addRowDefinition(const RowDefinition& rowDefine)
 {
 	rowDeinitions.addChild(rowDefine);
-	RowDefinition& last = rowDeinitions.last();
-	if (!rowDefine.height.isInvalid()) {
-		if (totalFixedHeight >= height.get()) {
-			last.setActualHeight(0);
-		}
-		else {
-			float tmp = totalFixedHeight + rowDefine.height.get();
-			if (tmp > height.get()) {
-				last.setActualHeight(height.get() - totalFixedHeight);
-				totalFixedHeight = height.get();
-			}
-			else {
-				last.setActualHeight(last.height.get());
-				totalFixedHeight += rowDefine.height.get();
-			}
-		}
-
-	}
-	else {
-		rFixedNum++;
-	}
-
+	if (!rowDefine.validHeight)
+		++rNoneFixedNum;
+	else
+		totalFixedHeight += rowDefine.height;
 }
 
 void Grid::addColumDefinition(const ColumDefinition& columDefine)
 {
 	columDeinitions.addChild(columDefine);
-	ColumDefinition& last = columDeinitions.last();
-	if (!columDefine.width.isInvalid()) {
-		if (totalFixedWidth >= width.get()) {
-			last.setActualWidth(0);
-		}
-		else {
-			float tmp = totalFixedWidth + columDefine.width.get();
-			if (tmp > width.get()) {
-				last.setActualWidth(width.get() - totalFixedWidth);
-				totalFixedWidth = width.get();
-			}
-			else {
-				last.setActualWidth(last.width.get());
-				totalFixedWidth += columDefine.width.get();
-			}
-		}
-
-	}
-	else {
-		cFixedNum++;
-	}
+	if (!columDefine.validWidth)
+		++cNoneFixedNum;
+	else
+		totalFixedWidth += columDefine.width;
 }
 
 void Grid::setRow(UIElement* target, int row)
@@ -154,42 +119,59 @@ void Grid::setGridRCCollection(unsigned int rowCount, unsigned int columnCount) 
 		addColumDefinition(ColumDefinition());
 }
 
-void Grid::aeasure(const Size& size) noexcept
+void Grid::Aeasure(const Size& size) noexcept
 {
 	//平均行高度
 	float avRowHeight;
-	//平均行高度的计算是减去固定高度总和的剩下高度由剩下的行平分
-	float heigthLeft = height.get() - totalFixedHeight;
-	//如果存在边框，那么剩下的高度还要减去2倍边框大小
-	if (!borderSize.isInvalid())
-		heigthLeft -= 2 * borderSize.get();
+	//平均行高度的计算是实际控件高度减去固定高度总和的剩下高度由剩下的行平分
+	float heigthLeft = size.Height() - totalFixedHeight;
+	//如果余下高度小于0，那么就说明非固定高度的行的高度为0
+	//否则就是剩余高度 / 非固定行数
 	if (heigthLeft <= 0)
 		avRowHeight = 0;
 	else
-		avRowHeight = heigthLeft / rFixedNum;
+		avRowHeight = heigthLeft / rNoneFixedNum;
+	//当前高度和
 	float yi = 0;
+	//设置每行的高度
 	for (auto& row : rowDeinitions) {
-		if (row.height.isInvalid())
-			row.setActualHeight(avRowHeight);
 		row.y = yi;
-		yi += avRowHeight;
+		if (!row.validHeight) {
+			row.height = avRowHeight;
+			yi += avRowHeight;
+			continue;
+		}
+		if (yi + row.height > size.Height()) {
+			row.height = size.Height() - yi;
+			yi = size.Height();
+		}
+		else {
+			yi += row.height;
+		}
 	}
 
 	//平均列宽度同上
 	float avColumWidth;
-	float widthLeft = width.get() - totalFixedWidth;
-	if (!borderSize.isInvalid())
-		widthLeft -= 2 * borderSize.get();
+	float widthLeft = size.Width() - totalFixedWidth;
 	if (widthLeft <= 0)
 		avColumWidth = 0;
 	else
-		avColumWidth = widthLeft / cFixedNum;
+		avColumWidth = widthLeft / cNoneFixedNum;
 	float xi = 0;
 	for (auto& colum : columDeinitions) {
-		if (colum.width.isInvalid())
-			colum.setActualWidth(avColumWidth);
 		colum.x = xi;
-		xi += avColumWidth;
+		if (!colum.validWidth) {
+			colum.width = avColumWidth;
+			xi += avColumWidth;
+			continue;
+		}
+		if (xi + colum.width > size.Width()) {
+			colum.width = size.Width() - xi;
+			yi = size.Width();
+		}
+		else {
+			yi += colum.width;
+		}
 	}
 	//初始化子控件在grid下的x，y
 	float x = 0;
@@ -197,6 +179,27 @@ void Grid::aeasure(const Size& size) noexcept
 
 	int rCount = rowDeinitions.Size();
 	int cCount = columDeinitions.Size();
+	for (auto& child : childs) {
+		//初始化控件的行列数据和占几行占几列的数据
+		int R = 0;
+		int Rspan = 1;
+		int C = 0;
+		int Cspan = 1;
+		//如果在行列设置集合中没有找到这个控件 或者所没有设置这个控件的行列，那么就全部设成地1行第1列的
+		if (childGridData.find(child) == childGridData.end()) {
+			R = 0;
+			C = 0;
+			Rspan = 1;
+			Cspan = 1;
+		}
+		else {
+			ControlGridData& gridPair = childGridData[child];
+			R = gridPair.row;
+			Rspan = gridPair.rowSpan;
+			C = gridPair.colum;
+			Cspan = gridPair.columSpan;
+		}
+	}
 	//遍历所有可视化树：子控件也在可视化树中
 	for (auto& child : style->visualTree) {
 		//初始化控件的行列数据和占几行占几列的数据
@@ -235,7 +238,7 @@ void Grid::aeasure(const Size& size) noexcept
 			if (Rspan > rCount || Rspan <= 0)
 				Rspan = 1;
 			for (int count = R; count < R + Rspan; ++count) {
-				sizeH += rowDeinitions[count].getActualHeight();
+				sizeH += rowDeinitions[count].height;
 			}
 			y = rowDeinitions[R].y;
 		}
@@ -250,13 +253,12 @@ void Grid::aeasure(const Size& size) noexcept
 			if (Cspan > cCount || Cspan <= 0)
 				Cspan = 1;
 			for (int count = C; count < C + Cspan; ++count) {
-				sizeW += columDeinitions[count].getActualWidth();
+				sizeW += columDeinitions[count].width;
 			}
 			x = columDeinitions[C].x;
 		}
-		
 		Size tmp(x, y,size.Z(), sizeW, sizeH);
 		tmp.TransMatrix() = style->styleData().AreaSize().TransMatrix();
-		child->beginInit(tmp);
+		child->BeginInit(tmp);
 	}
 }

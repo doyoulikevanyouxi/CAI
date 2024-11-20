@@ -149,9 +149,9 @@
     <ClInclude Include="src\Controls\ContentControls\TextBox.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\Shaders\templatetest.sha" />
-    <None Include="resources\Shaders\text_shader.sha" />
-    <None Include="resources\Shaders\square_shader.sha" />
+    <None Include="resources\Shaders\RectFragmentShader.glsl" />
+    <None Include="resources\Shaders\RectVertexShader.glsl" />
+    <None Include="resources\Shaders\TextVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf" />
@@ -160,6 +160,9 @@
     <Image Include="resources\icons\close.png" />
     <Image Include="resources\icons\minimize.png" />
     <Image Include="resources\icons\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\Shaders\TextFragmentShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,28 +1,30 @@
 #pragma once
-#include "Controls/ContentControl.h"
+#include "Object.h"
 /// <summary>
 /// 定义了一行的属性
 /// </summary>
-class RowDefinition : public ContentControl
+class RowDefinition : public Object
 {
 public:
-	RowDefinition() noexcept :y(0){ name = "RowDefinition";}
-	~RowDefinition() noexcept {}
+	RowDefinition() noexcept :y(0), height(0),validHeight(false){ name = CAISTR(RowDefinition);}
+	~RowDefinition() noexcept = default;
+	void SetHeight(float& value) { height = value; validHeight = true; }
 public:
 	float y;
-private:
-	void setWidth(float value) noexcept override {}
+	float height;
+	bool validHeight;
 };
 
 /// <summary>
 /// 定义了一列的属性
 /// </summary>
-class ColumDefinition : public ContentControl {
+class ColumDefinition : public Object {
 public:
-	ColumDefinition() noexcept:x(0){ name = "ColumnDefinition"; }
-	~ColumDefinition() noexcept {}
+	ColumDefinition() noexcept:x(0),width(0),validWidth(false){ name = CAISTR(ColumDefinition); }
+	~ColumDefinition() noexcept = default;
+	void SetWidth(float& value) { width = value; validWidth = true; }
 public:
 	float x;
-private:
-	void setHeight(float value) noexcept override {}
+	float width;
+	bool validWidth;
 };

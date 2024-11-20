@@ -8,19 +8,19 @@
 Window::Window() noexcept :winHd(NULL)
 {
 	if (CAIEngine.mainWHasToken) {
-		winHd = CAIEngine.creatWindow(400, 400, "TME");
+		winHd = CAIEngine.CreatWindow(400, 400, "TME");
 	}
 	else {
-		this->winHd = CAIEngine.getMainWindow();
+		this->winHd = CAIEngine.GetMainWindow();
 		CAIEngine.mainWHasToken = true;
 	}
-	style->styleData().setInvalid(true);
+	style->styleData().SetInvalid(true);
 }
 
 Window::Window(int width, int height) noexcept:Window()
 {
-	setWidth(width);
-	setHeight(height);
+	SetWidth(width);
+	SetHeight(height);
 }
 
 Window::~Window() noexcept
@@ -29,7 +29,7 @@ Window::~Window() noexcept
 
 void Window::activited()
 {
-	CAIEngine.activateWindow((GLFWwindow*)this->winHd);
+	CAIEngine.ActivateWindow((GLFWwindow*)this->winHd);
 }
 
 GLFWwindow* Window::getWinHD() noexcept
@@ -67,30 +67,30 @@ void Window::init() noexcept
 	Size sizeT(0, 0,0, width.get(), height.get());
 	this->size = sizeT;
 	size.TransMatrix() = mt;
-	beginInit(size);
+	BeginInit(size);
 	projection[2][2] =- 1.f / zmax;
 	projection[3][2] = 1;
-	CAIEngine.setColorProjection(colorProjection);
-	CAIEngine.setWindowProjection(projection);
+	CAIEngine.SetColorProjection(colorProjection);
+	CAIEngine.SetWindowProjection(projection);
 
 	
 }
 
 void Window::setSize(int width, int height) noexcept
 {
-	CAIEngine.setWindowSize(winHd, width, height);
-	setHeight(height);
-	setWidth(width);
+	CAIEngine.SetWindowSize(winHd, width, height);
+	SetHeight(height);
+	SetWidth(width);
 }
 
-void Window::renderLoop() noexcept
+void Window::RenderLoop() noexcept
 {
 	glfwMakeContextCurrent(this->winHd);
 	while (!glfwWindowShouldClose(this->winHd))
 	{
 		glClearColor(0.f, 0.f, 0.f, 0.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		render();
+		Render();
 		glfwSwapBuffers(this->winHd);
 		//glfwSwapBuffers(mainWinHd);
 		glfwPollEvents();

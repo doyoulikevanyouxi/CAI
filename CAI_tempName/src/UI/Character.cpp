@@ -124,7 +124,7 @@ void Font::Load()
 	glBindVertexArray(0);
 }
 
-Character& Font::character(unsigned int unicode)  noexcept
+Character& Font::GetCharacter(unsigned int unicode)  noexcept
 {
 	//缓存字符已经有了该字符
 	if (characters.find(unicode) == characters.end())

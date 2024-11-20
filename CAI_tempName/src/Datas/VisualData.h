@@ -19,9 +19,9 @@ public:
 	inline Draw::Brush& AreaBrush() const noexcept { return *areaBrush; }
 	inline unsigned int VertexSize() const noexcept { return vertexSize; }
 	inline unsigned int IndexSize() const noexcept { return indexSize; }
-	void setBorderSize(float value) noexcept;
+	void SetBorderSize(float value) noexcept;
 	float* VertexData() const noexcept;
-	void initData();
+	void InitData();
 	unsigned int* VertexIndexData() const noexcept;
 
 public:

@@ -75,8 +75,8 @@ public:
 	float Width() const { return width; }
 	float Height() const { return height; }
 	Math::SquareMatrix<4>& TransMatrix() const { return mode; }
-	void setWidth(const float value) { width = value; }
-	void setHeight(const float value) { height = value; }
+	void SetWidth(const float value) { width = value; }
+	void SetHeight(const float value) { height = value; }
 public:
 	Size& operator=(const Size& other) {
 		width = other.width;

@@ -15,10 +15,6 @@ public:
 	Window() noexcept;
 	Window(int width, int height) noexcept;
 	virtual ~Window() noexcept;
-
-	void test(GLFWwindow* window, double xpos, double ypos) {
-
-	}
 public:
 	void activited();
 	void show();
@@ -28,7 +24,7 @@ public:
 	void setSize(int width, int height) noexcept;
 protected:
 	//使用窗口本身的渲染循环，需要将循环放置到不同的线程中
-	void renderLoop() noexcept;
+	void RenderLoop() noexcept;
 protected:
 	GLFWwindow* winHd;
 	Size size;

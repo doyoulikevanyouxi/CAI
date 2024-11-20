@@ -29,32 +29,31 @@ public:
 	~RenderEngine() noexcept;
 	
 public:
-	uint32_t initial(void);
-	void start(void);
-	GLFWwindow* creatWindow(int width, int height, const char* title);
-	inline GLFWwindow* getMainWindow() { return alreadyOn && !mainWHasToken ? mainWinHd : NULL; }
-	inline Font* getFont() noexcept { return font; }
-	bool windowClose(GLFWwindow* win);
-	void activateWindow(GLFWwindow* win);
-	void addRenderWindow(Window* win);
-	void setWindowPossition(GLFWwindow* win, int x, int y);
-	void setWindowSize(GLFWwindow* win,int width,int height);
-	void setWindowProjection(const Math::TransMatrix& mt);
-	void setColorProjection(const Math::TransMatrix& mt);
-	void setColorProjection(float* mt);
+	uint32_t Initial(void);
+	void Start(void);
+	GLFWwindow* CreatWindow(int width, int height, const char* title);
+	inline GLFWwindow* GetMainWindow() { return alreadyOn && !mainWHasToken ? mainWinHd : NULL; }
+	inline Font* GetFont() noexcept { return font; }
+	bool WindowClose(GLFWwindow* win);
+	void ActivateWindow(GLFWwindow* win);
+	void AddRenderWindow(Window* win);
+	void SetWindowPossition(GLFWwindow* win, int x, int y);
+	void SetWindowSize(GLFWwindow* win,int width,int height);
+	void SetWindowProjection(const Math::TransMatrix& mt);
+	void SetColorProjection(const Math::TransMatrix& mt);
+	void SetColorProjection(float* mt);
 	void EventDistribute(EventArgs& eArgs);
 	void EventReDistribute(CAITF::EventAbstract& event);
 private:
-	Window* findWindowByHD(GLFWwindow* HD);
+	Window* FindWindowByHD(GLFWwindow* HD);
 private:
 	//将渲染循环统一起来是很麻烦的事
 	//必须有一个窗口接受数据更新，否则会出先bug
-	void renderLoop(void);
+	void RenderLoop(void);
 private:
 	GLFWwindow* mainWinHd;
 	Shader* squareShader;
 	Shader* fontShader;
-	Shader* templateShader;
 	Font* font;
 	std::vector<Window*> windows;
 	EventArgs* eventArgs;

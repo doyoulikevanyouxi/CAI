@@ -20,7 +20,7 @@ public:
 	void setHorizontalAlignment(RelativeLocation value);
 	void setVerticalAlignment(RelativeLocation value);
 protected:
-	virtual Size measure(const Size& size) noexcept override;
+	virtual Size Measure(const Size& size) noexcept override;
 public:
 	DependencyProperty<float> marginL{ "Margin-Left" };
 	DependencyProperty<float> marginR{ "Margin-Right" };

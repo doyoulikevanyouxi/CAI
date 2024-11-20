@@ -22,7 +22,7 @@ public:
 	void setContent(UIElement& elem) {
 		content.set(&elem);
 		style->addChildToVisual(elem);
-		elem.setParent(this);
+		elem.SetParent(this);
 	}
 public:
 	DependencyProperty<Object*> content{ "Content" };

@@ -21,41 +21,34 @@ public:
 	/// <summary>
 	/// 图形渲染
 	/// </summary>
-	virtual void render() noexcept;
-	void setControlStyeData() noexcept;
+	virtual void Render() noexcept;
+	void SetControlStyeData() noexcept;
 public:
 	//会有一个属性继承关系
-	void setParent(UIElement* parent);
-	virtual void setHeight(float value);
-	virtual void setWidth(float value);
-	virtual void setZindex(float value);
-	void setBorderSize(float value);
-	void setWidthAndHeight(float width, float height);
-	void setMinHeight(float value);
-	void setMinWidth(float value);
-	void setMaxHeight(float value);
-	void setMaxWidth(float value);
-	void setBackground(const Draw::Brush& color);
-	void setBackground(const uint32_t color);
-	void setBorderBrush(const Draw::Brush& color);
-	inline float getActualWidth() const noexcept { return actualWidth; }
-	inline float getActualHeight() const noexcept { return actualHeight; }
-	ControlTemplate& getControlTemplate() { return *style; }
+	void SetParent(UIElement* parent);
+	virtual void SetHeight(float value);
+	virtual void SetWidth(float value);
+	virtual void SetZindex(float value);
+	void SetBorderSize(float value);
+	void SetWidthAndHeight(float width, float height);
+	void SetMinHeight(float value);
+	void SetMinWidth(float value);
+	void SetMaxHeight(float value);
+	void SetMaxWidth(float value);
+	void SetBackground(const Draw::Brush& color);
+	void SetBackground(const uint32_t color);
+	void SetBorderBrush(const Draw::Brush& color);
+	inline float GetActualWidth() const noexcept { return actualWidth; }
+	inline float GetActualHeight() const noexcept { return actualHeight; }
+	ControlTemplate& GetControlTemplate() { return *style; }
 	//void setProperty();
 public:
 	//为自己测量控件大小和位置
-	void beginInit(const Size& size) noexcept;
-	Size& getSize();
+	void BeginInit(const Size& size) noexcept;
+	Size& GetSize();
 protected:
-	virtual Size measure(const Size& size) noexcept;
-	virtual void aeasure(const Size& size) noexcept;
-public:
-	/// <summary>
-	/// 注意的是，以下两个函数是给不进行绘制但参与布局的控件使用的
-	/// </summary>
-	/// <param name="value"></param>
-	void setActualWidth(float value);
-	void setActualHeight(float value);
+	virtual Size Measure(const Size& size) noexcept;
+	virtual void Aeasure(const Size& size) noexcept;
 protected:
 	/*virtual void OnResize() override;
 	virtual void OnRender() override;
@@ -68,9 +61,8 @@ protected:
 	virtual void OnEvent(CAITF::EventAbstract& e) override;
 	virtual void RaiseEvent(CAITF::EventAbstract& e) override;
 private:
-	void setActualWidth();
-	void setActualHeight();
-
+	inline void SetActualHeight(float value);
+	inline void SetActualWidth(float value);
 public:
 	DependencyProperty<float> width{ "Width" };
 	DependencyProperty<float> height{ "Height" };
@@ -98,7 +90,8 @@ protected:
 	float actualHeight;
 	UIElement* parent;
 
-	
+	bool validWidth = false;
+	bool validHeight = false;
 	//以下是openGL所用到资源
 protected:
 	PaintDevice* pDevice;

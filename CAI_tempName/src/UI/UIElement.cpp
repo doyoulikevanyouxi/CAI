@@ -12,8 +12,8 @@ UIElement::UIElement(UIElement* parent) noexcept :style(new ControlTemplate()), 
 {
 	actualWidth = 0.f;
 	actualHeight = 0.f;
-	pDevice->setWindow(nullptr);
-	pDevice->setPen(Brush(0xff000000));
+	pDevice->SetWindow(nullptr);
+	pDevice->SetPen(Brush(0xff000000));
 	style->vData.AreaBrush() = Brush(0x00000000);
 	style->vData.AreaSize().setX(0);
 	style->vData.AreaSize().setY(0);
@@ -30,8 +30,8 @@ UIElement::UIElement(const UIElement& other) noexcept :UIElement(nullptr)
 	actualWidth = other.actualWidth;
 	actualHeight = other.actualHeight;
 	background = other.background.get();
-	pDevice->setWindow(nullptr);
-	pDevice->setPen(other.pDevice->getPen());
+	pDevice->SetWindow(nullptr);
+	pDevice->SetPen(other.pDevice->GetPen());
 	*style = *other.style;
 }
 
@@ -41,7 +41,7 @@ UIElement::~UIElement() noexcept
 	delete pDevice;
 }
 
-void UIElement::render() noexcept
+void UIElement::Render() noexcept
 {
 	pDevice->Draw(style);	
 	//裁剪测试，由于float精度问题，可能存在裁剪过后存在间隙
@@ -49,102 +49,118 @@ void UIElement::render() noexcept
 	Size sz = style->vData.ContentSize().transto();
 	glScissor(sz.X(), sz.Y(), sz.Width(), sz.Height());
 	for (auto& element : style->visualTree) {
-		element->render();
+		element->Render();
 	}
 	glDisable(GL_SCISSOR_TEST);
 }
 
-void UIElement::setControlStyeData() noexcept
+void UIElement::SetControlStyeData() noexcept
 {
 
 }
 
-void UIElement::setParent(UIElement* parent)
+void UIElement::SetParent(UIElement* parent)
 {
 	this->parent = parent;
 }
 
-void UIElement::setHeight(float value)
+void UIElement::SetHeight(float value)
 {
 	height.set(value);
+	SetActualHeight(value);
+	validHeight = true;
 }
 
-void UIElement::setWidth(float value)
+void UIElement::SetWidth(float value)
 {
 	width.set(value);
+	SetActualWidth(value);
+	validWidth = true;
 }
 
-void UIElement::setZindex(float value)
+void UIElement::SetZindex(float value)
 {
 	zIndex.set(value);
-	style->vData.AreaSize().setZ(value);
 }
 
-void UIElement::setBorderSize(float value)
+void UIElement::SetBorderSize(float value)
 {
 	borderSize.set(value);
-	style->vData.setBorderSize(value);
 }
 
-void UIElement::setWidthAndHeight(float width, float height)
+void UIElement::SetWidthAndHeight(float width, float height)
 {
-	this->width.set(width);
-	this->height.set(height);
+	SetWidth(width);
+	SetHeight(height);
 }
 
-void UIElement::setMinHeight(float value)
+void UIElement::SetMinHeight(float value)
 {
 	minHeight.set(value);
+	if (actualHeight < value)
+		actualHeight = value;
+	validHeight = true;
 }
 
-void UIElement::setMinWidth(float value)
+void UIElement::SetMinWidth(float value)
 {
 	minWidth.set(value);
+	if (actualWidth < value) {
+		actualWidth = value;
+	}
+	validWidth = true;
 }
 
-void UIElement::setMaxHeight(float value)
+void UIElement::SetMaxHeight(float value)
 {
 	maxHeight.set(value);
+	if (actualHeight > value)
+		actualHeight = value;
+	validHeight = true;
 }
 
-void UIElement::setMaxWidth(float value)
+void UIElement::SetMaxWidth(float value)
 {
 	maxWidth.set(value);
+	if (actualWidth > value)
+		actualWidth = value;
+	validWidth = true;
 }
 
-void UIElement::setBackground(const Draw::Brush& color)
+void UIElement::SetBackground(const Draw::Brush& color)
 {
 	background.set(color);
 	style->vData.AreaBrush() = color;
 }
 
-void UIElement::setBackground(const uint32_t color)
+void UIElement::SetBackground(const uint32_t color)
 {
 	background.set(Draw::Brush(color));
 	style->vData.AreaBrush() = Draw::Brush(color);
 }
 
-void UIElement::setBorderBrush(const Draw::Brush& color)
+void UIElement::SetBorderBrush(const Draw::Brush& color)
 {
 	*(style->vData.borderBrush) = color;
 }
 
-void UIElement::beginInit(const Size& size) noexcept
+void UIElement::BeginInit(const Size& size) noexcept
 {
-	aeasure(measure(size));
-	style->vData.initData();
+	Aeasure(Measure(size));
+	style->vData.InitData();
 }
 
-Size UIElement::measure(const Size& size) noexcept
+Size UIElement::Measure(const Size& size) noexcept
 {
-	setActualHeight();
-	setActualWidth();
-	if (actualHeight > size.Height() && height.isInvalid())
-		actualHeight = size.Height();
-	if (actualWidth >= size.Width() && width.isInvalid())
-		actualWidth = size.Width();
-	style->vData.AreaSize().setWidth(actualWidth);
-	style->vData.AreaSize().setHeight(actualHeight);
+	//未设置宽度值时，采用传递过来的大小
+	if (width.IsInvalid()) {
+		SetActualWidth(size.Width());
+	}
+	if (height.IsInvalid()) {
+		SetActualHeight(size.Height());
+	}
+	style->vData.AreaSize().SetWidth(actualWidth);
+	style->vData.AreaSize().SetHeight(actualHeight);
 	//接着将根据给定的父变换矩阵来设置控件自身的变换矩阵
 	Math::SquareMatrix<4> tMatrix = {
 									1,0,0,0,
@@ -152,30 +168,25 @@ Size UIElement::measure(const Size& size) noexcept
 									0,0,1,0,
 									size.X(),size.Y(),0,1
 	};
-	if (zIndex.isInvalid())
+	//如果z值未设置，那么将继承上个z值并+1
+	if (zIndex.IsInvalid())
 		style->vData.AreaSize().setZ(size.Z() + 1);
 	style->vData.AreaSize().TransMatrix() = size.TransMatrix() * tMatrix;
 	if (zmax < style->vData.AreaSize().Z())
 		zmax = style->vData.AreaSize().Z();
-	
+	//如果有边框，就将边框加入
+	if (!borderSize.IsInvalid())
+		style->vData.SetBorderSize(borderSize.get());
+	//初始化控件顶点数据
+	style->vData.InitData();
 	return style->vData.ContentSize();
 }
 
-void UIElement::aeasure(const Size& size) noexcept
+void UIElement::Aeasure(const Size& size) noexcept
 {
 	for (auto& child : style->visualTree) {
-		child->beginInit(size);
+		child->BeginInit(size);
 	}
-}
-
-void UIElement::setActualWidth(float value)
-{
-	actualWidth = value;
-}
-
-void UIElement::setActualHeight(float value)
-{
-	actualHeight = value;
 }
 
 void UIElement::OnMouseOver(CAITF::MouseMoveEvent& e)
@@ -252,59 +263,38 @@ void UIElement::RaiseEvent(CAITF::EventAbstract& e)
 	}
 }
 
-void UIElement::setActualWidth()
+inline void UIElement::SetActualHeight(float value)
 {
-	if (width.isInvalid()) {
-		if (parent != nullptr) {
-			width = actualWidth = parent->actualWidth;
+	actualHeight = value;
+	if (!minHeight.IsInvalid()) {
+		if (value < minHeight.get()) {
+			actualHeight = minHeight.get();
 		}
-		else {
-			if (!minWidth.isInvalid()) {
-				actualWidth = minWidth.get();
-				return;
-			}
-			else {
-				actualWidth = 0.f;
-			}
+	}
+	if (!maxHeight.IsInvalid()) {
+		if (value > maxHeight.get()) {
+			actualHeight = maxHeight.get();
+		}
+	}
 
-		}
-	}
-	else {
-		actualWidth = width.get();
-	}
-	if (actualWidth < minWidth.get() && !minWidth.isInvalid())
-		actualWidth = minWidth.get();
-	else if (actualWidth > maxWidth.get() && !maxWidth.isInvalid())
-		actualWidth = maxWidth.get();
 }
 
-void UIElement::setActualHeight()
+inline void UIElement::SetActualWidth(float value)
 {
-	if (height.isInvalid()) {
-		if (parent != nullptr) {
-			height = actualHeight = parent->actualHeight;
-		}
-		else {
-			if (!minHeight.isInvalid()) {
-				actualHeight = minHeight.get();
-				return;
-			}
-			else {
-				actualHeight = 0.f;
-			}
-
+	actualWidth = value;
+	if (!minWidth.IsInvalid()) {
+		if (value < minWidth.get()) {
+			actualWidth = minWidth.get();
 		}
 	}
-	else {
-		actualHeight = height.get();
+	if (!maxWidth.IsInvalid()) {
+		if (value > maxWidth.get()) {
+			actualWidth = maxWidth.get();
+		}
 	}
-	if (actualHeight < minHeight.get() && !minHeight.isInvalid())
-		actualHeight = minHeight.get();
-	else if (actualHeight > maxHeight.get() && !maxHeight.isInvalid())
-		actualHeight = maxHeight.get();
 }
 
-Size& UIElement::getSize()
+Size& UIElement::GetSize()
 {
 	return style->vData.AreaSize();
 }

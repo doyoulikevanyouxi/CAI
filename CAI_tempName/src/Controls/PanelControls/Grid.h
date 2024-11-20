@@ -30,7 +30,7 @@ public:
 	void setRC(UIElement* target, int row, int colum);
 	void setGridRCCollection(unsigned int rowCount, unsigned int columnCount) noexcept;
 protected:
-	virtual void aeasure(const Size& size) noexcept override;
+	virtual void Aeasure(const Size& size) noexcept override;
 public:
 	RowDefinitionCollection rowDeinitions;
 	ColumDefinitionCollection columDeinitions;
@@ -40,10 +40,10 @@ public:
 	//AttachedProperty<std::unordered_map<UIElement*, int>> colum{ "Colum" };
 	//AttachedProperty<std::unordered_map<UIElement*, int>> colum{ "Colum" };
 private:
-	int rFixedNum;
+	int rNoneFixedNum;
 	float totalFixedWidth;		//所有已经设置的固定宽度和
 	float totalFixedHeight;	//所有已经设置的固定高度和
-	int cFixedNum;
+	int cNoneFixedNum;
 	std::unordered_map<UIElement*, ControlGridData> childGridData;
 };
 

@@ -17,12 +17,12 @@ void callFre() {
 
 int main() {
 	
-	if (CAIEngine.initial())
+	if (CAIEngine.Initial())
 		return -1;
 	
 	MainWindow mWindow(1000,800);
 	mWindow.init();
-	CAIEngine.addRenderWindow(&mWindow);
-	CAIEngine.start();
+	CAIEngine.AddRenderWindow(&mWindow);
+	CAIEngine.Start();
 	return 0;
 }

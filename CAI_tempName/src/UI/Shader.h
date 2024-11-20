@@ -1,26 +1,29 @@
 #pragma once
 #include"Mathmatics/Math.hpp"
+class string;
 class Shader
 {
-	class string;
 public:
 	Shader();
-	Shader(const std::string& shaFilePath);
+	Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath);
 	~Shader();
 public:
-	bool load(const std::string& shaFilePath);
-	void use() const;
-	void setVec3(const std::string& name, float value,float value2,float value3) const;
-	void setVec4(const std::string& name, float value,float value2,float value3,float value4) const;
-	void setMat4(const std::string& name, const Math::TransMatrix& mat) const;
-	void setMat4(const std::string& name, const float* mat) const;
-	float* getMat4(const std::string& name);
-private:
-	unsigned int vertexShader;
-	unsigned int fragmentShader;
-	std::string vertexshaderStr;
-	std::string fragmentshaderStr;
+	void SetVec3(const std::string& name, float value, float value2, float value3) const;
+	void SetVec4(const std::string& name, float value, float value2, float value3, float value4) const;
+	void SetMat4(const std::string& name, const Math::TransMatrix& mat) const;
+	void SetMat4(const std::string& name, const float* mat) const;
+public:
 	unsigned int ID;
-	bool isLoad;
+private:
+	std::string vertexStr;
+	std::string fragmentStr;
+	std::string geometryStr;
+private:
+	bool Load(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath);
+	void LoadShadder(const std::string& filePath, std::string& shaderStr);
+	void ComplieShader();
+public:
+	void Use() const;
 };
+
 

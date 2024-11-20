@@ -42,9 +42,9 @@ void Control::setVerticalAlignment(RelativeLocation value)
 	verticalAlignment.set(value);
 }
 
-Size Control::measure(const Size& size) noexcept
+Size Control::Measure(const Size& size) noexcept
 {
-	UIElement::measure(size);
+	UIElement::Measure(size);
 	RelativeLocation hor = horizontAlalignment.get();
 	RelativeLocation ver = verticalAlignment.get();
 	float x = 0;
