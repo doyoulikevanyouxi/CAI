@@ -65,6 +65,8 @@ void Window::init() noexcept
 	};
 	
 	Size sizeT(0, 0,0, width.get(), height.get());
+	sizeT.SetGlobalHeight(height.get());
+	sizeT.SetGlobalWidth(width.get());
 	this->size = sizeT;
 	size.TransMatrix() = mt;
 	BeginInit(size);

@@ -4,7 +4,7 @@
 #include "UI/Draw.h"
 #include <glad/glad.h>
 #include "stbimge/stb_image.h"
-VisualData::VisualData() noexcept :isDataHasBeenPushToGpu(false), hasBorder(false), areaSize(new Size()), borderSize(0), contentSize(new Size()),
+VisualData::VisualData() noexcept :isDataHasBeenPushToGpu(false), hasBorder(false), needClip(false), areaSize(new Size()), borderSize(0), contentSize(new Size()),clipSize(new Size()),
 areaBrush(new Draw::Brush()), borderBrush(new Draw::Brush()), vertexData(new float[12]), vertexColorData(new float[16]), borderVertexData(new float[12]),
 borderVertexColorData(new float[16]), textureIndexData(new float[8]), vertexIndexData(new unsigned int[6]), vertexSize(4), indexSize(6), texture(0)
 {
@@ -27,6 +27,8 @@ VisualData::~VisualData() noexcept
 		delete areaSize;
 	if (contentSize != nullptr)
 		delete contentSize;
+	if (clipSize != nullptr)
+		delete clipSize;
 	if (areaBrush != nullptr)
 		delete areaBrush;
 	if (borderBrush != nullptr)

@@ -45,13 +45,9 @@ void UIElement::Render() noexcept
 {
 	pDevice->Draw(style);	
 	//裁剪测试，由于float精度问题，可能存在裁剪过后存在间隙
-	glEnable(GL_SCISSOR_TEST);
-	Size sz = style->vData.ContentSize().transto();
-	glScissor(sz.X(), sz.Y(), sz.Width(), sz.Height());
 	for (auto& element : style->visualTree) {
 		element->Render();
 	}
-	glDisable(GL_SCISSOR_TEST);
 }
 
 void UIElement::SetControlStyeData() noexcept
@@ -152,6 +148,17 @@ void UIElement::BeginInit(const Size& size) noexcept
 
 Size UIElement::Measure(const Size& size) noexcept
 {
+	style->vData.AreaSize().SetGlobalWidth(size.GlobalWidth());
+	style->vData.AreaSize().SetGlobalHeight(size.GlobalHeight());
+	Point tmp(size.X(), size.Y());
+	tmp.Y() += size.Height();
+	Point::TranslatTo(tmp, size.TransMatrix());
+	Point::SetToLeftBottom(tmp, size.GlobalHeight());
+	//设置裁减区域
+	style->vData.clipSize->setX(tmp.X());
+	style->vData.clipSize->setY(tmp.Y());
+	style->vData.clipSize->SetWidth(size.Width());
+	style->vData.clipSize->SetHeight(size.Height());
 	//未设置宽度值时，采用传递过来的大小
 	if (width.IsInvalid()) {
 		SetActualWidth(size.Width());

@@ -97,7 +97,7 @@ namespace Math {
 			return value;
 		}
 		template<int R2, int C2>
-		Matrix<R,C2> operator*(const Matrix<R2, C2>& other) {
+		Matrix<R,C2> operator*(const Matrix<R2, C2>& other) const {
 			static_assert(C == R2, "matrix mutiplication require that first matrix's colums equals the second's rows");
 			Matrix<R,C2> value;
 			for (int i = 0; i < rows; ++i) {

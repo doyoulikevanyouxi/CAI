@@ -12,6 +12,20 @@ public:
 	Point(const Point& p) noexcept { x = p.x; y = p.y; }
 	~Point() noexcept {}
 public:
+	static void TranslatTo(Point& pt, const Math::TransMatrix& trans) {
+		Math::vec4 tmp = { pt.x,pt.y,1,1 };
+		Math::vec4 newValue = trans * tmp;
+		pt.x = newValue[0][0];
+		pt.y = newValue[1][0];
+	}
+	static void SetToLeftBottom(Point& globalpt, float height) {
+		globalpt.y = height - globalpt.y;
+	}
+	static void SetOriginTo(Point& globalpt, const Point& newOrigin) {
+		globalpt.x = -(newOrigin.x - globalpt.x);
+		globalpt.y = newOrigin.y - globalpt.y;
+	}
+public:
 	float& X() const { return x; }
 	float& Y() const { return y; }
 
@@ -28,20 +42,20 @@ private:
 
 class Size : public Object {
 public:
-	Size() noexcept : width(0.f), height(0.f), x(0.f), y(0.f),z(0.f){
+	Size() noexcept : width(0.f), height(0.f),globalWidth(0.f),globalHeight(0.f), x(0.f), y(0.f), z(0.f) {
 		invalid = true;
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
-	Size(const Point& point, float width, float height) noexcept :width(width), height(height), x(point.X()), y(point.Y()),z(0.f){
+	Size(const Point& point, float width, float height) noexcept :width(width), height(height), globalWidth(0.f), globalHeight(0.f), x(point.X()), y(point.Y()),z(0.f){
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = 1;
 		sizeCoord[3][0] = 1;
 	}
-	Size(float x, float y, float z,float width, float height) noexcept : width(width), height(height), x(x), y(y),z(z){
+	Size(float x, float y, float z,float width, float height) noexcept : width(width), height(height), globalWidth(0.f), globalHeight(0.f), x(x), y(y),z(z){
 		sizeCoord[0][0] = x;
 		sizeCoord[1][0] = y;
 		sizeCoord[2][0] = z;
@@ -50,6 +64,8 @@ public:
 	Size(const Size& other) noexcept {
 		width = other.width;
 		height = other.height;
+		globalHeight = other.globalHeight;
+		globalWidth = other.globalWidth;
 		x = other.x;
 		y = other.y;
 		z = other.z;
@@ -60,27 +76,26 @@ public:
 	void setX(float value) { x = value; sizeCoord[0][0] = x; }
 	void setY(float value) { y = value; sizeCoord[1][0] = y; }
 	void setZ(float value) { z = value; sizeCoord[2][0] = z; }
+	void SetGlobalWidth(float value)  {  globalWidth = value; }
+	void SetGlobalHeight(float value)  {  globalHeight = value; }
 	void setCoordinat(float x, float y) { this->x = x; this->y = y; sizeCoord[0][0] = 0; sizeCoord[1][0] = y; }
 	float X() const { return x; }
 	float Y() const { return y; }
 	float Z() const { return z; }
-	Size transto() {
-		Size tmp(*this);
-		tmp.mode = tmp.mode.Transpose();
-		tmp.sizeCoord =  tmp.mode* tmp.sizeCoord;
-		tmp.x = tmp.sizeCoord[0][0];
-		tmp.y = tmp.sizeCoord[1][0];
-		return tmp;
-	}
+	float GlobalWidth() const{ return globalWidth; }
+	float GlobalHeight() const { return globalHeight; }
 	float Width() const { return width; }
 	float Height() const { return height; }
-	Math::SquareMatrix<4>& TransMatrix() const { return mode; }
+	Math::TransMatrix& TransMatrix() const { return mode; }
+	Math::vec4& Coordinate() const{ return sizeCoord; }
 	void SetWidth(const float value) { width = value; }
 	void SetHeight(const float value) { height = value; }
 public:
 	Size& operator=(const Size& other) {
 		width = other.width;
 		height = other.height;
+		globalHeight = other.globalHeight;
+		globalWidth = other.globalWidth;
 		x = other.x;
 		y = other.y;
 		z = other.z;
@@ -94,6 +109,8 @@ private:
 	float width;
 	//可视化的空间高度
 	float height;
+	float globalWidth;
+	float globalHeight;
 	//局部坐标X，空间左上角
 	float x;
 	//局部坐标Y，空间左上角
@@ -101,6 +118,6 @@ private:
 	float z;
 	//模型矩阵--用于将自身的坐标转换成全局坐标
 	mutable Math::TransMatrix mode;
-	//由x,y组成的向量
+	//由x,y,z组成的顶点数据----图形左上角的顶点数据
 	mutable Math::vec4 sizeCoord;
 };

@@ -258,6 +258,8 @@ void Grid::Aeasure(const Size& size) noexcept
 			x = columDeinitions[C].x;
 		}
 		Size tmp(x, y,size.Z(), sizeW, sizeH);
+		tmp.SetGlobalHeight(size.GlobalHeight());
+		tmp.SetGlobalWidth(size.GlobalWidth());
 		tmp.TransMatrix() = style->styleData().AreaSize().TransMatrix();
 		child->BeginInit(tmp);
 	}

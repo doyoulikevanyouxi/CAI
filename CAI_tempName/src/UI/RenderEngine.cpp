@@ -162,6 +162,7 @@ void RenderEngine::RenderLoop(void)
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
 
+	glEnable(GL_SCISSOR_TEST);
 	glEnable(GL_STENCIL);
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -171,7 +172,6 @@ void RenderEngine::RenderLoop(void)
 		glClearColor(1.f,1.f,1.f,1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		for (auto& win : windows) {
-
 			glfwMakeContextCurrent(win->getWinHD());
 			squareShader->Use();
 			win->Render();

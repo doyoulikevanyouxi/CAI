@@ -191,6 +191,7 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 		style->vData.isDataHasBeenPushToGpu = true;
 	}
 	CAIEngine.squareShader->SetMat4("model", data.AreaSize().TransMatrix());
+	glScissor(data.clipSize->X(),data.clipSize->Y(), data.clipSize->Width(),data.clipSize->Height());
 	//检查是否存在边框，边框由模板测试实现，去除掉内容区域的绘制数据
 	if (data.hasBorder) {
 		//设置模板测试参数，允许该样式绘制的数据显示，并且将绘制区域模板数据设置为1
