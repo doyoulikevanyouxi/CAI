@@ -7,6 +7,7 @@ TextBlock::TextBlock() noexcept
 {
 	fontSize.set(12);
 	fontBrush.set(Draw::Color(Draw::Color::BLACK));
+	overranging.set(TextOverRangeOperator::Default);
 }
 TextBlock::TextBlock(const std::wstring& str) noexcept
 {
@@ -27,6 +28,5 @@ void TextBlock::Render() noexcept
 	UIElement::Render();
 	if (text.get().empty())
 		return;
-	
-	pDevice->DrawText(text.get(), style->styleData().AreaSize(), FontSetting(fontSize.get(),fontBrush.get()));
+	pDevice->DrawText(text.get(), style->styleData().ContentSize(), { fontSize.get(),fontBrush.get(),overranging.get() });
 }

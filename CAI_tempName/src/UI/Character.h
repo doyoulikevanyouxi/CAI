@@ -5,10 +5,16 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+enum TextOverRangeOperator {
+	Default,
+	Wrap
+};
+
 struct FontSetting
 {
 	unsigned int size;
 	Draw::Color color;
+	TextOverRangeOperator operation;
 };
 
 struct Character

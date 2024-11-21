@@ -24,6 +24,7 @@ public:
 		TextBox* tx = new TextBox();
 		tx->fontBrush.set(Draw::Color(Draw::Color::GREEN));
 		tx->fontSize.set(20);
+		tx->overranging.set(TextOverRangeOperator::Wrap);
 		tx->SetBackground(0xffccefda);
 		grid->addChild(*tx);
 		grid->setRC(tx, 1, 1);

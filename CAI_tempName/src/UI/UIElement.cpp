@@ -143,7 +143,6 @@ void UIElement::SetBorderBrush(const Draw::Brush& color)
 void UIElement::BeginInit(const Size& size) noexcept
 {
 	Aeasure(Measure(size));
-	style->vData.InitData();
 }
 
 Size UIElement::Measure(const Size& size) noexcept

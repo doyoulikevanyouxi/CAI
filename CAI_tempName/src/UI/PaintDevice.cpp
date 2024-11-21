@@ -49,6 +49,12 @@ void PaintDevice::FillWith(Brush& bs) noexcept
 {
 }
 
+/// <summary>
+/// 绘制字符
+/// </summary>
+/// <param name="str">需要被绘制的字符</param>
+/// <param name="size">允许绘制的区域</param>
+/// <param name="fontSet">字体设置</param>
 void PaintDevice::DrawText(const std::wstring& str, const Size& size,const FontSetting& fontSet) noexcept
 {
 	glEnable(GL_BLEND);
@@ -63,16 +69,24 @@ void PaintDevice::DrawText(const std::wstring& str, const Size& size,const FontS
 	CAIEngine.fontShader->SetVec4("textColor", color.R_f(),color.G_f(),color.B_f(),255);
 	glBindVertexArray(ft->VAO);
 	float x = size.X();
+	float xLeft = size.X() + size.Width();
 	//为了将字符的基准线放置到同一水平面，需要固定高度，并将参照坐标移动至左下角
 	float y = size.Y()+fontSet.size;
 	for (auto& chr : str) {
-		
 		auto& charac = ft->GetCharacter(chr);
-
 		float xpos = x + charac.bearingX*scal;
 		//基准坐标向上移动
-		float ypos = y-charac.bearingY*scal;
 		float w = charac.width * scal;
+		//如果字符超出了可绘制区域
+		//那么就换行并且x重置为初始值
+		if (fontSet.operation == TextOverRangeOperator::Wrap) {
+			if (xpos + w > xLeft) {
+				y += fontSet.size;
+				x = size.X();
+				xpos = x + charac.bearingX * scal;
+			}
+		}
+		float ypos = y - charac.bearingY * scal;
 		float h = charac.height * scal;
 		float vertices[] = {
 			xpos,ypos,size.Z(), 0,0,
