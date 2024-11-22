@@ -4,9 +4,9 @@
 #include "UI/Draw.h"
 #include <glad/glad.h>
 #include "stbimge/stb_image.h"
-VisualData::VisualData() noexcept :isDataHasBeenPushToGpu(false), hasBorder(false), needClip(false), areaSize(new Size()), borderSize(0), contentSize(new Size()),clipSize(new Size()),
+VisualData::VisualData() noexcept :isDataHasBeenPushToGpu(false), hasBorder(false), needClip(false), areaSize(new Size()), globalAreaSize(new Size()), borderSize(0), contentSize(new Size()),clipSize(new Size()),
 areaBrush(new Draw::Brush()), borderBrush(new Draw::Brush()), vertexData(new float[12]), vertexColorData(new float[16]), borderVertexData(new float[12]),
-borderVertexColorData(new float[16]), textureIndexData(new float[8]), vertexIndexData(new unsigned int[6]), vertexSize(4), indexSize(6), texture(0)
+borderVertexColorData(new float[16]), textureIndexData(new float[8]), vertexIndexData(new unsigned int[6]), vertexSize(4), indexSize(6), texture(0),textureBorder(0)
 {
 }
 
@@ -29,6 +29,8 @@ VisualData::~VisualData() noexcept
 		delete contentSize;
 	if (clipSize != nullptr)
 		delete clipSize;
+	if (globalAreaSize != nullptr)
+		delete globalAreaSize;
 	if (areaBrush != nullptr)
 		delete areaBrush;
 	if (borderBrush != nullptr)
@@ -60,6 +62,12 @@ void VisualData::SetBorderSize(float value) noexcept
 void VisualData::InitData()
 {
 	*contentSize = *areaSize;
+	globalAreaSize->SetHeight(areaSize->height);
+	globalAreaSize->SetWidth(areaSize->width);
+	globalAreaSize->SetGlobalWidth(areaSize->globalWidth);
+	globalAreaSize->SetGlobalHeight(areaSize->globalHeight);
+	Math::vec4_t xyz = areaSize->sizeCoord.Transpose()* areaSize->mode;
+	globalAreaSize->setCoordinat(xyz[0][0],xyz[0][1],xyz[0][2]);
 	if (hasBorder) {
 		float x = contentSize->x;
 		float y = contentSize->y;
@@ -158,6 +166,8 @@ VisualData& VisualData::operator=(const VisualData& other) noexcept
 	*areaSize = *(other.areaSize);
 	borderSize = borderSize;
 	*contentSize = *(other.contentSize);
+	*clipSize = *(other.clipSize);
+	*globalAreaSize = *(other.globalAreaSize);
 	*areaBrush = *(other.areaBrush);
 	vertexSize = other.vertexSize;
 	indexSize = other.indexSize;

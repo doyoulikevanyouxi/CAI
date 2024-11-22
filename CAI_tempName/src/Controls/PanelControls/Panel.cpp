@@ -16,11 +16,11 @@ Panel::~Panel()
 
 }
 
-void Panel::addChild(UIElement& child)
+void Panel::AddChild(UIElement* child)
 {
-	childs.addChild(&child);
+	childs.AddChild(child);
 	//加入到可视化树中
-	style->visualTree.addChild(&child);
-	child.SetParent(this);
+	style->visualTree.AddChild(child);
+	child->SetParent(this);
 }
 

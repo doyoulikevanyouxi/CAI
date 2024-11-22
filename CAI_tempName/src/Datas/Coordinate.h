@@ -1,5 +1,4 @@
 #pragma once
-
 #include"Object.h"
 #include"Mathmatics/Math.hpp"
 
@@ -78,7 +77,14 @@ public:
 	void setZ(float value) { z = value; sizeCoord[2][0] = z; }
 	void SetGlobalWidth(float value)  {  globalWidth = value; }
 	void SetGlobalHeight(float value)  {  globalHeight = value; }
-	void setCoordinat(float x, float y) { this->x = x; this->y = y; sizeCoord[0][0] = 0; sizeCoord[1][0] = y; }
+	void setCoordinat(float x, float y) { this->x = x; this->y = y; sizeCoord[0][0] = x; sizeCoord[1][0] = y; }
+	void setCoordinat(float x, float y, float z) { this->x = x; this->y = y;  this->z = z; sizeCoord[0][0] = x; sizeCoord[1][0] = y; sizeCoord[2][0] = z; }
+	void setCoordinat(Math::vec4& vec) { 
+		sizeCoord = vec;
+		this->x = sizeCoord[0][0];
+		this->y = sizeCoord[1][0];
+		this->z = sizeCoord[2][0];
+	}
 	float X() const { return x; }
 	float Y() const { return y; }
 	float Z() const { return z; }
@@ -90,6 +96,9 @@ public:
 	Math::vec4& Coordinate() const{ return sizeCoord; }
 	void SetWidth(const float value) { width = value; }
 	void SetHeight(const float value) { height = value; }
+	bool PointIn(const float& x, const float& y) const{
+		return (x >= this->x && x <= this->x + width) && (y >= this->y && y <= this->y + height);
+	}
 public:
 	Size& operator=(const Size& other) {
 		width = other.width;

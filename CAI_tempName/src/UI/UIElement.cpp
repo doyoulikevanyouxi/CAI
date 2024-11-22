@@ -7,6 +7,7 @@
 #include"PaintDevice.h"
 #include"Shader.h"
 #include"RenderEngine.h"
+#include "Events/Events.h"
 float zmax = 1;
 UIElement::UIElement(UIElement* parent) noexcept :style(new ControlTemplate()), parent(parent), pDevice(new PaintDevice())
 {
@@ -143,6 +144,7 @@ void UIElement::SetBorderBrush(const Draw::Brush& color)
 void UIElement::BeginInit(const Size& size) noexcept
 {
 	Aeasure(Measure(size));
+	style->visualTree.SortByZindex();
 }
 
 Size UIElement::Measure(const Size& size) noexcept
@@ -195,34 +197,42 @@ void UIElement::Aeasure(const Size& size) noexcept
 	}
 }
 
-void UIElement::OnMouseOver(CAITF::MouseMoveEvent& e)
+void UIElement::OnMouseLeave(MouseLeaveEvent& e)
+{
+}
+
+void UIElement::OnMouseEnter(MouseEnterEvent& e)
+{
+}
+
+void UIElement::OnPreMouseOver(PreMouseOverEvent& e)
+{
+}
+
+void UIElement::OnMouseOver(MouseOverEvent& e)
 {
 	e.handled = false;
 }
 
-void UIElement::OnInput(CAITF::InputEvent& e)
+void UIElement::OnInput(InputEvent& e)
 {
 }
 
-void UIElement::OnEvent(CAITF::EventAbstract& e)
+void UIElement::OnEvent(EventAbstract& e)
 {
 	//Ìí¼Ó¹ýÂË£¬¹ýÂËµô±ÜÃâ¼ÌÐø´«µÝ
-	if (eventDispatcher.filter(e))
-		return;
+	/*if (eventDispatcher.filter(e))
+		return;*/
 	switch (e.GetEventPreType())
 	{
-	case	CAITF::EventType::InputEvent:
-		OnInput((CAITF::InputEvent&)e);
+	case	 EventType::InputEvent:
+		OnInput((InputEvent&)e);
 		break;
 	default:
 		break;
 	}
 	switch (e.GetEventType())
 	{
-	case	CAITF::EventSubType::MouseMoveEvent: {
-		OnMouseOver((CAITF::MouseMoveEvent&)e);
-	}
-		break;
 	default:
 		break;
 	}
@@ -230,36 +240,34 @@ void UIElement::OnEvent(CAITF::EventAbstract& e)
 		return;
 	switch (e.sType)
 	{
-	case CAITF::EventSpreadType::Tunnel:
+	case EventSpreadType::Tunnel:
 		for (auto& child : style->visualTree) {
 			child->OnEvent(e);
 			if (e.handled)
 				return;
 		}
 		break;
-	case CAITF::EventSpreadType::Bubble:
+	case EventSpreadType::Bubble:
 		parent->OnEvent(e);
 		break;
-	case CAITF::EventSpreadType::Direct:
+	case EventSpreadType::Direct:
 		break;
 	default:
 		break;
 	}
-	
-	
 }
 
-void UIElement::RaiseEvent(CAITF::EventAbstract& e)
+void UIElement::RaiseEvent(EventAbstract& e)
 {
 	switch (e.sType)
 	{
-	case CAITF::EventSpreadType::Tunnel:
+	case EventSpreadType::Tunnel:
 		OnEvent(e);
 		break;
-	case CAITF::EventSpreadType::Bubble:
+	case EventSpreadType::Bubble:
 		OnEvent(e);
 		break;
-	case CAITF::EventSpreadType::Direct:
+	case EventSpreadType::Direct:
 		if (e.source == nullptr || e.target == nullptr)
 			break;
 		((UIElement*)(e.target))->OnEvent(e);
@@ -299,6 +307,8 @@ inline void UIElement::SetActualWidth(float value)
 		}
 	}
 }
+
+
 
 Size& UIElement::GetSize()
 {

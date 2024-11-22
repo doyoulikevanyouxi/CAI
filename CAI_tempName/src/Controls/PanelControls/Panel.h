@@ -14,7 +14,7 @@ public:
 	Panel() noexcept;
 	virtual ~Panel();
 public:
-	virtual void addChild(UIElement& child);
+	virtual void AddChild(UIElement* child);
 
 protected:
 	UIElementCollection childs;

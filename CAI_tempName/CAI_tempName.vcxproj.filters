@@ -126,6 +126,12 @@
     <ClCompile Include="src\Input\Input.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\XMGL\TextInpreter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\ApplicationControl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object.h">
@@ -236,17 +242,26 @@
     <ClInclude Include="src\Controls\Shapes.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\XMGL\TextInpreter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\ApplicationControl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\MouseEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\InputEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\WindowEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\Shaders\text_shader.sha">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="resources\Shaders\square_shader.sha">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="resources\Shaders\templatetest.sha">
-      <Filter>资源文件</Filter>
-    </None>
+    <None Include="resources\Shaders\RectFragmentShader.glsl" />
+    <None Include="resources\Shaders\RectVertexShader.glsl" />
+    <None Include="resources\Shaders\TextVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf">
@@ -263,5 +278,8 @@
     <Image Include="resources\icons\minus.png">
       <Filter>资源文件</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\Shaders\TextFragmentShader.glsl" />
   </ItemGroup>
 </Project>

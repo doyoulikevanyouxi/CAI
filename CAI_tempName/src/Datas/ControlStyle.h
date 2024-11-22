@@ -8,6 +8,10 @@
 /// </summary>
 class ControlTemplate : public Object
 {
+	friend class UIElement;
+	friend class Panel;
+	friend class PaintDevice;
+	friend class ApplicationControl;
 public:
 	ControlTemplate() noexcept {}
 	ControlTemplate(const ControlTemplate& other) {
@@ -16,7 +20,7 @@ public:
 	}
 	virtual ~ControlTemplate() noexcept {}
 public:
-	void addChildToVisual(UIElement& child) { visualTree.addChild(&child); }
+	void addChildToVisual(UIElement& child) { visualTree.AddChild(&child); }
 	VisualData& styleData() noexcept { return vData; }
 public:
 	ControlTemplate& operator=(const ControlTemplate& other) {
@@ -29,8 +33,5 @@ public:
 public:
 	UIElementCollection visualTree;
 private:
-	friend class UIElement;
-	friend class Panel;
-	friend class PaintDevice;
 	VisualData vData;
 };

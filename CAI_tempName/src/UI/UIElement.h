@@ -13,6 +13,8 @@ extern float zmax;
 /// </summary>
 class UIElement : public Element
 {
+	friend class RenderEngine;
+	friend class ApplicationControl;
 public:
 	UIElement(UIElement* parent = nullptr) noexcept;
 	UIElement(const UIElement& other) noexcept;
@@ -55,11 +57,14 @@ protected:
 	virtual void OnMouseOver() override;
 	virtual void OnMouseLeftButtonPress() override;
 	virtual void OnMouseLeftButtonUp() override;*/
-	friend class RenderEngine;
-	virtual void OnMouseOver( CAITF::MouseMoveEvent& e) override;
-	virtual void OnInput(CAITF::InputEvent& e) override;
-	virtual void OnEvent(CAITF::EventAbstract& e) override;
-	virtual void RaiseEvent(CAITF::EventAbstract& e) override;
+	// 通过 Element 继承
+	virtual void OnMouseLeave(MouseLeaveEvent& e) override;
+	virtual void OnMouseEnter(MouseEnterEvent& e) override;
+	virtual void OnPreMouseOver(PreMouseOverEvent& e) override;
+	virtual void OnMouseOver(MouseOverEvent& e) override;
+	virtual void OnInput(InputEvent& e) override;
+	virtual void OnEvent(EventAbstract& e) override;
+	virtual void RaiseEvent(EventAbstract& e) override;
 private:
 	inline void SetActualHeight(float value);
 	inline void SetActualWidth(float value);
@@ -95,5 +100,7 @@ protected:
 	//以下是openGL所用到资源
 protected:
 	PaintDevice* pDevice;
+
+
 };
 

@@ -6,7 +6,7 @@
 class RowDefinition : public Object
 {
 public:
-	RowDefinition() noexcept :y(0), height(0),validHeight(false){ name = CAISTR(RowDefinition);}
+	RowDefinition(float height = 0,bool validHeight = false) noexcept :y(0), height(height),validHeight(validHeight){ name = CAISTR(RowDefinition);}
 	~RowDefinition() noexcept = default;
 	void SetHeight(float& value) { height = value; validHeight = true; }
 public:
@@ -20,7 +20,7 @@ public:
 /// </summary>
 class ColumDefinition : public Object {
 public:
-	ColumDefinition() noexcept:x(0),width(0),validWidth(false){ name = CAISTR(ColumDefinition); }
+	ColumDefinition(float width=0,bool validWidth =false) noexcept:x(0),width(width),validWidth(validWidth){ name = CAISTR(ColumDefinition); }
 	~ColumDefinition() noexcept = default;
 	void SetWidth(float& value) { width = value; validWidth = true; }
 public:

@@ -7,6 +7,7 @@
 #include "Controls/ContentControls/Window.h"
 #include "Events/Events.h"
 #include "Input/Input.h"
+#include "ApplicationControl.h"
 using namespace std;
 RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr),
 									font(nullptr), alreadyOn(false), mainWHasToken(false), eventArgs(new EventArgs)
@@ -89,11 +90,12 @@ void RenderEngine::AddRenderWindow(Window* win)
 	glfwSetWindowUserPointer(win->getWinHD(), this);
 	glfwSetCursorPosCallback(mainWinHd, [](GLFWwindow* window, double xpos, double ypos) {
 		RenderEngine* ev = (RenderEngine*)glfwGetWindowUserPointer(window);
-		CAITF::MouseMoveEvent e(xpos, ypos);
+		MouseMoveEvent e(xpos, ypos);
 		EventArgs eArgs;
-		eArgs.event = (CAITF::EventAbstract*)&e;
+		eArgs.event = (EventAbstract*)&e;
 		eArgs.winHD = window;
-		ev->EventDistribute(eArgs);
+		Window* win = ev->FindWindowByHD(eArgs.winHD);
+		ApplicationControl::app.OnMouseMove(e, win);
 		});
 	glfwSetCharCallback(mainWinHd, TextCallBack);
 	glfwSetKeyCallback(mainWinHd, KeyCallBack);
@@ -139,7 +141,7 @@ void RenderEngine::EventDistribute(EventArgs& eArgs)
 	win->RaiseEvent(*(eArgs.event));
 }
 
-void RenderEngine::EventReDistribute(CAITF::EventAbstract& event)
+void RenderEngine::EventReDistribute(EventAbstract& event)
 {
 	if (event.target == nullptr)
 		return;

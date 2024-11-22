@@ -1,6 +1,7 @@
 #include "caipch.h"
 #include "TextBox.h"
 #include "UI/PaintDevice.h"
+#include "Events/Events.h"
 TextBox::TextBox() noexcept
 {
 	name = CAISTR(TextBox);
@@ -10,11 +11,11 @@ TextBox::~TextBox() noexcept
 {
 }
 
-void TextBox::OnInput(CAITF::InputEvent& e)
+void TextBox::OnInput(InputEvent& e)
 {
-	if (e.GetEventType() != CAITF::EventSubType::TextInputEvent)
+	if (e.GetEventType() != EventSubType::TextInputEvent)
 		return;
-	CAITF::TextInputEvent& event = (CAITF::TextInputEvent&)e;
+	TextInputEvent& event = (TextInputEvent&)e;
 	text.get() += event.Char();
 	e.handled = true;
 }

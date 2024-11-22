@@ -12,22 +12,20 @@ struct GLFWwindow;
 class Shader;
 class Font;
 class Window;
-namespace CAITF {
-	class EventAbstract;
-}
+class EventAbstract;
 class RenderEngine final : public Object
 {
 	friend class PaintDevice;
 public:
 	struct EventArgs
 	{
-		CAITF::EventAbstract* event;
+		EventAbstract* event;
 		GLFWwindow* winHD;
 	};
 public:
 	RenderEngine() noexcept;
 	~RenderEngine() noexcept;
-	
+
 public:
 	uint32_t Initial(void);
 	void Start(void);
@@ -38,12 +36,12 @@ public:
 	void ActivateWindow(GLFWwindow* win);
 	void AddRenderWindow(Window* win);
 	void SetWindowPossition(GLFWwindow* win, int x, int y);
-	void SetWindowSize(GLFWwindow* win,int width,int height);
+	void SetWindowSize(GLFWwindow* win, int width, int height);
 	void SetWindowProjection(const Math::TransMatrix& mt);
 	void SetColorProjection(const Math::TransMatrix& mt);
 	void SetColorProjection(float* mt);
 	void EventDistribute(EventArgs& eArgs);
-	void EventReDistribute(CAITF::EventAbstract& event);
+	void EventReDistribute(EventAbstract& event);
 private:
 	Window* FindWindowByHD(GLFWwindow* HD);
 private:

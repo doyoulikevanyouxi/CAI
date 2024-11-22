@@ -6,6 +6,6 @@ public:
 	TextBox() noexcept;
 	~TextBox() noexcept;
 protected:
-	virtual void OnInput(CAITF::InputEvent& e) override;
+	virtual void OnInput(InputEvent& e) override;
 };
 

@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\bin-data\</IntDir>
-    <LibraryPath>$(SolutionDir)$(ProjectName)\CLog\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <LibraryPath>$(SolutionDir)$(ProjectName)\CLog\lib;$(SolutionDir)$(ProjectName)\XMGLInterpreter\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -54,7 +54,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CLOG_PLATFORM_WINDOWS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\CLog\include;src;src\Common;D:\openglLIB\glfw\include\GLFW;D:\openglLIB\glad\include;D:\openglLIB\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\CLog\include;$(SolutionDir)$(ProjectName)\XMGLInterpreter\include;src;src\Common;D:\openglLIB\glfw\include\GLFW;D:\openglLIB\glad\include;D:\openglLIB\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>caipch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -63,7 +63,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\openglLIB\glfw;D:\openglLIB\freetype;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CLog.lib;glfw3.lib;freetype.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>XMGLInterpreter.lib;CLog.lib;glfw3.lib;freetype.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\UI\ApplicationControl.cpp" />
     <ClCompile Include="src\Common\caipch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -109,8 +110,13 @@
     <ClCompile Include="src\Datas\VisualData.cpp" />
     <ClCompile Include="src\Controls\ContentControls\Window.cpp" />
     <ClCompile Include="src\Controls\ContentControls\TextBox.cpp" />
+    <ClCompile Include="src\XMGL\TextInpreter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Events\InputEvents.h" />
+    <ClInclude Include="src\Events\MouseEvents.h" />
+    <ClInclude Include="src\Events\WindowEvents.h" />
+    <ClInclude Include="src\UI\ApplicationControl.h" />
     <ClInclude Include="src\Common\caipch.h" />
     <ClInclude Include="src\Common\Object.h" />
     <ClInclude Include="src\Controls\Shapes.h" />
@@ -147,6 +153,7 @@
     <ClInclude Include="src\Datas\VisualData.h" />
     <ClInclude Include="src\Controls\ContentControls\Window.h" />
     <ClInclude Include="src\Controls\ContentControls\TextBox.h" />
+    <ClInclude Include="src\XMGL\TextInpreter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\RectFragmentShader.glsl" />

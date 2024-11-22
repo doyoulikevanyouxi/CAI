@@ -19,8 +19,8 @@ public:
 
 public:
 	bool IsInvalid() const{ return invalid; }
-protected:
-	bool invalid;
+public:
 	std::string name;
+	bool invalid;
 };
 

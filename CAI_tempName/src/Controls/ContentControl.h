@@ -19,10 +19,10 @@ public:
 		selfCreatEle->setText(str);
 		content.set(selfCreatEle);
 	}
-	void setContent(UIElement& elem) {
-		content.set(&elem);
-		style->addChildToVisual(elem);
-		elem.SetParent(this);
+	void setContent(UIElement* elem) {
+		content.set(elem);
+		style->addChildToVisual(*elem);
+		elem->SetParent(this);
 	}
 public:
 	DependencyProperty<Object*> content{ "Content" };

@@ -1,24 +1,28 @@
 #pragma once
 #include "Object.h"
 #include "Events/Events.h"
-
 class Element : public Object
 {
-public:
-	//void registEventCallBack(std::function<void(CAITF::EventAbstract)> ,std::function<void(CAITF::EventAbstract)>);
 protected:
 	//virtual void OnResize() = 0;
 	//virtual void OnRender();
 	//virtual void OnMouseOver();
 	//virtual void OnMouseLeftButtonPress();
 	//virtual void OnMouseLeftButtonUp();
-	virtual void OnInput(CAITF::InputEvent& e) = 0;
-	virtual void OnMouseOver( CAITF::MouseMoveEvent& e) =0;
-	virtual void OnEvent(CAITF::EventAbstract& e) = 0;
-	virtual void RaiseEvent(CAITF::EventAbstract& e) = 0;
+	virtual void OnInput(InputEvent& e) = 0;
+	virtual void OnMouseLeave(MouseLeaveEvent& e) = 0;
+	virtual void OnMouseEnter(MouseEnterEvent& e) = 0;
+	virtual void OnPreMouseOver(PreMouseOverEvent& e) = 0;
+	virtual void OnMouseOver(MouseOverEvent& e) = 0;
+	/*virtual void OnMouseIn();
+	virtual void OnMouseLeft();*/
+	virtual void OnEvent(EventAbstract& e) = 0;
+	virtual void RaiseEvent(EventAbstract& e) = 0;
 public:
 	void* dataContext;
-protected:
-	CAITF::EventDispatcher eventDispatcher;
+	bool focus = false;
+	bool isMouseOver = false;
+	bool isMouseDirectOver = false;
+	bool isMouseEnter = false;
 };
 

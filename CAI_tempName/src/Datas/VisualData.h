@@ -17,6 +17,7 @@ public:
 	inline Size& AreaSize() const noexcept { return *areaSize; }
 	inline Size& ClipSize() const noexcept { return *clipSize; }
 	inline Size& ContentSize() const noexcept { return *contentSize; }
+	inline Size& GlobalAreaSize() const noexcept { return *globalAreaSize; }
 	inline Draw::Brush& AreaBrush() const noexcept { return *areaBrush; }
 	inline unsigned int VertexSize() const noexcept { return vertexSize; }
 	inline unsigned int IndexSize() const noexcept { return indexSize; }
@@ -59,6 +60,7 @@ private:
 	Size* contentSize;
 	//裁减空间---只绘制该区域的内容，超出该区域的内容将不会处理
 	Size* clipSize;
+	Size* globalAreaSize;
 	//绘制区域颜色刷
 	Draw::Brush* areaBrush;
 	Draw::Brush* borderBrush;

@@ -14,7 +14,7 @@ Grid::~Grid() noexcept
 
 void Grid::addRowDefinition(const RowDefinition& rowDefine)
 {
-	rowDeinitions.addChild(rowDefine);
+	rowDeinitions.AddChild(rowDefine);
 	if (!rowDefine.validHeight)
 		++rNoneFixedNum;
 	else
@@ -23,7 +23,7 @@ void Grid::addRowDefinition(const RowDefinition& rowDefine)
 
 void Grid::addColumDefinition(const ColumDefinition& columDefine)
 {
-	columDeinitions.addChild(columDefine);
+	columDeinitions.AddChild(columDefine);
 	if (!columDefine.validWidth)
 		++cNoneFixedNum;
 	else
@@ -177,8 +177,8 @@ void Grid::Aeasure(const Size& size) noexcept
 	float x = 0;
 	float y = 0;
 
-	int rCount = rowDeinitions.Size();
-	int cCount = columDeinitions.Size();
+	size_t rCount = rowDeinitions.Size();
+	size_t cCount = columDeinitions.Size();
 	for (auto& child : childs) {
 		//初始化控件的行列数据和占几行占几列的数据
 		int R = 0;
