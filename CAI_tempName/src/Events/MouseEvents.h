@@ -1,10 +1,26 @@
 #pragma once
 #include "EventAbstract.h"
+
+#define MOUSE_UP	  0
+#define MOUSE_PRESS 1
+
+#define MOUSE_BUTTON_1 1
+#define MOUSE_BUTTON_2 2
+#define MOUSE_BUTTON_3 3
+#define MOUSE_BUTTON_4 4
+#define MOUSE_BUTTON_5 5
+#define MOUSE_BUTTON_6 6
+#define MOUSE_LEFT_BUTTON		MOUSE_BUTTON_1
+#define MOUSE_RIGHT_BUTTON		MOUSE_BUTTON_2
+#define MOUSE_MIDDLE_BUTTON	MOUSE_BUTTON_3
+
 class MouseButtonEvent :public EventAbstract {
 public:
 	Event_Class_PreType(EventType::MouseButtonEvent)
 protected:
 	MouseButtonEvent(int button) noexcept : button(button) {}
+public:
+	inline int MButton() const { return button; }
 protected:
 	int button;
 };
@@ -110,38 +126,117 @@ public:
 };
 
 
-
-
-/// <summary>
-/// 鼠标按钮按下事件
-/// </summary>
-class MouseButtonPressedEvent : public MouseButtonEvent {
+class PreMouseButtonDownEvent :public MouseButtonEvent {
 public:
-	MouseButtonPressedEvent(int button, bool repeat) noexcept :MouseButtonEvent(button), repeat(repeat) {}
+	PreMouseButtonDownEvent(int button, bool repeat) noexcept :MouseButtonEvent(button), repeat(repeat) {}
 public:
 	const std::string ToString() const override {
-		std::string str = "MouseButtonPressedEvent:" + std::to_string(button) + std::to_string(repeat);
+		std::string str = "PreMouseButtonDownEvent:" + std::to_string(button) + std::to_string(repeat);
 		return str;
 	}
 	Event_Class_PreType(EventType::MouseButtonEvent)
 public:
-	Event_Class_Type(MouseButtonPressedEvent)
+	Event_Class_Type(PreMouseButtonDownEvent)
 private:
 	bool repeat;
 };
 
-/// <summary>
-/// 鼠标按钮弹起事件
-/// </summary>
-class MouseButtonUpEvent : public MouseButtonEvent {
+
+class MouseLeftButtonDownEvent : public MouseButtonEvent {
 public:
-	MouseButtonUpEvent(int button) noexcept :MouseButtonEvent(button) {}
+	MouseLeftButtonDownEvent(bool repeat) noexcept :MouseButtonEvent(MOUSE_LEFT_BUTTON), repeat(repeat) {}
 public:
 	const std::string ToString() const override {
-		std::string str = "MouseButtonPressedEvent:" + std::to_string(button);
+		std::string str = "MouseLeftButtonDownEvent:"  + std::to_string(repeat);
 		return str;
 	}
-	Event_Class_Type(MouseButtonUpEvent)
+	Event_Class_PreType(EventType::MouseButtonEvent)
+public:
+	Event_Class_Type(MouseLeftButtonDownEvent)
 private:
 	bool repeat;
+
+};
+
+class MouseRightButtonDownEvent : public MouseButtonEvent {
+public:
+	MouseRightButtonDownEvent(bool repeat) noexcept :MouseButtonEvent(MOUSE_RIGHT_BUTTON), repeat(repeat) {}
+public:
+	const std::string ToString() const override {
+		std::string str = "MouseRightButtonDownEvent:" + std::to_string(repeat);
+		return str;
+	}
+	Event_Class_PreType(EventType::MouseButtonEvent)
+public:
+	Event_Class_Type(MouseLeftButtonDownEvent)
+private:
+	bool repeat;
+};
+
+class MouseMiddleButtonDownEvent : public MouseButtonEvent {
+public:
+	MouseMiddleButtonDownEvent(bool repeat) noexcept :MouseButtonEvent(MOUSE_MIDDLE_BUTTON), repeat(repeat) {}
+public:
+	const std::string ToString() const override {
+		std::string str = "MouseMiddleButtonDownEvent:" + std::to_string(repeat);
+		return str;
+	}
+	Event_Class_PreType(EventType::MouseButtonEvent)
+public:
+	Event_Class_Type(MouseMiddleButtonDownEvent)
+private:
+	bool repeat;
+};
+
+class PreMouseButtonUpEvent : public MouseButtonEvent {
+public:
+	PreMouseButtonUpEvent(int button) noexcept :MouseButtonEvent(button){}
+public:
+	const std::string ToString() const override {
+		std::string str = "PreMouseButtonUpEvent:" + std::to_string(button);
+		return str;
+	}
+	Event_Class_PreType(EventType::MouseButtonEvent)
+public:
+	Event_Class_Type(PreMouseButtonUpEvent)
+};
+
+
+class MouseLeftButtonUpEvent : public MouseButtonEvent {
+public:
+	MouseLeftButtonUpEvent() noexcept :MouseButtonEvent(MOUSE_LEFT_BUTTON) {}
+public:
+	const std::string ToString() const override {
+		std::string str = "MouseLeftButtonUpEvent:" + std::to_string(button);
+		return str;
+	}
+	Event_Class_PreType(EventType::MouseButtonEvent)
+public:
+	Event_Class_Type(MouseLeftButtonUpEvent)
+};
+
+class MouseRightButtonUpEvent : public MouseButtonEvent {
+public:
+	MouseRightButtonUpEvent() noexcept :MouseButtonEvent(MOUSE_RIGHT_BUTTON) {}
+public:
+	const std::string ToString() const override {
+		std::string str = "MouseRightButtonUpEvent:" + std::to_string(button);
+		return str;
+	}
+	Event_Class_PreType(EventType::MouseButtonEvent)
+public:
+	Event_Class_Type(MouseRightButtonUpEvent)
+};
+
+class MouseMiddleButtonUpEvent : public MouseButtonEvent {
+public:
+	MouseMiddleButtonUpEvent() noexcept :MouseButtonEvent(MOUSE_RIGHT_BUTTON) {}
+public:
+	const std::string ToString() const override {
+		std::string str = "MouseMiddleButtonUpEvent:" + std::to_string(button);
+		return str;
+	}
+	Event_Class_PreType(EventType::MouseButtonEvent)
+public:
+	Event_Class_Type(MouseMiddleButtonUpEvent)
 };

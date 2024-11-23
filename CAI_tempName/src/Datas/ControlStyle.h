@@ -11,7 +11,7 @@ class ControlTemplate : public Object
 	friend class UIElement;
 	friend class Panel;
 	friend class PaintDevice;
-	friend class ApplicationControl;
+	friend class Application;
 public:
 	ControlTemplate() noexcept {}
 	ControlTemplate(const ControlTemplate& other) {

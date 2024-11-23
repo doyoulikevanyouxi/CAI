@@ -4,14 +4,16 @@
 #include <Events/Events.h>
 using Brush = Draw::Brush;
 class Gridg : public Grid {
-
+	
 protected:
-	void OnMouseEnter(MouseEnterEvent& e) override {
+	//Draw::Color color;
+	/*void OnMouseEnter(MouseEnterEvent& e) override {
 		std::cout << name << ": enter" << std::endl;
 	}
 	void OnMouseLeave(MouseLeaveEvent& e) override {
 		std::cout << name << ": leave" << std::endl;
-	}
+	}*/
+
 };
 class MainWindow : public Window
 {
@@ -19,18 +21,19 @@ public:
 	MainWindow(int width = 800, int height = 600) noexcept :Window(width, height) {
 		initializeComponents();
 		Gridg* grid = new Gridg();
-		grid->name = "g1";
+		grid->SetBackground(0xffffffff);
 		grid->addColumDefinition(ColumDefinition());
 		grid->addColumDefinition(ColumDefinition(400,true));
 		grid->addRowDefinition(RowDefinition());
 		grid->addRowDefinition(RowDefinition(300,true));
 		TextBox* txtbox = new TextBox();
+		txtbox->SetBorderSize(10);
+		txtbox->SetBorderBrush(0xffffff00);
 		txtbox->fontSize.set(20);
 		txtbox->SetBackground(0xff0000ff);
 		grid->setRC(txtbox, 0, 0);
 		grid->setRowSpan(txtbox, 2);
 		Gridg* gChild = new Gridg();
-		gChild->name = "g2";
 		gChild->SetBackground(0xffff0000);
 		grid->setRC(gChild, 0, 1);
 		TextBlock* tb = new TextBlock();
@@ -38,9 +41,9 @@ public:
 		tb->SetBackground(0xff00ff00);
 		grid->setRC(tb, 1, 1);
 		grid->AddChild(txtbox);
-		grid->AddChild(gChild);
+		//grid->AddChild(gChild);
 		grid->AddChild(tb);
-		tb->text.set(L"safasf");
+		tb->text.set(L"ÄãºÃ°¡,\r\n´ósb");
 		setContent(grid);
 	}
 	~MainWindow() noexcept {

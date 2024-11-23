@@ -155,6 +155,8 @@ Size UIElement::Measure(const Size& size) noexcept
 	tmp.Y() += size.Height();
 	Point::TranslatTo(tmp, size.TransMatrix());
 	Point::SetToLeftBottom(tmp, size.GlobalHeight());
+	if (tmp.Y() < 0)
+		tmp.Y() = 0;
 	//设置裁减区域
 	style->vData.clipSize->setX(tmp.X());
 	style->vData.clipSize->setY(tmp.Y());
@@ -177,8 +179,10 @@ Size UIElement::Measure(const Size& size) noexcept
 									size.X(),size.Y(),0,1
 	};
 	//如果z值未设置，那么将继承上个z值并+1
-	if (zIndex.IsInvalid())
-		style->vData.AreaSize().setZ(size.Z() + 1);
+	if (!zIndex.IsInvalid())
+		style->vData.AreaSize().setZ(zIndex.get());
+	else
+		style->vData.AreaSize().setZ(size.Z()+1);
 	style->vData.AreaSize().TransMatrix() = size.TransMatrix() * tMatrix;
 	if (zmax < style->vData.AreaSize().Z())
 		zmax = style->vData.AreaSize().Z();
@@ -197,6 +201,38 @@ void UIElement::Aeasure(const Size& size) noexcept
 	}
 }
 
+
+void UIElement::OnPreMouseDown(PreMouseButtonDownEvent& e)
+{
+}
+
+void UIElement::OnMouseLeftButtonDown(MouseLeftButtonDownEvent& e)
+{
+}
+
+void UIElement::OnMouseRightButtonDown(MouseRightButtonDownEvent& e)
+{
+}
+
+void UIElement::OnMouseMiddleButtonDown(MouseMiddleButtonDownEvent& e)
+{
+}
+
+void UIElement::OnPreMouseUp(PreMouseButtonUpEvent& e)
+{
+}
+
+void UIElement::OnMouseLeftButtonUp(MouseLeftButtonUpEvent& e)
+{
+}
+
+void UIElement::OnMouseRightButtonUp(MouseRightButtonUpEvent& e)
+{
+}
+
+void UIElement::OnMouseMiddleButtonUp(MouseMiddleButtonUpEvent& e)
+{
+}
 void UIElement::OnMouseLeave(MouseLeaveEvent& e)
 {
 }
@@ -211,10 +247,9 @@ void UIElement::OnPreMouseOver(PreMouseOverEvent& e)
 
 void UIElement::OnMouseOver(MouseOverEvent& e)
 {
-	e.handled = false;
 }
 
-void UIElement::OnInput(InputEvent& e)
+void UIElement::OnTextInput(InputEvent& e)
 {
 }
 
@@ -223,10 +258,10 @@ void UIElement::OnEvent(EventAbstract& e)
 	//添加过滤，过滤掉避免继续传递
 	/*if (eventDispatcher.filter(e))
 		return;*/
-	switch (e.GetEventPreType())
+	/*switch (e.GetEventPreType())
 	{
 	case	 EventType::InputEvent:
-		OnInput((InputEvent&)e);
+		OnTextInput((InputEvent&)e);
 		break;
 	default:
 		break;
@@ -254,7 +289,7 @@ void UIElement::OnEvent(EventAbstract& e)
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void UIElement::RaiseEvent(EventAbstract& e)
@@ -307,8 +342,6 @@ inline void UIElement::SetActualWidth(float value)
 		}
 	}
 }
-
-
 
 Size& UIElement::GetSize()
 {

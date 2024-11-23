@@ -18,6 +18,5 @@ public:
 	DependencyProperty<unsigned int> fontSize{ "FontSize" };
 	DependencyProperty<Draw::Color> fontBrush{ "FontBrush" };
 	DependencyProperty<TextOverRangeOperator> overranging{ "Overranging" };
-
 };
 

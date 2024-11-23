@@ -61,7 +61,7 @@ namespace Draw {
 	class Brush {
 	public:
 		Brush() noexcept;
-		explicit Brush(uint32_t color_v) noexcept;
+		Brush(uint32_t color_v) noexcept;
 		explicit Brush(const std::string& filePath) noexcept;
 		~Brush() noexcept;
 		Brush(const Brush& other) noexcept;

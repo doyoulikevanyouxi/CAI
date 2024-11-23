@@ -74,8 +74,6 @@ void Window::init() noexcept
 	projection[3][2] = 1;
 	CAIEngine.SetColorProjection(colorProjection);
 	CAIEngine.SetWindowProjection(projection);
-
-	
 }
 
 void Window::setSize(int width, int height) noexcept

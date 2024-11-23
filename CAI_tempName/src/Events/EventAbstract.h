@@ -1,17 +1,19 @@
 #pragma once
-#include <string>
+#include <caipch.h>
 enum	 class EventType {
-	InputEvent = 1 << 2,
-	MouseButtonEvent = 1 << 3,
-	ValueChangedEvent = 1 << 4,
-	Defualt
+	Defualt = CAIBIT(0),
+	InputEvent = CAIBIT(1),
+	MouseButtonEvent = CAIBIT(2),
+	ValueChangedEvent = CAIBIT(3),
 };
 
 enum class EventSubType {
 	None = 0,
 	WindowResizeEvent,
 	KeyPressedEvent, KeyUpEvent, TextInputEvent,
-	MouseMoveEvent, PreMouseOverEvent, MouseOverEvent, MouseButtonPressedEvent, MouseButtonUpEvent, MouseEnterEvent, MouseLeaveEvent,
+	MouseMoveEvent, PreMouseOverEvent, MouseOverEvent, MouseEnterEvent, MouseLeaveEvent,
+	PreMouseButtonDownEvent, MouseLeftButtonDownEvent, MouseRightButtonDownEvent, MouseMiddleButtonDownEvent,
+	PreMouseButtonUpEvent, MouseLeftButtonUpEvent, MouseRightButtonUpEvent, MouseMiddleButtonUpEvent,
 	PropertyChangedEvent,
 	Defualt
 };

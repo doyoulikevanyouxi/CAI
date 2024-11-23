@@ -86,11 +86,11 @@
     <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\UI\ApplicationControl.cpp" />
+    <ClCompile Include="src\Controls\Content.cpp" />
+    <ClCompile Include="src\UI\Application.cpp" />
     <ClCompile Include="src\Common\caipch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Input\Input.cpp" />
     <ClCompile Include="src\log\Log.cpp" />
     <ClCompile Include="src\Controls\ContentControls\Button.cpp" />
     <ClCompile Include="src\UI\Character.cpp" />
@@ -113,14 +113,14 @@
     <ClCompile Include="src\XMGL\TextInpreter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Controls\Content.h" />
     <ClInclude Include="src\Events\InputEvents.h" />
     <ClInclude Include="src\Events\MouseEvents.h" />
     <ClInclude Include="src\Events\WindowEvents.h" />
-    <ClInclude Include="src\UI\ApplicationControl.h" />
+    <ClInclude Include="src\UI\Application.h" />
     <ClInclude Include="src\Common\caipch.h" />
     <ClInclude Include="src\Common\Object.h" />
     <ClInclude Include="src\Controls\Shapes.h" />
-    <ClInclude Include="src\Input\Input.h" />
     <ClInclude Include="src\MVVM\AbstractNotifyPropertyChanged.h" />
     <ClInclude Include="src\log\Log.h" />
     <ClInclude Include="src\Events\EventAbstract.h" />

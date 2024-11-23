@@ -14,7 +14,7 @@ extern float zmax;
 class UIElement : public Element
 {
 	friend class RenderEngine;
-	friend class ApplicationControl;
+	friend class Application;
 public:
 	UIElement(UIElement* parent = nullptr) noexcept;
 	UIElement(const UIElement& other) noexcept;
@@ -58,11 +58,20 @@ protected:
 	virtual void OnMouseLeftButtonPress() override;
 	virtual void OnMouseLeftButtonUp() override;*/
 	// 通过 Element 继承
+	// 通过 Element 继承
+	virtual void OnPreMouseDown(PreMouseButtonDownEvent& e) override;
+	virtual void OnMouseLeftButtonDown(MouseLeftButtonDownEvent& e) override;
+	virtual void OnMouseRightButtonDown(MouseRightButtonDownEvent& e) override;
+	virtual void OnMouseMiddleButtonDown(MouseMiddleButtonDownEvent& e) override;
+	virtual void OnPreMouseUp(PreMouseButtonUpEvent& e) override;
+	virtual void OnMouseLeftButtonUp(MouseLeftButtonUpEvent& e) override;
+	virtual void OnMouseRightButtonUp(MouseRightButtonUpEvent& e) override;
+	virtual void OnMouseMiddleButtonUp(MouseMiddleButtonUpEvent& e) override;
 	virtual void OnMouseLeave(MouseLeaveEvent& e) override;
 	virtual void OnMouseEnter(MouseEnterEvent& e) override;
 	virtual void OnPreMouseOver(PreMouseOverEvent& e) override;
 	virtual void OnMouseOver(MouseOverEvent& e) override;
-	virtual void OnInput(InputEvent& e) override;
+	virtual void OnTextInput(InputEvent& e) override;
 	virtual void OnEvent(EventAbstract& e) override;
 	virtual void RaiseEvent(EventAbstract& e) override;
 private:
@@ -101,6 +110,9 @@ protected:
 protected:
 	PaintDevice* pDevice;
 
+
+
+	
 
 };
 

@@ -73,6 +73,15 @@ void PaintDevice::DrawText(const std::wstring& str, const Size& size,const FontS
 	//为了将字符的基准线放置到同一水平面，需要固定高度，并将参照坐标移动至左下角
 	float y = size.Y()+fontSet.size;
 	for (auto& chr : str) {
+		if (chr == L'\r') {
+			x = size.X();
+			continue;
+		}
+		if (chr == L'\n') {
+			y += fontSet.size;
+			continue;
+		}
+		
 		auto& charac = ft->GetCharacter(chr);
 		float xpos = x + charac.bearingX*scal;
 		//基准坐标向上移动
@@ -227,7 +236,6 @@ void PaintDevice::Draw(ControlTemplate* style) noexcept
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//重置模板数据，使得后续所有绘制都通过，但是数据不写入模板中
 		glStencilFunc(GL_ALWAYS, 0, 0xFF);
-		glStencilMask(0x00);
 	}
 	else {
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -11,7 +11,7 @@ TextBox::~TextBox() noexcept
 {
 }
 
-void TextBox::OnInput(InputEvent& e)
+void TextBox::OnTextInput(InputEvent& e)
 {
 	if (e.GetEventType() != EventSubType::TextInputEvent)
 		return;

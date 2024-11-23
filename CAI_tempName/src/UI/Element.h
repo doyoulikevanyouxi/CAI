@@ -9,13 +9,21 @@ protected:
 	//virtual void OnMouseOver();
 	//virtual void OnMouseLeftButtonPress();
 	//virtual void OnMouseLeftButtonUp();
-	virtual void OnInput(InputEvent& e) = 0;
+	virtual void OnTextInput(InputEvent& e) = 0;
 	virtual void OnMouseLeave(MouseLeaveEvent& e) = 0;
 	virtual void OnMouseEnter(MouseEnterEvent& e) = 0;
 	virtual void OnPreMouseOver(PreMouseOverEvent& e) = 0;
 	virtual void OnMouseOver(MouseOverEvent& e) = 0;
-	/*virtual void OnMouseIn();
-	virtual void OnMouseLeft();*/
+
+	virtual void OnPreMouseDown(PreMouseButtonDownEvent& e) = 0;
+	virtual void OnMouseLeftButtonDown(MouseLeftButtonDownEvent& e) = 0;
+	virtual void OnMouseRightButtonDown(MouseRightButtonDownEvent& e) = 0;
+	virtual void OnMouseMiddleButtonDown(MouseMiddleButtonDownEvent& e) = 0;
+	virtual void OnPreMouseUp(PreMouseButtonUpEvent& e) = 0;
+	virtual void OnMouseLeftButtonUp(MouseLeftButtonUpEvent& e) = 0;
+	virtual void OnMouseRightButtonUp(MouseRightButtonUpEvent& e) = 0;
+	virtual void OnMouseMiddleButtonUp(MouseMiddleButtonUpEvent& e) = 0;
+
 	virtual void OnEvent(EventAbstract& e) = 0;
 	virtual void RaiseEvent(EventAbstract& e) = 0;
 public:

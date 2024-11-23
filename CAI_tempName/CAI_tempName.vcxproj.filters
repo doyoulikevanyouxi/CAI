@@ -123,13 +123,13 @@
     <ClCompile Include="src\Controls\ContentControls\TextBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Input\Input.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\XMGL\TextInpreter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\ApplicationControl.cpp">
+    <ClCompile Include="src\UI\Application.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controls\Content.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -233,9 +233,6 @@
     <ClInclude Include="src\Common\Object.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Input\Input.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\Controls\ContentControls\TextBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -245,7 +242,7 @@
     <ClInclude Include="src\XMGL\TextInpreter.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\ApplicationControl.h">
+    <ClInclude Include="src\UI\Application.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Events\MouseEvents.h">
@@ -255,6 +252,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Events\WindowEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls\Content.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

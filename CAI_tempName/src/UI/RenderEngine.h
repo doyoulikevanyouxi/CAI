@@ -17,12 +17,6 @@ class RenderEngine final : public Object
 {
 	friend class PaintDevice;
 public:
-	struct EventArgs
-	{
-		EventAbstract* event;
-		GLFWwindow* winHD;
-	};
-public:
 	RenderEngine() noexcept;
 	~RenderEngine() noexcept;
 
@@ -40,7 +34,7 @@ public:
 	void SetWindowProjection(const Math::TransMatrix& mt);
 	void SetColorProjection(const Math::TransMatrix& mt);
 	void SetColorProjection(float* mt);
-	void EventDistribute(EventArgs& eArgs);
+	void EventDistribute(Window*& win, EventAbstract& e);
 	void EventReDistribute(EventAbstract& event);
 private:
 	Window* FindWindowByHD(GLFWwindow* HD);
@@ -54,7 +48,6 @@ private:
 	Shader* fontShader;
 	Font* font;
 	std::vector<Window*> windows;
-	EventArgs* eventArgs;
 public:
 	bool alreadyOn;
 	bool mainWHasToken;

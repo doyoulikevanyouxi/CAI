@@ -6,6 +6,6 @@ public:
 	TextBox() noexcept;
 	~TextBox() noexcept;
 protected:
-	virtual void OnInput(InputEvent& e) override;
+	virtual void OnTextInput(InputEvent& e) override;
 };
 

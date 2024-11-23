@@ -6,13 +6,12 @@
 #include "Character.h"
 #include "Controls/ContentControls/Window.h"
 #include "Events/Events.h"
-#include "Input/Input.h"
-#include "ApplicationControl.h"
+#include "Application.h"
 using namespace std;
 RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr),
-									font(nullptr), alreadyOn(false), mainWHasToken(false), eventArgs(new EventArgs)
+									font(nullptr), alreadyOn(false), mainWHasToken(false)
 {
-	name = "RenderEngine";
+	name = CAISTR(RenderEngine);
 }
 
 RenderEngine::~RenderEngine() noexcept
@@ -23,8 +22,6 @@ RenderEngine::~RenderEngine() noexcept
 		delete fontShader;
 	if (font != nullptr)
 		delete font;
-	if (eventArgs != nullptr)
-		delete eventArgs;
 	glfwTerminate();
 }
 
@@ -87,18 +84,12 @@ void RenderEngine::ActivateWindow(GLFWwindow* win)
 void RenderEngine::AddRenderWindow(Window* win)
 {
 	windows.emplace_back(win);
-	glfwSetWindowUserPointer(win->getWinHD(), this);
-	glfwSetCursorPosCallback(mainWinHd, [](GLFWwindow* window, double xpos, double ypos) {
-		RenderEngine* ev = (RenderEngine*)glfwGetWindowUserPointer(window);
-		MouseMoveEvent e(xpos, ypos);
-		EventArgs eArgs;
-		eArgs.event = (EventAbstract*)&e;
-		eArgs.winHD = window;
-		Window* win = ev->FindWindowByHD(eArgs.winHD);
-		ApplicationControl::app.OnMouseMove(e, win);
-		});
-	glfwSetCharCallback(mainWinHd, TextCallBack);
-	glfwSetKeyCallback(mainWinHd, KeyCallBack);
+	glfwSetWindowUserPointer(win->getWinHD(), win);
+	glfwSetCursorPosCallback(win->getWinHD(), MouseMoveCallBack);
+	glfwSetMouseButtonCallback(win->getWinHD(), MouseButtonCallBack);
+	glfwSetCharCallback(win->getWinHD(), TextInputCallBack);
+	glfwSetKeyCallback(win->getWinHD(), KeyInputCallBack);
+	glfwSetCursorEnterCallback(win->getWinHD(), LeaveWindowCallBack);
 }
 
 void RenderEngine::SetWindowPossition(GLFWwindow* win, int x, int y)
@@ -133,21 +124,6 @@ void RenderEngine::SetColorProjection(float* mt)
 	fontShader->SetMat4("projection_color", mt);
 }
 
-void RenderEngine::EventDistribute(EventArgs& eArgs)
-{
-	Window* win = FindWindowByHD(eArgs.winHD);
-	if (win == nullptr)
-		return;
-	win->RaiseEvent(*(eArgs.event));
-}
-
-void RenderEngine::EventReDistribute(EventAbstract& event)
-{
-	if (event.target == nullptr)
-		return;
-	((UIElement*)event.target)->RaiseEvent(event);
-}
-
 Window* RenderEngine::FindWindowByHD(GLFWwindow* HD)
 {
 	for(auto& win : windows){
@@ -161,14 +137,15 @@ void RenderEngine::RenderLoop(void)
 {
 	if (!alreadyOn)
 		return;
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LESS);
 
 	glEnable(GL_SCISSOR_TEST);
-	glEnable(GL_STENCIL);
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+
+	glEnable(GL_STENCIL_TEST);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	
+	glClearStencil(0);
+	glStencilFunc(GL_ALWAYS, 0, 0xff);
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
 		glClearColor(1.f,1.f,1.f,1.f);
