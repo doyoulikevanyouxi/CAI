@@ -1,6 +1,7 @@
 #pragma once
-#include "Events/Events.h"
 struct GLFWwindow;
+class MouseMoveEvent;
+class RenderEngine;
 class UIElement;
 /// <summary>
 /// 程序控制中心
@@ -10,6 +11,11 @@ class Application
 {
 public:
 	static Application app;
+public:
+	void Terminat();
+	void Start();
+public:
+	bool Init();
 /// <summary>
 /// 对原始的事件数据进行处理
 /// </summary>
@@ -19,6 +25,9 @@ public:
 	void OnWindowLeave(UIElement* win);
 	void OnKeyInput(int key, int scancode, int action, int mods);
 	void OnTextInput(unsigned int code);
+private:
+	Application();
+	~Application();
 private:
 	//处理鼠标移动事件
 	void MousePositionHandle(MouseMoveEvent& e, UIElement*& element,size_t mousOverElemntIndex);
@@ -33,7 +42,8 @@ private:
 	inline void RaiseMouseUpEvent(int button,int mods);
 	inline void RaiseKeyInputEvent(UIElement& element, int key, int action, int mods);
 	inline void RaiseTextInputEvent(UIElement& element, unsigned int code);
-	Application();
+public:
+	RenderEngine* renderEngine;
 private:
 	//鼠标直接指向的控件
 	UIElement* mouseDirectOverElement;

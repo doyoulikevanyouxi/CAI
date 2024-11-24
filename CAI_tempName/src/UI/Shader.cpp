@@ -1,9 +1,10 @@
 #include"caipch.h"
 #include "Shader.h"
 #include<glad/glad.h>
-
+#include"log/Log.h"
 #define ShaderCheck(x) {	int success;char infoLog[512];glGetShaderiv(x, GL_COMPILE_STATUS, &success);\
-						if (!success){ glGetShaderInfoLog(x, 512, NULL, infoLog);std::cout <<__FILE__<<" line:"<<__LINE__<< "\nERROR::SHADER::COMPILATION_FAILED\n" << infoLog<< std::endl;}}
+						if (!success){ glGetShaderInfoLog(x, 512, NULL, infoLog);\
+						LogError( "{0}:{1}---ERROR::SHADER::COMPILATION_FAILED---{3}",__FILE__,__LINE__, infoLog);}}
 
 Shader::Shader() :ID(0)
 {
@@ -24,12 +25,12 @@ bool Shader::Load(const std::string& vertexShaderPath, const std::string& fragme
 {
 	LoadShadder(vertexShaderPath, vertexStr);
 	if (vertexStr.empty()) {
-		std::cout << "vertex shader str is empty" << std::endl;
+		LogError("vertex shader str is empty");
 		return false;
 	}
 	LoadShadder(fragmentShaderPath, fragmentStr);
 	if (fragmentStr.empty()) {
-		std::cout << "fragment shader str is empty" << std::endl;
+		LogError("fragment shader str is empty");
 		return false;
 	}
 	LoadShadder(geometryShaderPath, geometryStr);
@@ -42,7 +43,7 @@ void Shader::LoadShadder(const std::string& filePath, std::string& shaderStr)
 		return;
 	std::ifstream file(filePath);
 	if (!file.is_open()) {
-		std::cout << "There is no such file named:" << filePath << std::endl;
+		LogError("There is no such file named:{0}", filePath);
 		return;
 	}
 	std::string str;
@@ -72,7 +73,7 @@ void Shader::ComplieShader()
 	glAttachShader(ID, vertexShader);
 	glAttachShader(ID, fragmentShader);
 	if (!geometryStr.empty()) {
-		geometryShader = glCreateShader(GL_FRAGMENT_SHADER);
+		geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(geometryShader, 1, &geometryShaderSource, NULL);
 		glCompileShader(geometryShader);
 		ShaderCheck(geometryShader);

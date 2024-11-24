@@ -2,6 +2,7 @@
 #include "Controls/Shapes.h"
 #include "log/Log.h"
 #include <Events/Events.h>
+#include "UI/Application.h"
 using Brush = Draw::Brush;
 class Gridg : public Grid {
 	
@@ -19,7 +20,8 @@ class MainWindow : public Window
 {
 public:
 	MainWindow(int width = 800, int height = 600) noexcept :Window(width, height) {
-		initializeComponents();
+		SetHeight(800);
+		SetWidth(1000);
 		Gridg* grid = new Gridg();
 		grid->SetBackground(0xffffffff);
 		grid->addColumDefinition(ColumDefinition());
@@ -45,13 +47,20 @@ public:
 		grid->AddChild(tb);
 		tb->text.set(L"你好啊,\r\n大sb");
 		setContent(grid);
+		
+		initializeComponents();
+
 	}
 	~MainWindow() noexcept {
 	}
-
+public:
+	void Start() {
+		Application::app.Start();
+	}
 private:
-	void initializeComponents(void) {
+	void initializeComponents() {
 		//以下设置每个窗口都会有一个，其目的是将坐标映射到标准设备坐标
 		name = CAISTR(MainWindow);
+		Window::InitializeComponents();
 	}
 };

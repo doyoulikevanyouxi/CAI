@@ -111,6 +111,7 @@
     <ClCompile Include="src\Controls\ContentControls\Window.cpp" />
     <ClCompile Include="src\Controls\ContentControls\TextBox.cpp" />
     <ClCompile Include="src\XMGL\TextInpreter.cpp" />
+    <ClCompile Include="src\UI\Visual.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls\Content.h" />
@@ -154,9 +155,11 @@
     <ClInclude Include="src\Controls\ContentControls\Window.h" />
     <ClInclude Include="src\Controls\ContentControls\TextBox.h" />
     <ClInclude Include="src\XMGL\TextInpreter.h" />
+    <ClInclude Include="src\UI\Visual.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
+    <None Include="resources\Shaders\RectGeometryShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
   </ItemGroup>

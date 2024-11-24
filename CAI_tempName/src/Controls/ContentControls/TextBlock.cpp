@@ -28,5 +28,5 @@ void TextBlock::Render() noexcept
 	UIElement::Render();
 	if (text.get().empty())
 		return;
-	pDevice->DrawText(text.get(), style->styleData().ContentSize(), { fontSize.get(),fontBrush.get(),overranging.get() });
+	pDevice->DrawString(text.get(), style->styleData().ContentSize(), { fontSize.get(),fontBrush.get(),overranging.get() });
 }

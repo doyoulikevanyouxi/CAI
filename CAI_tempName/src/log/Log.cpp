@@ -3,7 +3,7 @@
 
 std::shared_ptr<CL::CLog> Log::loger;
 
-void Log::init()
+void Log::Init()
 {
 	loger = std::make_shared<CL::CLog>();
 	loger->SetSavePath("../x64/bin/Debug/record.log");

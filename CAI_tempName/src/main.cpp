@@ -3,8 +3,7 @@
 #include "caipch.h"
 #include<chrono>
 #include "MainWindow.hpp"
-#include "UI/RenderEngine.h"
-
+#include "UI/Application.h"
 
 //帧率 实时计算法
 void callFre() {
@@ -16,13 +15,10 @@ void callFre() {
 
 
 int main() {
+	Log::Init();
 	
-	if (CAIEngine.Initial())
-		return -1;
-	
-	MainWindow mWindow(1000,800);
-	mWindow.init();
-	CAIEngine.AddRenderWindow(&mWindow);
-	CAIEngine.Start();
+	MainWindow window;
+	window.Init();
+	window.Start();
 	return 0;
 }

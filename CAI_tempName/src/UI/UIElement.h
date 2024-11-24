@@ -13,13 +13,16 @@ extern float zmax;
 /// </summary>
 class UIElement : public Element
 {
-	friend class RenderEngine;
 	friend class Application;
 public:
 	UIElement(UIElement* parent = nullptr) noexcept;
 	UIElement(const UIElement& other) noexcept;
 	virtual ~UIElement() noexcept;
 public:
+	virtual void Init();
+	//为自己测量控件大小和位置
+	void CheckSize(const Size& size) noexcept;
+	Size& GetSize();
 	/// <summary>
 	/// 图形渲染
 	/// </summary>
@@ -44,10 +47,7 @@ public:
 	inline float GetActualHeight() const noexcept { return actualHeight; }
 	ControlTemplate& GetControlTemplate() { return *style; }
 	//void setProperty();
-public:
-	//为自己测量控件大小和位置
-	void BeginInit(const Size& size) noexcept;
-	Size& GetSize();
+
 protected:
 	virtual Size Measure(const Size& size) noexcept;
 	virtual void Aeasure(const Size& size) noexcept;
@@ -97,11 +97,11 @@ protected:
 	/// <summary>
 	/// 控件的实际渲染长度
 	/// </summary>
-	float actualWidth;
+	float actualWidth = 0.f;
 	/// <summary>
 	/// 控件实际渲染高度
 	/// </summary>
-	float actualHeight;
+	float actualHeight =0.f;
 	UIElement* parent;
 
 	bool validWidth = false;

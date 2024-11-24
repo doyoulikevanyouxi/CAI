@@ -8,16 +8,10 @@
 #include"Shader.h"
 #include"RenderEngine.h"
 #include "Events/Events.h"
+#include "Application.h"
 float zmax = 1;
-UIElement::UIElement(UIElement* parent) noexcept :style(new ControlTemplate()), parent(parent), pDevice(new PaintDevice())
+UIElement::UIElement(UIElement* parent) noexcept :style(new ControlTemplate()), parent(parent), pDevice(nullptr)
 {
-	actualWidth = 0.f;
-	actualHeight = 0.f;
-	pDevice->SetWindow(nullptr);
-	pDevice->SetPen(Brush(0xff000000));
-	style->vData.AreaBrush() = Brush(0x00000000);
-	style->vData.AreaSize().setX(0);
-	style->vData.AreaSize().setY(0);
 }
 
 UIElement::UIElement(const UIElement& other) noexcept :UIElement(nullptr)
@@ -31,15 +25,33 @@ UIElement::UIElement(const UIElement& other) noexcept :UIElement(nullptr)
 	actualWidth = other.actualWidth;
 	actualHeight = other.actualHeight;
 	background = other.background.get();
-	pDevice->SetWindow(nullptr);
-	pDevice->SetPen(other.pDevice->GetPen());
 	*style = *other.style;
+	pDevice = other.pDevice;
 }
 
 UIElement::~UIElement() noexcept
 {
 	delete style;
-	delete pDevice;
+}
+
+void UIElement::Init()
+{
+	pDevice = Application::app.renderEngine->CreatePaintDevice();
+	for (auto& child : style->visualTree) {
+		child->Init();
+	}
+}
+
+void UIElement::CheckSize(const Size& size) noexcept
+{
+	Aeasure(Measure(size));
+	style->visualTree.SortByZindex();
+}
+
+
+Size& UIElement::GetSize()
+{
+	return style->vData.AreaSize();
 }
 
 void UIElement::Render() noexcept
@@ -138,14 +150,9 @@ void UIElement::SetBackground(const uint32_t color)
 
 void UIElement::SetBorderBrush(const Draw::Brush& color)
 {
-	*(style->vData.borderBrush) = color;
+	style->vData.borderBrush = color;
 }
 
-void UIElement::BeginInit(const Size& size) noexcept
-{
-	Aeasure(Measure(size));
-	style->visualTree.SortByZindex();
-}
 
 Size UIElement::Measure(const Size& size) noexcept
 {
@@ -158,10 +165,10 @@ Size UIElement::Measure(const Size& size) noexcept
 	if (tmp.Y() < 0)
 		tmp.Y() = 0;
 	//设置裁减区域
-	style->vData.clipSize->setX(tmp.X());
-	style->vData.clipSize->setY(tmp.Y());
-	style->vData.clipSize->SetWidth(size.Width());
-	style->vData.clipSize->SetHeight(size.Height());
+	style->vData.clipSize.setX(tmp.X());
+	style->vData.clipSize.setY(tmp.Y());
+	style->vData.clipSize.SetWidth(size.Width());
+	style->vData.clipSize.SetHeight(size.Height());
 	//未设置宽度值时，采用传递过来的大小
 	if (width.IsInvalid()) {
 		SetActualWidth(size.Width());
@@ -191,13 +198,14 @@ Size UIElement::Measure(const Size& size) noexcept
 		style->vData.SetBorderSize(borderSize.get());
 	//初始化控件顶点数据
 	style->vData.InitData();
+	pDevice->BindBufferData(style);
 	return style->vData.ContentSize();
 }
 
 void UIElement::Aeasure(const Size& size) noexcept
 {
 	for (auto& child : style->visualTree) {
-		child->BeginInit(size);
+		child->CheckSize(size);
 	}
 }
 
@@ -255,41 +263,7 @@ void UIElement::OnTextInput(InputEvent& e)
 
 void UIElement::OnEvent(EventAbstract& e)
 {
-	//添加过滤，过滤掉避免继续传递
-	/*if (eventDispatcher.filter(e))
-		return;*/
-	/*switch (e.GetEventPreType())
-	{
-	case	 EventType::InputEvent:
-		OnTextInput((InputEvent&)e);
-		break;
-	default:
-		break;
-	}
-	switch (e.GetEventType())
-	{
-	default:
-		break;
-	}
-	if (e.handled)
-		return;
-	switch (e.sType)
-	{
-	case EventSpreadType::Tunnel:
-		for (auto& child : style->visualTree) {
-			child->OnEvent(e);
-			if (e.handled)
-				return;
-		}
-		break;
-	case EventSpreadType::Bubble:
-		parent->OnEvent(e);
-		break;
-	case EventSpreadType::Direct:
-		break;
-	default:
-		break;
-	}*/
+	
 }
 
 void UIElement::RaiseEvent(EventAbstract& e)
@@ -343,9 +317,5 @@ inline void UIElement::SetActualWidth(float value)
 	}
 }
 
-Size& UIElement::GetSize()
-{
-	return style->vData.AreaSize();
-}
 
 

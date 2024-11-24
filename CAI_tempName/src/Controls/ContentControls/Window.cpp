@@ -1,5 +1,6 @@
 #include "caipch.h"
 #include "Window.h"
+#include "UI/Application.h"
 #include "UI/RenderEngine.h"
 #include "Datas/ControlStyle.h"
 #include <glad/glad.h>
@@ -7,13 +8,6 @@
 #include "UI/PaintDevice.h"
 Window::Window() noexcept :winHd(NULL)
 {
-	if (CAIEngine.mainWHasToken) {
-		winHd = CAIEngine.CreatWindow(400, 400, "TME");
-	}
-	else {
-		this->winHd = CAIEngine.GetMainWindow();
-		CAIEngine.mainWHasToken = true;
-	}
 	style->styleData().SetInvalid(true);
 }
 
@@ -27,19 +21,21 @@ Window::~Window() noexcept
 {
 }
 
-void Window::activited()
-{
-	CAIEngine.ActivateWindow((GLFWwindow*)this->winHd);
-}
-
 GLFWwindow* Window::getWinHD() noexcept
 {
 	return winHd;
 }
 
-void Window::init() noexcept
+void Window::SetSize(int width, int height) noexcept
 {
-	setSize(width.get(),height.get() );
+	Application::app.renderEngine->SetWindowSize(winHd, width, height);
+	SetHeight(height);
+	SetWidth(width);
+}
+
+void Window::Init()
+{
+	UIElement::Init();
 	float DPH = 1 / height.get() * 2;
 	float DPW = 1 / width.get() * 2;
 	//Í¶Ó°¾ØÕó
@@ -63,24 +59,32 @@ void Window::init() noexcept
 		0,0,1,0,
 		0,0,0,1
 	};
-	
-	Size sizeT(0, 0,0, width.get(), height.get());
+
+	Size sizeT(0, 0, 0, width.get(), height.get());
 	sizeT.SetGlobalHeight(height.get());
 	sizeT.SetGlobalWidth(width.get());
 	this->size = sizeT;
 	size.TransMatrix() = mt;
-	BeginInit(size);
-	projection[2][2] =- 1.f / zmax;
+	CheckSize(size);
+	projection[2][2] = -1.f / zmax;
 	projection[3][2] = 1;
-	CAIEngine.SetColorProjection(colorProjection);
-	CAIEngine.SetWindowProjection(projection);
+	Application::app.renderEngine->SetColorProjection(colorProjection);
+	Application::app.renderEngine->SetWindowProjection(projection);
 }
 
-void Window::setSize(int width, int height) noexcept
+void Window::InitializeComponents()
 {
-	CAIEngine.SetWindowSize(winHd, width, height);
-	SetHeight(height);
-	SetWidth(width);
+	if (!initialConponentsDone) {
+		initialConponentsDone = true;
+	}
+	if (!Application::app.Init()) {
+		return;
+	}
+	winHd = Application::app.renderEngine->CreatWindow(width.get(), height.get(), this->name.c_str());
+	if (winHd == nullptr) {
+		return;
+	}
+	Application::app.renderEngine->AddRenderWindow(this);
 }
 
 void Window::RenderLoop() noexcept

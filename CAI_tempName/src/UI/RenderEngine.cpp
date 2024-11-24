@@ -2,62 +2,62 @@
 #include "RenderEngine.h"
 #include <glad/glad.h>
 #include <glfw3.h>
+#include "Application.h"
+#include "PaintDevice.h"
 #include "Shader.h"
 #include "Character.h"
 #include "Controls/ContentControls/Window.h"
-#include "Events/Events.h"
-#include "Application.h"
-using namespace std;
-RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), squareShader(nullptr), fontShader(nullptr),
-									font(nullptr), alreadyOn(false), mainWHasToken(false)
+#include "log/Log.h"
+
+RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), font(nullptr), fontShader(nullptr), rectShader(nullptr)
 {
 	name = CAISTR(RenderEngine);
 }
 
 RenderEngine::~RenderEngine() noexcept
 {
-	if (squareShader != nullptr)
-		delete squareShader;
-	if (fontShader != nullptr)
-		delete fontShader;
 	if (font != nullptr)
 		delete font;
+	if (fontShader != nullptr)
+		delete fontShader;
+	if (rectShader != nullptr)
+		delete rectShader;
+	for (auto& painter : pDevice)
+		delete painter;
+	for (auto& win : glfwWindows)
+		glfwDestroyWindow(win);
 	glfwTerminate();
 }
 
-uint32_t RenderEngine::Initial(void)
+bool RenderEngine::InitGuiEnvironment()
 {
-	if (glfwInit() == GLFW_FALSE) {
-		cout << "glfw init false" << endl;
-		return 1;
+	if (glfwInit() == GLFW_FALSE){
+		LogError("glfw init false");
+		return false;
 	}
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	mainWinHd = glfwCreateWindow(800, 600, "CAITF(TEMP)", NULL, NULL);
-	if (mainWinHd == NULL)
-	{
-		cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return 2;
-	}
-	//必须有上下文后才能使用GL函数，此时导入GL函数才不会出错
+	return true;
+}
+
+bool RenderEngine::LoadGLFunction()
+{
 	glfwMakeContextCurrent(mainWinHd);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		cout << "Failed to initialize GLAD" << endl;
-		return 3;
+		LogError("Failed to initialize GLAD");
+		return false;
 	}
-	/*std::cout << glGetString(GL_VERSION) << std::endl;
-	int nrAttributes;
-	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-	std::cout << "Maximum  of vertex attributes supported: " << nrAttributes << std::endl;*/
-	squareShader = new Shader("resources/Shaders/RectVertexShader.glsl", "resources/Shaders/RectFragmentShader.glsl","");
-	fontShader = new Shader("resources/Shaders/TextVertexShader.glsl", "resources/Shaders/TextFragmentShader.glsl", "");
+	return true;
+}
+
+bool RenderEngine::LoadShader()
+{
 	font = new Font();
-	squareShader->Use();
-	alreadyOn = true;
-	return 0;
+	fontShader = new Shader("resources/Shaders/TextVertexShader.glsl", "resources/Shaders/TextFragmentShader.glsl", "");
+	rectShader = new Shader("resources/Shaders/RectVertexShader.glsl", "resources/Shaders/RectFragmentShader.glsl", "resources/Shaders/RectGeometryShader.glsl");
+	return true;
 }
 
 
@@ -67,18 +67,22 @@ void RenderEngine::Start(void) {
 
 GLFWwindow* RenderEngine::CreatWindow(int width, int height, const char* title)
 {
-	return glfwCreateWindow(width, height, title, NULL, NULL);
-}
-
-bool RenderEngine::WindowClose(GLFWwindow* win)
-{
-	return glfwWindowShouldClose(win) ? true:false;
-}
-
-void RenderEngine::ActivateWindow(GLFWwindow* win)
-{
-	glfwMakeContextCurrent(win);
-	
+	GLFWwindow* window = nullptr;
+	if (mainWinHd == nullptr) {
+		window = glfwCreateWindow(width, height, title, NULL, NULL);
+		mainWinHd = window;
+		if (!LoadGLFunction()) {
+			glfwDestroyWindow(window);
+			mainWinHd = nullptr;
+			return nullptr;
+		}
+		LoadShader();
+	}
+	else {
+		window = glfwCreateWindow(width, height, title, NULL, mainWinHd);
+	}
+	glfwWindows.emplace_back(window);
+	return window;
 }
 
 void RenderEngine::AddRenderWindow(Window* win)
@@ -92,15 +96,9 @@ void RenderEngine::AddRenderWindow(Window* win)
 	glfwSetCursorEnterCallback(win->getWinHD(), LeaveWindowCallBack);
 }
 
-void RenderEngine::SetWindowPossition(GLFWwindow* win, int x, int y)
-{
-	glfwSetWindowPos(win, x, y);
-}
-
 void RenderEngine::SetWindowSize(GLFWwindow* win, int width, int height)
 {
 	glfwSetWindowSize(win, width, height);
-	glfwMakeContextCurrent(win);
 	//当指定，opengl会自动将视口绑定到上下文所指定的窗口大小
 	//但后期设置窗口视口大小并不会自动更改
 	glViewport(0, 0, width, height);
@@ -108,36 +106,53 @@ void RenderEngine::SetWindowSize(GLFWwindow* win, int width, int height)
 
 void RenderEngine::SetWindowProjection(const Math::TransMatrix& mt)
 {
-	squareShader->SetMat4("projection", mt);
+	rectShader->SetMat4("projection", mt);
 	fontShader->SetMat4("projection", mt);
 }
 
 void RenderEngine::SetColorProjection(const Math::TransMatrix& mt)
 {
-	squareShader->SetMat4("projection_color", mt);
+	rectShader->SetMat4("projection_color", mt);
 	fontShader->SetMat4("projection_color", mt);
 }
 
 void RenderEngine::SetColorProjection(float* mt)
 {
-	squareShader->SetMat4("projection_color", mt);
+	rectShader->SetMat4("projection_color", mt);
 	fontShader->SetMat4("projection_color", mt);
 }
 
-Window* RenderEngine::FindWindowByHD(GLFWwindow* HD)
+PaintDevice* RenderEngine::CreatePaintDevice()
 {
-	for(auto& win : windows){
-		if (win->getWinHD() == HD)
-			return win;
-	}
-	return nullptr;
+	auto device = new PaintDevice();
+	device->font = font;
+	device->fontShader = fontShader;
+	device->shader = rectShader;
+	device->Init();
+	pDevice.emplace_back(device);
+	return device;
 }
+
+//void RenderEngine::SetWindowProjection(const Math::TransMatrix& mt)
+//{
+//	squareShader->SetMat4("projection", mt);
+//	fontShader->SetMat4("projection", mt);
+//}
+//
+//void RenderEngine::SetColorProjection(const Math::TransMatrix& mt)
+//{
+//	squareShader->SetMat4("projection_color", mt);
+//	fontShader->SetMat4("projection_color", mt);
+//}
+//
+//void RenderEngine::SetColorProjection(float* mt)
+//{
+//	squareShader->SetMat4("projection_color", mt);
+//	fontShader->SetMat4("projection_color", mt);
+//}
 
 void RenderEngine::RenderLoop(void)
 {
-	if (!alreadyOn)
-		return;
-
 	glEnable(GL_SCISSOR_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -148,16 +163,13 @@ void RenderEngine::RenderLoop(void)
 	glStencilFunc(GL_ALWAYS, 0, 0xff);
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
-		glClearColor(1.f,1.f,1.f,1.f);
+		glClearColor(1.f, 1.f, 1.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		for (auto& win : windows) {
 			glfwMakeContextCurrent(win->getWinHD());
-			squareShader->Use();
 			win->Render();
 			glfwSwapBuffers(win->getWinHD());
 		}
 		glfwPollEvents();
 	}
 }
-
-RenderEngine CAIEngine;

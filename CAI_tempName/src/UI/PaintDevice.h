@@ -1,44 +1,30 @@
 #pragma once
-#include "Object.h"
-#include "Datas/Coordinate.h"
+class Size;
 class ControlTemplate;
-namespace Draw {
-	class Brush;
-}
+class Font;
 struct FontSetting;
-class Window;
-using Brush = Draw::Brush;
+class Shader;
 
-class PaintDevice final: public Object
+class PaintDevice 
 {
+	friend class RenderEngine;
 public:
 	PaintDevice() noexcept;
-	PaintDevice(Window* wnd) noexcept;
 	~PaintDevice() noexcept;
 public:
-	void SetWindow(Window* wnd) noexcept;
-	void SetPen(const Brush& pen) noexcept;
-	const Brush& GetPen() const noexcept { return *pen; }
-	void FillWith(Brush& bs) noexcept;
+	void Init();
+	void LoadShader();
 public:
-	void DrawText(const std::wstring& str,const Size& size,const FontSetting& fontSet) noexcept;
-	void DrawLine(const Point& initial,Point& end) noexcept;
-	void DrawLines(const Point points[], size_t lineNum) noexcept;
-	void DrawRect(const Point& initial, float width, float height) noexcept;
+	void BindBufferData(ControlTemplate* style);
+	void DrawString(const std::wstring& str,const Size& size,const FontSetting& fontSet) noexcept;
 	void Draw(ControlTemplate* style) noexcept;
 private:
-	Brush* pen;
-	Brush* fill;
-private:
-	//窗口句柄
-	Window* hd;
 	//顶点数组
 	unsigned int VAO;
 	//顶点缓冲对象
 	unsigned int VBO;
-	//索引缓冲对象
-	unsigned int EBO;
-	bool areadySet;
-
+	Font* font;
+	Shader* fontShader;
+	Shader* shader;
 };
 

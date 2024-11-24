@@ -1,11 +1,40 @@
 #include "caipch.h"
 #include "Application.h"
+#include "Events/Events.h"
 #include "UIElement.h"
+#include "RenderEngine.h"
 #include "Controls/ContentControls/Window.h"
 #include "Datas/ControlStyle.h"
 #include "Datas/Coordinate.h"
 #include <glfw3.h>
 Application Application::app;
+
+void Application::Terminat()
+{
+	//delete this;
+}
+
+void Application::Start()
+{
+	renderEngine->Start();
+}
+
+bool Application::Init()
+{
+	if (!renderEngine->InitGuiEnvironment())
+		return false;
+	return true;
+}
+
+Application::Application() : mouseDirectOverElement(nullptr), focusElement(nullptr),renderEngine(new RenderEngine())
+{
+
+}
+
+Application::~Application()
+{
+	delete renderEngine;
+}
 
 void Application::OnMouseMove(UIElement* win,double x,double y)
 {
@@ -62,7 +91,7 @@ void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, si
 	//此处判断表面该处控件已经超出了双链表所表示的层次
 	//该层以及后续层次的控件不再与双链表中元素比较
 	//但会向其添加该层次的鼠标指向空控件
-	if (mouseOverElemntIndex == mouseOverElements.size()) {
+	if (mouseOverElemntIndex >= mouseOverElements.size()) {
 		if (size.PointIn(e.X(), e.Y())) {
 			element->isMouseOver = true;
 			element->isMouseDirectOver = true;
@@ -117,7 +146,7 @@ void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, si
 		//鼠标不再控件内
 		//将该层极其后序层的所有控件的记录全部删除
 		//并设置其控件的mouseover状态
-		long int index = mouseOverElements.size() - 1;
+		int index = mouseOverElements.size() - 1;
 		while (index >= mouseOverElemntIndex) {
 			//该控件链该位置极其后面的控件都将发出MouseLeave事件
 			mouseOverElements[index]->isMouseOver = false;
@@ -134,7 +163,7 @@ void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, si
 	if (size.PointIn(e.X(), e.Y())) {
 		element->isMouseOver = true;
 		element->isMouseDirectOver = true;
-		long int index = mouseOverElements.size() - 1;
+		int index = mouseOverElements.size() - 1;
 		while (index >= mouseOverElemntIndex) {
 			mouseOverElements[index]->isMouseOver = false;
 			mouseOverElements[index]->isMouseDirectOver = false;
@@ -309,10 +338,7 @@ inline void Application::RaiseTextInputEvent(UIElement& element, unsigned int co
 	element.OnTextInput(e);
 }
 
-Application::Application() : mouseDirectOverElement(nullptr), focusElement(nullptr)
-{
 
-}
 
 void LeaveWindowCallBack(GLFWwindow* winHD, int entered)
 {
