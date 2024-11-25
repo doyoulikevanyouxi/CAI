@@ -17,7 +17,7 @@ public:
 		}
 		if (selfCreatEle == nullptr) {
 			selfCreatEle = new TextBlock();
-			style->addChildToVisual(*selfCreatEle);
+			AddVisualChild(selfCreatEle);
 		}
 		selfCreatEle->setText(str);
 		content.set(selfCreatEle);
@@ -28,12 +28,12 @@ public:
 			return;
 		}
 		content.set(elem);
-		style->addChildToVisual(*elem);
+		AddVisualChild(elem);
 		elem->SetParent(this);
 		hasSetContent = true;
 	}
 public:
-	DependencyProperty<Object*> content{ "Content" };
+	DependencyProperty<UIElement*> content{ "Content" };
 private:
 	bool hasSetContent = false;
 	TextBlock* selfCreatEle;

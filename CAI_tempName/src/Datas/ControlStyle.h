@@ -15,23 +15,15 @@ class ControlTemplate : public Object
 public:
 	ControlTemplate() noexcept {}
 	ControlTemplate(const ControlTemplate& other) {
-		visualTree = other.visualTree;
-		vData = other.vData;
+		
 	}
 	virtual ~ControlTemplate() noexcept {}
-public:
-	void addChildToVisual(UIElement& child) { visualTree.AddChild(&child); }
-	VisualData& styleData() noexcept { return vData; }
 public:
 	ControlTemplate& operator=(const ControlTemplate& other) {
 		if (&other == this)
 			return *this;
-		visualTree = other.visualTree;
-		vData = other.vData;
 		return *this;
 	}
 public:
-	UIElementCollection visualTree;
-private:
-	VisualData vData;
+
 };

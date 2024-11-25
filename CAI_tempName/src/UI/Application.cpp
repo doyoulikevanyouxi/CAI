@@ -1,17 +1,29 @@
 #include "caipch.h"
 #include "Application.h"
-#include "Events/Events.h"
 #include "UIElement.h"
-#include "RenderEngine.h"
 #include "Controls/ContentControls/Window.h"
 #include "Datas/ControlStyle.h"
 #include "Datas/Coordinate.h"
+#include	"RenderEngine.h"
+#include "Datas/VisualCollection.h"
 #include <glfw3.h>
 Application Application::app;
 
-void Application::Terminat()
+Application::Application() : mouseDirectOverElement(nullptr), focusElement(nullptr), renderEngine(new RenderEngine())
 {
-	//delete this;
+}
+
+Application::~Application()
+{
+	delete renderEngine;
+}
+
+bool Application::Init()
+{
+	if (!renderEngine->InitGUIEnvironment()) {
+		return false;
+	}
+	return false;
 }
 
 void Application::Start()
@@ -19,22 +31,6 @@ void Application::Start()
 	renderEngine->Start();
 }
 
-bool Application::Init()
-{
-	if (!renderEngine->InitGuiEnvironment())
-		return false;
-	return true;
-}
-
-Application::Application() : mouseDirectOverElement(nullptr), focusElement(nullptr),renderEngine(new RenderEngine())
-{
-
-}
-
-Application::~Application()
-{
-	delete renderEngine;
-}
 
 void Application::OnMouseMove(UIElement* win,double x,double y)
 {
@@ -73,7 +69,7 @@ void Application::OnTextInput(unsigned int code)
 
 void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, size_t mouseOverElemntIndex)
 {
-	const Size& size = element->style->vData.GlobalAreaSize();
+	const Size& size = element->vData.GlobalAreaSize();
 	
 	//如果控件不可见就返回
 	/*if (element) {
@@ -91,15 +87,15 @@ void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, si
 	//此处判断表面该处控件已经超出了双链表所表示的层次
 	//该层以及后续层次的控件不再与双链表中元素比较
 	//但会向其添加该层次的鼠标指向空控件
-	if (mouseOverElemntIndex >= mouseOverElements.size()) {
+	if (mouseOverElemntIndex == mouseOverElements.size()) {
 		if (size.PointIn(e.X(), e.Y())) {
 			element->isMouseOver = true;
 			element->isMouseDirectOver = true;
 			mouseOverElements.emplace_back(element);
 			++mouseOverElemntIndex;
 			//继续向下
-			for (auto& child : element->style->visualTree) {
-				MousePositionHandle(e, child, mouseOverElemntIndex);
+			for (auto& child : *(element->visualTree)) {
+				MousePositionHandle(e, (UIElement*&)child, mouseOverElemntIndex);
 				if (e.handled){
 					element->isMouseDirectOver = false;
 					break;
@@ -128,8 +124,8 @@ void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, si
 			RaisePreMouseOverEvent(*element,e.X(), e.Y());
 			++mouseOverElemntIndex;
 			//向下传递
-			for (auto& child : element->style->visualTree) {
-				MousePositionHandle(e, child, mouseOverElemntIndex);
+			for (auto& child : *(element->visualTree)) {
+				MousePositionHandle(e, (UIElement*&)child, mouseOverElemntIndex);
 				if (e.handled) {
 					element->isMouseDirectOver = false;
 					break;
@@ -146,15 +142,17 @@ void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, si
 		//鼠标不再控件内
 		//将该层极其后序层的所有控件的记录全部删除
 		//并设置其控件的mouseover状态
-		int index = mouseOverElements.size() - 1;
-		while (index >= mouseOverElemntIndex) {
-			//该控件链该位置极其后面的控件都将发出MouseLeave事件
-			mouseOverElements[index]->isMouseOver = false;
-			mouseOverElements[index]->isMouseDirectOver = false;
-			RaiseMouseLeaveEvent(*(mouseOverElements[index]));
-			mouseOverElements.pop_back();
-			--index;
-		}
+		ReMoveMouseOverElements(mouseOverElemntIndex);
+		//int index = mouseOverElements.size() - 1;
+		//while (index >= mouseOverElemntIndex) {
+		//	//该控件链该位置极其后面的控件都将发出MouseLeave事件
+		//	mouseOverElements[index]->isMouseOver = false;
+		//	mouseOverElements[index]->isMouseDirectOver = false;
+		//	RaiseMouseLeaveEvent(*(mouseOverElements[index]));
+		//	mouseOverElements.pop_back();
+		//	--index;
+		//	
+		//}
 		//处理完后就进入了控件链的尾部
 		return;
 	}
@@ -163,21 +161,23 @@ void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, si
 	if (size.PointIn(e.X(), e.Y())) {
 		element->isMouseOver = true;
 		element->isMouseDirectOver = true;
-		int index = mouseOverElements.size() - 1;
-		while (index >= mouseOverElemntIndex) {
-			mouseOverElements[index]->isMouseOver = false;
-			mouseOverElements[index]->isMouseDirectOver = false;
-			//发出mouseleave
-			RaiseMouseLeaveEvent(*(mouseOverElements[index]));
-			mouseOverElements.pop_back();
-			--index;
-		}
+		ReMoveMouseOverElements(mouseOverElemntIndex);
+
+		//int index = mouseOverElements.size() - 1;
+		//while (index >= mouseOverElemntIndex) {
+		//	mouseOverElements[index]->isMouseOver = false;
+		//	mouseOverElements[index]->isMouseDirectOver = false;
+		//	//发出mouseleave
+		//	RaiseMouseLeaveEvent(*(mouseOverElements[index]));
+		//	mouseOverElements.pop_back();
+		//	--index;
+		//}
 		mouseOverElements.emplace_back(element);
 		//此时也是控件链的尾部
 		++mouseOverElemntIndex;
 		//向下传递
-		for (auto& child : element->style->visualTree) {
-			MousePositionHandle(e, child, mouseOverElemntIndex);
+		for (auto& child : *(element->visualTree)) {
+			MousePositionHandle(e, (UIElement*&)child, mouseOverElemntIndex);
 			if (e.handled){
 				element->isMouseDirectOver = false;
 				break;
@@ -338,6 +338,16 @@ inline void Application::RaiseTextInputEvent(UIElement& element, unsigned int co
 	element.OnTextInput(e);
 }
 
+void Application::ReMoveMouseOverElements(unsigned int from)
+{
+	while (mouseOverElements.size() > from) {
+		mouseOverElements.back()->isMouseOver = false;
+		mouseOverElements.back()->isMouseDirectOver = false;
+		//发出mouseleave
+		RaiseMouseLeaveEvent(*(mouseOverElements.back()));
+		mouseOverElements.pop_back();
+	}
+}
 
 
 void LeaveWindowCallBack(GLFWwindow* winHD, int entered)

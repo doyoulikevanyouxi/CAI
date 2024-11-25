@@ -97,7 +97,6 @@
     <ClCompile Include="src\Controls\Decoration.cpp" />
     <ClCompile Include="src\UI\Draw.cpp" />
     <ClCompile Include="src\Controls\EControl.cpp" />
-    <ClCompile Include="src\UI\Element.cpp" />
     <ClCompile Include="src\Controls\PanelControls\Grid.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\UI\PaintDevice.cpp" />
@@ -112,6 +111,7 @@
     <ClCompile Include="src\Controls\ContentControls\TextBox.cpp" />
     <ClCompile Include="src\XMGL\TextInpreter.cpp" />
     <ClCompile Include="src\UI\Visual.cpp" />
+    <ClCompile Include="src\Datas\VisualCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Controls\Content.h" />
@@ -135,7 +135,6 @@
     <ClInclude Include="src\Controls\EControl.h" />
     <ClInclude Include="src\Datas\ControlStyle.h" />
     <ClInclude Include="src\UI\Draw.h" />
-    <ClInclude Include="src\UI\Element.h" />
     <ClInclude Include="src\Controls\PanelControls\Grid.h" />
     <ClInclude Include="src\MainWindow.hpp" />
     <ClInclude Include="src\Mathmatics\Math.hpp" />
@@ -156,10 +155,10 @@
     <ClInclude Include="src\Controls\ContentControls\TextBox.h" />
     <ClInclude Include="src\XMGL\TextInpreter.h" />
     <ClInclude Include="src\UI\Visual.h" />
+    <ClInclude Include="src\Datas\VisualCollection.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
-    <None Include="resources\Shaders\RectGeometryShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
   </ItemGroup>

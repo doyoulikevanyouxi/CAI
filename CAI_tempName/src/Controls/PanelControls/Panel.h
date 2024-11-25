@@ -1,7 +1,7 @@
 #pragma once
 #include "../EControl.h"
-#include "Datas/Collection.h"
 #include"Mathmatics/Math.hpp"
+#include "Datas/VisualCollection.h"
 /// <summary>
 /// Panel控件允许为所以容纳的控件进行排版和大小设定
 /// 不继承至Control下是因为布局容器本身是没有太多的渲染数据
@@ -17,7 +17,7 @@ public:
 	virtual void AddChild(UIElement* child);
 
 protected:
-	UIElementCollection childs;
+	VisualCollection childs;
 protected:
 	Math::TransMatrix transMatrix;
 	/// <summary>

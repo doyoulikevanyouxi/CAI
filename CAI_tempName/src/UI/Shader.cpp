@@ -1,19 +1,13 @@
 #include"caipch.h"
 #include "Shader.h"
 #include<glad/glad.h>
-#include"log/Log.h"
-#define ShaderCheck(x) {	int success;char infoLog[512];glGetShaderiv(x, GL_COMPILE_STATUS, &success);\
-						if (!success){ glGetShaderInfoLog(x, 512, NULL, infoLog);\
-						LogError( "{0}:{1}---ERROR::SHADER::COMPILATION_FAILED---{3}",__FILE__,__LINE__, infoLog);}}
 
-Shader::Shader() :ID(0)
-{
-}
+#include "log/Log.h"
 
-Shader::Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath)
+Shader::Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, const std::string& geometryShaderPath) :ID(0), vertexShaderPath(vertexShaderPath),
+																													 fragmentShaderPath(fragmentShaderPath), 
+																													 geometryShaderPath(geometryShaderPath)
 {
-	if (Load(vertexShaderPath, fragmentShaderPath, geometryShaderPath))
-		ComplieShader();
 }
 
 
@@ -25,12 +19,12 @@ bool Shader::Load(const std::string& vertexShaderPath, const std::string& fragme
 {
 	LoadShadder(vertexShaderPath, vertexStr);
 	if (vertexStr.empty()) {
-		LogError("vertex shader str is empty");
+		LogError("Vertex string shader can't be empty");
 		return false;
 	}
 	LoadShadder(fragmentShaderPath, fragmentStr);
 	if (fragmentStr.empty()) {
-		LogError("fragment shader str is empty");
+		LogError("Fragmen string shader can't be empty");
 		return false;
 	}
 	LoadShadder(geometryShaderPath, geometryStr);
@@ -53,8 +47,10 @@ void Shader::LoadShadder(const std::string& filePath, std::string& shaderStr)
 	file.close();
 }
 
-void Shader::ComplieShader()
+bool Shader::ComplieShader()
 {
+	if (!Load(vertexShaderPath, fragmentShaderPath, geometryShaderPath))
+		return false;
 	const char* vertexShaderSource = vertexStr.c_str();
 	const char* fragmentShaderSource = fragmentStr.c_str();
 	const char* geometryShaderSource = geometryStr.c_str();
@@ -62,13 +58,19 @@ void Shader::ComplieShader()
 	unsigned int fragmentShader;
 	unsigned int geometryShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(vertexShader);
-	ShaderCheck(vertexShader);
+	if (!CheckComplieError(vertexShader)) {
+		glDeleteShader(vertexShader);
+		return false;
+	}
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
-	ShaderCheck(fragmentShader);
+	if (!CheckComplieError(fragmentShader)) {
+		glDeleteShader(fragmentShader);
+		return false;
+	}
 	ID = glCreateProgram();
 	glAttachShader(ID, vertexShader);
 	glAttachShader(ID, fragmentShader);
@@ -76,13 +78,30 @@ void Shader::ComplieShader()
 		geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(geometryShader, 1, &geometryShaderSource, NULL);
 		glCompileShader(geometryShader);
-		ShaderCheck(geometryShader);
+		if (!CheckComplieError(geometryShader)) {
+			glDeleteShader(geometryShader);
+			return false;
+		}
 		glAttachShader(ID, geometryShader);
 		glDeleteShader(geometryShader);
 	}
 	glLinkProgram(ID);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+	return true;
+}
+
+inline bool Shader::CheckComplieError(const unsigned int& shader)
+{
+	int success;
+	char infoLog[512];
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		std::cout << __FILE__ << " line:" << __LINE__ << "\nERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+		return false;
+	}
+	return true;
 }
 
 void Shader::Use() const
@@ -100,7 +119,7 @@ void Shader::SetVec3(const std::string& name, float value, float value2, float v
 void Shader::SetVec4(const std::string& name, float value, float value2, float value3, float value4) const
 {
 	Use();
-	glUniform4f(glGetUniformLocation(ID, name.c_str()), value, value2, value3,value4);
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), value, value2, value3, value4);
 }
 
 

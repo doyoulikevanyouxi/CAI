@@ -2,87 +2,115 @@
 #include "RenderEngine.h"
 #include <glad/glad.h>
 #include <glfw3.h>
-#include "Application.h"
-#include "PaintDevice.h"
 #include "Shader.h"
 #include "Character.h"
+#include "PaintDevice.h"
 #include "Controls/ContentControls/Window.h"
-#include "log/Log.h"
+#include "Application.h"
 
-RenderEngine::RenderEngine() noexcept : mainWinHd(NULL), font(nullptr), fontShader(nullptr), rectShader(nullptr)
+#include "log/log.h"
+RenderEngine::RenderEngine() noexcept : mainWinHd(nullptr), squareShader(nullptr), fontShader(nullptr),
+font(nullptr),initComplete(false)
 {
 	name = CAISTR(RenderEngine);
 }
 
 RenderEngine::~RenderEngine() noexcept
 {
-	if (font != nullptr)
-		delete font;
+	if (squareShader != nullptr)
+		delete squareShader;
 	if (fontShader != nullptr)
 		delete fontShader;
-	if (rectShader != nullptr)
-		delete rectShader;
-	for (auto& painter : pDevice)
-		delete painter;
-	for (auto& win : glfwWindows)
-		glfwDestroyWindow(win);
+	if (font != nullptr)
+		delete font;
+	//for (auto& win : glfwWindws)
+	//	glfwDestroyWindow(win);
+	for (auto& pDevice : paintDevices)
+		delete pDevice;
 	glfwTerminate();
 }
 
-bool RenderEngine::InitGuiEnvironment()
+bool RenderEngine::InitGUIEnvironment()
 {
-	if (glfwInit() == GLFW_FALSE){
-		LogError("glfw init false");
+	if (glfwInit() == GLFW_FALSE) {
+		LogError("GLFW init failed");
 		return false;
 	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	LogNotice("GLFW init finished");
 	return true;
 }
 
-bool RenderEngine::LoadGLFunction()
+inline bool RenderEngine::InitGLFunction()
 {
-	glfwMakeContextCurrent(mainWinHd);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		LogError("Failed to initialize GLAD");
+		LogError("GLAD init failed");
 		return false;
 	}
+	LogNotice("GLAD init finished");
+
 	return true;
 }
 
-bool RenderEngine::LoadShader()
+inline bool RenderEngine::InitResources()
 {
-	font = new Font();
+	squareShader = new Shader("resources/Shaders/RectVertexShader.glsl", "resources/Shaders/RectFragmentShader.glsl", "");
+	if (!squareShader->ComplieShader()) {
+		delete squareShader;
+		squareShader = nullptr;
+		return false;
+	}
 	fontShader = new Shader("resources/Shaders/TextVertexShader.glsl", "resources/Shaders/TextFragmentShader.glsl", "");
-	rectShader = new Shader("resources/Shaders/RectVertexShader.glsl", "resources/Shaders/RectFragmentShader.glsl", "resources/Shaders/RectGeometryShader.glsl");
+	if (!fontShader->ComplieShader()) {
+		delete squareShader;
+		squareShader = nullptr;
+		delete fontShader;
+		fontShader = nullptr;
+		return false;
+	}
+	font = new Font();
 	return true;
 }
 
+GLFWwindow* RenderEngine::GLCreateWindow(int width, int height, const char* title)
+{
+	if (mainWinHd == nullptr) {
+		auto window = glfwCreateWindow(width, height, title, NULL, NULL);
+		glfwMakeContextCurrent(window);
+		if (!InitGLFunction()) {
+			if (window != nullptr)
+				glfwDestroyWindow(window);
+			return nullptr;
+		}
+		if (!InitResources()) {
+			if (window != nullptr)
+				glfwDestroyWindow(window);
+			return nullptr;
+		}
+		mainWinHd = window;
+		initComplete = true;
+		glfwWindws.emplace_back(window);
+		return window;
+	}
+	auto window = glfwCreateWindow(width, height, title, NULL, mainWinHd);
+	glfwWindws.emplace_back(window);
+	return window;
+}
+
+PaintDevice* RenderEngine::GetPaintDevice()
+{
+	if (!initComplete)
+		return nullptr;
+	PaintDevice* device = new PaintDevice();
+	device->fontShader = fontShader;
+	device->rectShader = squareShader;
+	paintDevices.emplace_back(device);
+
+	return device;
+}
 
 void RenderEngine::Start(void) {
 	RenderLoop();
-}
-
-GLFWwindow* RenderEngine::CreatWindow(int width, int height, const char* title)
-{
-	GLFWwindow* window = nullptr;
-	if (mainWinHd == nullptr) {
-		window = glfwCreateWindow(width, height, title, NULL, NULL);
-		mainWinHd = window;
-		if (!LoadGLFunction()) {
-			glfwDestroyWindow(window);
-			mainWinHd = nullptr;
-			return nullptr;
-		}
-		LoadShader();
-	}
-	else {
-		window = glfwCreateWindow(width, height, title, NULL, mainWinHd);
-	}
-	glfwWindows.emplace_back(window);
-	return window;
 }
 
 void RenderEngine::AddRenderWindow(Window* win)
@@ -106,53 +134,36 @@ void RenderEngine::SetWindowSize(GLFWwindow* win, int width, int height)
 
 void RenderEngine::SetWindowProjection(const Math::TransMatrix& mt)
 {
-	rectShader->SetMat4("projection", mt);
+	squareShader->SetMat4("projection", mt);
 	fontShader->SetMat4("projection", mt);
 }
 
 void RenderEngine::SetColorProjection(const Math::TransMatrix& mt)
 {
-	rectShader->SetMat4("projection_color", mt);
+	squareShader->SetMat4("projection_color", mt);
 	fontShader->SetMat4("projection_color", mt);
 }
 
 void RenderEngine::SetColorProjection(float* mt)
 {
-	rectShader->SetMat4("projection_color", mt);
+	squareShader->SetMat4("projection_color", mt);
 	fontShader->SetMat4("projection_color", mt);
 }
 
-PaintDevice* RenderEngine::CreatePaintDevice()
+Window* RenderEngine::FindWindowByHD(GLFWwindow* HD)
 {
-	auto device = new PaintDevice();
-	device->font = font;
-	device->fontShader = fontShader;
-	device->shader = rectShader;
-	device->Init();
-	pDevice.emplace_back(device);
-	return device;
+	for (auto& win : windows) {
+		if (win->getWinHD() == HD)
+			return win;
+	}
+	return nullptr;
 }
-
-//void RenderEngine::SetWindowProjection(const Math::TransMatrix& mt)
-//{
-//	squareShader->SetMat4("projection", mt);
-//	fontShader->SetMat4("projection", mt);
-//}
-//
-//void RenderEngine::SetColorProjection(const Math::TransMatrix& mt)
-//{
-//	squareShader->SetMat4("projection_color", mt);
-//	fontShader->SetMat4("projection_color", mt);
-//}
-//
-//void RenderEngine::SetColorProjection(float* mt)
-//{
-//	squareShader->SetMat4("projection_color", mt);
-//	fontShader->SetMat4("projection_color", mt);
-//}
 
 void RenderEngine::RenderLoop(void)
 {
+	if (!initComplete)
+		return;
+
 	glEnable(GL_SCISSOR_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -167,9 +178,11 @@ void RenderEngine::RenderLoop(void)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		for (auto& win : windows) {
 			glfwMakeContextCurrent(win->getWinHD());
+			squareShader->Use();
 			win->Render();
 			glfwSwapBuffers(win->getWinHD());
 		}
 		glfwPollEvents();
 	}
 }
+

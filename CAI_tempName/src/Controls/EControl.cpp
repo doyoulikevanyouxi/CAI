@@ -21,7 +21,7 @@ Control::~Control() noexcept
 
 void Control::setMargin(float left, float top, float right, float bottom) noexcept
 {
-	Size& size = style->styleData().AreaSize();
+	Size& size = vData.AreaSize();
 	float x = size.X();
 	float y = size.Y();
 	size.setX(x+left-right);
@@ -90,7 +90,7 @@ Size Control::Measure(const Size& size) noexcept
 			break;
 		}
 	}
-	Size& sz = style->styleData().AreaSize();
+	Size& sz = vData.AreaSize();
 	float xz = sz.X();
 	float yz = sz.Y();
 	sz.setX(xz + x);

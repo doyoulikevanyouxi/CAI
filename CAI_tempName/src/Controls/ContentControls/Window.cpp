@@ -1,14 +1,9 @@
 #include "caipch.h"
 #include "Window.h"
-#include "UI/Application.h"
 #include "UI/RenderEngine.h"
-#include "Datas/ControlStyle.h"
-#include <glad/glad.h>
-#include <glfw3.h>
-#include "UI/PaintDevice.h"
-Window::Window() noexcept :winHd(NULL)
+#include "UI/Application.h"
+Window::Window() noexcept :winHd(nullptr)
 {
-	style->styleData().SetInvalid(true);
 }
 
 Window::Window(int width, int height) noexcept:Window()
@@ -21,21 +16,15 @@ Window::~Window() noexcept
 {
 }
 
-GLFWwindow* Window::getWinHD() noexcept
-{
-	return winHd;
-}
 
-void Window::SetSize(int width, int height) noexcept
+bool Window::Init()
 {
-	Application::app.renderEngine->SetWindowSize(winHd, width, height);
-	SetHeight(height);
-	SetWidth(width);
-}
-
-void Window::Init()
-{
-	UIElement::Init();
+	//获取窗口
+	winHd = Application::app.renderEngine->GLCreateWindow(width.get(),height.get(),name.c_str());
+	if (winHd == nullptr)
+		return false;
+	Visual::Init();
+	Application::app.renderEngine->AddRenderWindow(this);
 	float DPH = 1 / height.get() * 2;
 	float DPW = 1 / width.get() * 2;
 	//投影矩阵
@@ -70,36 +59,17 @@ void Window::Init()
 	projection[3][2] = 1;
 	Application::app.renderEngine->SetColorProjection(colorProjection);
 	Application::app.renderEngine->SetWindowProjection(projection);
+	return true;
 }
 
-void Window::InitializeComponents()
+GLFWwindow* Window::getWinHD() noexcept
 {
-	if (!initialConponentsDone) {
-		initialConponentsDone = true;
-	}
-	if (!Application::app.Init()) {
-		return;
-	}
-	winHd = Application::app.renderEngine->CreatWindow(width.get(), height.get(), this->name.c_str());
-	if (winHd == nullptr) {
-		return;
-	}
-	Application::app.renderEngine->AddRenderWindow(this);
+	return winHd;
 }
 
-void Window::RenderLoop() noexcept
+void Window::SetSize(int width, int height) noexcept
 {
-	glfwMakeContextCurrent(this->winHd);
-	while (!glfwWindowShouldClose(this->winHd))
-	{
-		glClearColor(0.f, 0.f, 0.f, 0.f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Render();
-		glfwSwapBuffers(this->winHd);
-		//glfwSwapBuffers(mainWinHd);
-		glfwPollEvents();
-	}
+	Application::app.renderEngine->SetWindowSize(winHd, width, height);
+	SetHeight(height);
+	SetWidth(width);
 }
-
-
- 

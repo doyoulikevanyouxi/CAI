@@ -1,6 +1,6 @@
 #pragma once
 //所有UI的基类
-
+#include<string>
 class Object 
 {
 public:

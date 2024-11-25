@@ -1,15 +1,12 @@
 #pragma once
-#include "Object.h"
-#include "UI/UIElement.h"
-#include <algorithm>
 template<typename _Ty>
-class Collection :public Object {
+class Collection  {
 public:
-	Collection() noexcept { name = CAISTR(Collection); }
+	Collection() noexcept = default;
 	Collection(const Collection& other) {
 		*this = other;
 	}
-	~Collection() noexcept {}
+	~Collection() noexcept = default;
 public:
 	void AddChild(const _Ty& child) { childs.emplace_back(child); }
 	size_t Size() noexcept { return childs.size(); }
@@ -26,16 +23,3 @@ public:
 protected:
 	std::vector<_Ty> childs;
 };
-
-class UIElementCollection : public  Collection<UIElement*> {
-public:
-	UIElementCollection() { name = CAISTR(UIElementCollection); }
-public:
-	void SortByZindex() {
-		std::sort(childs.begin(), childs.end(), [](UIElement*& a, UIElement*& b) {
-			return a->zIndex.get() > b->zIndex.get();
-			});
-	}
-
-};
-

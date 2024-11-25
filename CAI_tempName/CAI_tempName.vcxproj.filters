@@ -69,9 +69,6 @@
     <ClCompile Include="src\UI\UIElement.cpp">
       <Filter>源文件\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\Element.cpp">
-      <Filter>源文件\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Controls\PanelControls\Panel.cpp">
       <Filter>源文件\UI</Filter>
     </ClCompile>
@@ -135,6 +132,9 @@
     <ClCompile Include="src\UI\Visual.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Datas\VisualCollection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Object.h">
@@ -148,9 +148,6 @@
     </ClInclude>
     <ClInclude Include="src\Controls\ContentControls\Button.h">
       <Filter>头文件\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Element.h">
-      <Filter>头文件\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Controls\ContentControl.h">
       <Filter>头文件\UI</Filter>
@@ -263,12 +260,14 @@
     <ClInclude Include="src\UI\Visual.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Datas\VisualCollection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
-    <None Include="resources\Shaders\RectGeometryShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf">

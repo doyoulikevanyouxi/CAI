@@ -1,6 +1,6 @@
 #pragma once
+#include "Events/Events.h"
 struct GLFWwindow;
-class MouseMoveEvent;
 class RenderEngine;
 class UIElement;
 /// <summary>
@@ -11,11 +11,12 @@ class Application
 {
 public:
 	static Application app;
-public:
-	void Terminat();
-	void Start();
+private:
+	Application();
+	~Application();
 public:
 	bool Init();
+	void Start();
 /// <summary>
 /// 对原始的事件数据进行处理
 /// </summary>
@@ -25,9 +26,6 @@ public:
 	void OnWindowLeave(UIElement* win);
 	void OnKeyInput(int key, int scancode, int action, int mods);
 	void OnTextInput(unsigned int code);
-private:
-	Application();
-	~Application();
 private:
 	//处理鼠标移动事件
 	void MousePositionHandle(MouseMoveEvent& e, UIElement*& element,size_t mousOverElemntIndex);
@@ -42,14 +40,16 @@ private:
 	inline void RaiseMouseUpEvent(int button,int mods);
 	inline void RaiseKeyInputEvent(UIElement& element, int key, int action, int mods);
 	inline void RaiseTextInputEvent(UIElement& element, unsigned int code);
-public:
-	RenderEngine* renderEngine;
+private:
+	void ReMoveMouseOverElements(unsigned int from);
 private:
 	//鼠标直接指向的控件
 	UIElement* mouseDirectOverElement;
 	//焦点控件
 	UIElement* focusElement;
 	std::deque<UIElement*> mouseOverElements;
+public:
+	RenderEngine* renderEngine;
 };
 
 void LeaveWindowCallBack(GLFWwindow* winHD, int entered);

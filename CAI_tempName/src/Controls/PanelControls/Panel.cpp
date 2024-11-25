@@ -20,7 +20,7 @@ void Panel::AddChild(UIElement* child)
 {
 	childs.AddChild(child);
 	//加入到可视化树中
-	style->visualTree.AddChild(child);
+	AddVisualChild(child);
 	child->SetParent(this);
 }
 

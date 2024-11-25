@@ -201,7 +201,7 @@ void Grid::Aeasure(const Size& size) noexcept
 		}
 	}
 	//遍历所有可视化树：子控件也在可视化树中
-	for (auto& child : style->visualTree) {
+	for (auto& child : *visualTree) {
 		//初始化控件的行列数据和占几行占几列的数据
 		int R = 0;
 		int Rspan = 1;
@@ -260,7 +260,7 @@ void Grid::Aeasure(const Size& size) noexcept
 		Size tmp(x, y,size.Z(), sizeW, sizeH);
 		tmp.SetGlobalHeight(size.GlobalHeight());
 		tmp.SetGlobalWidth(size.GlobalWidth());
-		tmp.TransMatrix() = style->styleData().AreaSize().TransMatrix();
+		tmp.TransMatrix() = vData.AreaSize().TransMatrix();
 		child->CheckSize(tmp);
 	}
 }

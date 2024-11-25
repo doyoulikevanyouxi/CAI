@@ -44,6 +44,6 @@ private:
 	float totalFixedWidth;		//所有已经设置的固定宽度和
 	float totalFixedHeight;	//所有已经设置的固定高度和
 	int cNoneFixedNum;
-	std::unordered_map<UIElement*, ControlGridData> childGridData;
+	std::unordered_map<Visual*, ControlGridData> childGridData;
 };
 

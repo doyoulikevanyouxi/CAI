@@ -4,7 +4,7 @@
 #include<chrono>
 #include "MainWindow.hpp"
 #include "UI/Application.h"
-
+#include "log/Log.h"
 //帧率 实时计算法
 void callFre() {
 	static std::chrono::high_resolution_clock::time_point pre = std::chrono::high_resolution_clock::now();
@@ -15,10 +15,11 @@ void callFre() {
 
 
 int main() {
-	Log::Init();
+	Log::init();
 	
-	MainWindow window;
-	window.Init();
-	window.Start();
+	MainWindow mWindow(1000,800);
+	if (!mWindow.Init())
+		return -1;
+	Application::app.Start();
 	return 0;
 }

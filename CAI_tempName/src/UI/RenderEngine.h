@@ -9,42 +9,46 @@
 #include "Object.h"
 #include "Mathmatics/Math.hpp"
 struct GLFWwindow;
-class PaintDevice;
 class Shader;
 class Font;
 class Window;
 class EventAbstract;
+class PaintDevice;
 class RenderEngine final : public Object
 {
 	friend class Application;
 private:
 	RenderEngine() noexcept;
 	~RenderEngine() noexcept;
-
 public:
-	bool InitGuiEnvironment();
-	bool LoadGLFunction();
-	bool LoadShader();
+	bool InitGUIEnvironment();
+	inline bool InitGLFunction();
+	inline bool InitResources();
+	GLFWwindow* GLCreateWindow(int width, int height, const char* title);
+	PaintDevice* GetPaintDevice();
 	void Start(void);
-	GLFWwindow* CreatWindow(int width, int height, const char* title);
 	inline Font* GetFont() noexcept { return font; }
 	void AddRenderWindow(Window* win);
 	void SetWindowSize(GLFWwindow* win, int width, int height);
 	void SetWindowProjection(const Math::TransMatrix& mt);
 	void SetColorProjection(const Math::TransMatrix& mt);
 	void SetColorProjection(float* mt);
-public:
-	PaintDevice* CreatePaintDevice();
+private:
+	Window* FindWindowByHD(GLFWwindow* HD);
 private:
 	//将渲染循环统一起来是很麻烦的事
 	//必须有一个窗口接受数据更新，否则会出先bug
 	void RenderLoop(void);
 private:
-	Font* font;
-	Shader* fontShader;
-	Shader* rectShader;
 	GLFWwindow* mainWinHd;
-	std::deque<GLFWwindow*> glfwWindows;
-	std::deque<PaintDevice*> pDevice;
+	Shader* squareShader;
+	Shader* fontShader;
+	Font* font;
+	std::vector<GLFWwindow*> glfwWindws;
+	std::vector<PaintDevice*> paintDevices;
 	std::vector<Window*> windows;
+private:
+	bool initComplete;
+public:
 };
+

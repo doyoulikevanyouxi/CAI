@@ -3,7 +3,7 @@
 class Log
 {
 public:
-	static void Init();
+	static void init();
 	inline static std::shared_ptr<CL::CLog>& GetLoger() { return loger; }
 private:
 	static std::shared_ptr<CL::CLog> loger;
