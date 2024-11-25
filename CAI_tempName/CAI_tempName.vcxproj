@@ -54,7 +54,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CLOG_PLATFORM_WINDOWS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\CLog\include;$(SolutionDir)$(ProjectName)\XMGLInterpreter\include;src;src\Common;D:\openglLIB\glfw\include\GLFW;D:\openglLIB\glad\include;D:\openglLIB\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\CLog\include;$(SolutionDir)$(ProjectName)\XMGLInterpreter\include;src;src\Common;$(SolutionDir)$(ProjectName)\OpenGLLIBS\glfw\include\GLFW;$(SolutionDir)$(ProjectName)\OpenGLLIBS\glad\include;$(SolutionDir)$(ProjectName)\OpenGLLIBS\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>caipch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -83,10 +83,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c">
+    <ClCompile Include="OpenGLLibs\glad\src\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Animation\BoolAnimation.cpp" />
+    <ClCompile Include="src\Animation\DoubleAnimation.cpp" />
+    <ClCompile Include="src\Animation\StoryBord.cpp" />
+    <ClCompile Include="src\Animation\TimeLine\Duration.cpp" />
     <ClCompile Include="src\Controls\Content.cpp" />
+    <ClCompile Include="src\Controls\Path.cpp" />
     <ClCompile Include="src\UI\Application.cpp" />
     <ClCompile Include="src\Common\caipch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -114,9 +119,16 @@
     <ClCompile Include="src\Datas\VisualCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation\AnimationAbstract.h" />
+    <ClInclude Include="src\Animation\BoolAnimation.h" />
+    <ClInclude Include="src\Animation\DoubleAnimation.h" />
+    <ClInclude Include="src\Animation\StoryBord.h" />
+    <ClInclude Include="src\Animation\TimeLine\Duration.h" />
     <ClInclude Include="src\Controls\Content.h" />
+    <ClInclude Include="src\Controls\Path.h" />
     <ClInclude Include="src\Events\InputEvents.h" />
     <ClInclude Include="src\Events\MouseEvents.h" />
+    <ClInclude Include="src\Events\SizeChangedEvent.h" />
     <ClInclude Include="src\Events\WindowEvents.h" />
     <ClInclude Include="src\UI\Application.h" />
     <ClInclude Include="src\Common\caipch.h" />
