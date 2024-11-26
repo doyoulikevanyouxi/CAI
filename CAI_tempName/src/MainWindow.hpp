@@ -3,6 +3,7 @@
 #include "log/Log.h"
 #include <Events/Events.h>
 #include <UI/Application.h>
+#include <Animation/BoolAnimation.h>
 using Brush = Draw::Brush;
 class Gridg : public Grid {
 	
@@ -28,6 +29,15 @@ public:
 		grid->addRowDefinition(RowDefinition());
 		grid->addRowDefinition(RowDefinition(300,true));
 		TextBox* txtbox = new TextBox();
+		BoolAnimation* animate = new BoolAnimation();
+		animate->From = true;
+		animate->To = false;
+		animate->Target = txtbox->GetVisible();
+		animate->Repeat = true;
+		animate->duration.timeSpan = 1.0;
+		animate->delayDuration.timeSpan = 1.0;
+		txtbox->storybord.AddAnimation(animate);
+		txtbox->BeginAnimation();
 		txtbox->SetBorderSize(10);
 		txtbox->SetBorderBrush(0xffffff00);
 		txtbox->fontSize.set(20);

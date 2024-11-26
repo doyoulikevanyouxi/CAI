@@ -71,8 +71,7 @@ void PaintDevice::UpdataColor(const double* data)
 /// <param name="fontSet">◊÷ÃÂ…Ë÷√</param>
 void PaintDevice::DrawText(const std::wstring& str, const Size& size,const FontSetting& fontSet) noexcept
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	Font* ft = Application::app.renderEngine->GetFont();
 	//Àı∑≈
 	float scal = fontSet.size /(float)ft->fontSize;
@@ -133,7 +132,6 @@ void PaintDevice::DrawText(const std::wstring& str, const Size& size,const FontS
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_BLEND);
 }
 
 void PaintDevice::Draw(VisualData& data)
@@ -141,7 +139,10 @@ void PaintDevice::Draw(VisualData& data)
 	rectShader->Use();
 	rectShader->SetMat4("model", data.AreaSize().TransMatrix());
 	glBindVertexArray(VAO);
-
+	glScissor(data.clipSize->X(), data.clipSize->Y(), data.clipSize->Width(), data.clipSize->Height());
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	if (!data.visibale)
+		return;
 	if (data.hasBorder) {
 		glStencilFunc(GL_ALWAYS, 1, 0xff);
 		glStencilMask(0xff);

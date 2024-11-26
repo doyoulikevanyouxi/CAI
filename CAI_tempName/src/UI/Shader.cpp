@@ -91,6 +91,7 @@ bool Shader::ComplieShader()
 	return true;
 }
 
+
 inline bool Shader::CheckComplieError(const unsigned int& shader)
 {
 	int success;
@@ -107,6 +108,19 @@ inline bool Shader::CheckComplieError(const unsigned int& shader)
 void Shader::Use() const
 {
 	glUseProgram(ID);
+}
+
+
+void Shader::SetFloat(const std::string& name, float value) const
+{
+	Use();
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+}
+
+void Shader::SetVec2(const std::string& name, float value, float value2) const
+{
+	Use();
+	glUniform2f(glGetUniformLocation(ID, name.c_str()), value, value2);
 }
 
 

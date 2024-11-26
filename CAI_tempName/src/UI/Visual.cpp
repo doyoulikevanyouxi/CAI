@@ -151,6 +151,12 @@ void Visual::SetBorderBrush(const Draw::Brush& color)
 	*(vData.borderBrush) = color;
 }
 
+void Visual::SetVisible(const bool visible)
+{
+	this->visible.set(visible);
+	vData.visibale = visible;
+}
+
 void Visual::CheckSize(const Size& size) noexcept
 {
 	Aeasure(Measure(size));
@@ -159,6 +165,10 @@ void Visual::CheckSize(const Size& size) noexcept
 
 Size Visual::Measure(const Size& size) noexcept
 {
+	if (parent != nullptr) {
+		if (!parent->vData.visibale)
+			vData.visibale = false;
+	}
 	vData.AreaSize().SetGlobalWidth(size.GlobalWidth());
 	vData.AreaSize().SetGlobalHeight(size.GlobalHeight());
 	Point tmp(size.X(), size.Y());

@@ -25,6 +25,8 @@ public:
 public:
 	void operator=(const Visual& other);
 public:
+	bool* GetVisible() { return &(vData.visibale); }
+
 	virtual void SetHeight(float value);
 	virtual void SetWidth(float value);
 	virtual void SetZindex(float value);
@@ -37,6 +39,7 @@ public:
 	void SetBackground(const Draw::Brush& color);
 	void SetBackground(const uint32_t color);
 	void SetBorderBrush(const Draw::Brush& color);
+	void SetVisible(const bool visible);
 	inline float GetActualWidth() const noexcept { return actualWidth; }
 	inline float GetActualHeight() const noexcept { return actualHeight; }
 public:
@@ -61,6 +64,7 @@ public:
 	DependencyProperty<float> borderSize{ "Border-Size" };
 	DependencyProperty<float> shadow{ "Border-Size" };
 	DependencyProperty<float> fontSize{ "FontSize" };
+	DependencyProperty<bool> visible{ "Visible" };
 
 public:
 	bool focus = false;

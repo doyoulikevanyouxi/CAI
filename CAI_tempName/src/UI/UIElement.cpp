@@ -25,9 +25,26 @@ UIElement::~UIElement() noexcept
 
 
 
+void UIElement::Render()
+{
+	if (!storybord.Empty()) {
+		if (storybord.IsBegin()) {
+			storybord.Excut();
+		}
+	}
+	Visual::Render();
+}
+
 void UIElement::SetParent(UIElement* parent)
 {
 	this->parent = parent;
+}
+
+void UIElement::BeginAnimation()
+{
+	if (storybord.Empty())
+		return;
+	storybord.BeginAnimation();
 }
 
 void UIElement::OnPreMouseDown(PreMouseButtonDownEvent& e)

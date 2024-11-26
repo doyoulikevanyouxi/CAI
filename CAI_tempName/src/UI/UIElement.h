@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Visual.h"
 #include "Events/Events.h"
+#include "Animation/StoryBord.h"
 class PaintDevice;
 class ControlTemplate;
 class Size;
@@ -22,8 +23,9 @@ public:
 
 public:
 	//会有一个属性继承关系
+	virtual void Render() override;
 	void SetParent(UIElement* parent);
-
+	void BeginAnimation();
 protected:
 	virtual void OnPreMouseDown(PreMouseButtonDownEvent& e);
 	virtual void OnMouseLeftButtonDown(MouseLeftButtonDownEvent& e);
@@ -44,5 +46,7 @@ protected:
 protected:
 	ControlTemplate* style;
 	UIElement* parent;
+public:
+	StoryBord storybord;
 };
 

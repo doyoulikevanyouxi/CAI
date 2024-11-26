@@ -51,6 +51,7 @@ public:
 	bool hasBorder;
 	bool needClip;
 private:
+	bool visibale = true;
 	//绘制区域大小
 	Size* areaSize;
 	//边框大小

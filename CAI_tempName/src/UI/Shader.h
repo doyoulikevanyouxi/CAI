@@ -8,6 +8,8 @@ public:
 	~Shader();
 public:
 	bool ComplieShader();
+	void SetFloat(const std::string& name, float value) const;
+	void SetVec2(const std::string& name, float value, float value2) const;
 	void SetVec3(const std::string& name, float value, float value2, float value3) const;
 	void SetVec4(const std::string& name, float value, float value2, float value3, float value4) const;
 	void SetMat4(const std::string& name, const Math::TransMatrix& mat) const;

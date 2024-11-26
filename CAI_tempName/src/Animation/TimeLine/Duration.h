@@ -9,10 +9,11 @@ public:
 	void Start();
 	void Excu();
 	void ReSet();
+	double timeSpan;
+
 protected:
 	
 private:
-	double timeSpan;
 	std::chrono::steady_clock::time_point startTimePoint;
 };
 

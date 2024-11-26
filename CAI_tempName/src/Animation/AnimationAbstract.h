@@ -8,8 +8,6 @@ public:
 public:
 	bool Repeat;
 	bool Finish;
-protected:
 	Duration duration;
 	Duration delayDuration;
 };
-
