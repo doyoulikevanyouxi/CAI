@@ -1,11 +1,108 @@
 # CAI_tempName
     从0开始的图形渲染框架搭建。
-    CAI(Cpp Auto Interface Constructor)即c++。目前来看，我国暂时没有对于c++界面开发做一个比较好的工具，国产之前出的东西，那是什么玩意，讨个壳。而现在比较流行的一个是QT，一个是Imgui库，二者都是国外产品，前者是收费的，但是目前用途很广泛，竞争压力巨大，后者是专门用于构建界面的库，虽然开源但并没有可视化操作，所有操作都比较看形像力，无法及时做出良好的调整，但做出来的界面自定义功能强大，效率高，属于无状态的一种。在开发过众多的WPF应用后，个人觉得WPF的许多设计相当好，第一是可以在VS下开发，可视化，第二是界面完全可以独立于编程语言使用他们的xmal(派生于xml)即可，这个操作类似于网页了，这个是很不错的，第三是一个mvvm模式，数据变动自动更新到界面上也很不错，当然原理还是内部手动更新界面，只是，数据变动会通知界面而已。
-介于以上，决定做一个隶属于国产的c++界面开发程序，替换掉QT。渲染这块目前用Opengl来做，可能自动化构建需要最后来做了
+    CAI(Cpp Auto Interface Constructor)即c++ 界面自动构建工具。
+    这是一款从0开始的项目，因此项目周期会比较长。
+# Usage
+   程序的调用如下：
+   在MainWindow.hpp文件中，MainWindow的构造函数里，你需要为Winodw指定一个Content内容，在以下示例的最后一行操作。如果没有指定那么不会显示任何内容。
+   不必按照该实例给出的操作，早期实例化每一个所需控件，你可以在任何主线程位置添加新的控件，在目前的渲染中使用的基于范围的for循环递归，如果多线程增加
+   /删除，会导致迭代器失效，导致错误。当然你也可以实现多线程安全的操作，不采用迭代器，或者另外实现容器。但如果要实现多线程安全，请确保其迭代器不会失效。
+   如果要实现自己的容器，请修改Datas/VisualCollection类，如果你的容器不支持基于范围的for，那么你需要修改所有使用了范围for的位置。
 
+    MainWindow(int width = 800, int height = 600) noexcept :Window(width, height) {
+        //初始化渲染组件，获取窗口
+		InitializeComponent();
+        //实例化一个Grid控件
+		Grid* grid = new Grid();
+        //设置Grid控件背景色
+		grid->SetBackground(0xffffffff);
+        //设置Grid控件网格数据，即每行每列的数据
+        //添加了一列
+		grid->addColumDefinition(ColumDefinition());
+        //添加了一列，并且该列有固定宽度400px
+		grid->addColumDefinition(ColumDefinition(400,true));
+        //添加了一行
+		grid->addRowDefinition(RowDefinition());
+        //添加了一行，并且该行有固定高度300px
+		grid->addRowDefinition(RowDefinition(300,true));
+        //实例化一个TextBox控件
+		TextBox* txtbox = new TextBox();
+        //实例化了一个Bool动画
+		BoolAnimation* animate = new BoolAnimation();
+        //设置boo动画起始值为true
+		animate->From = true;
+        //设置boo动画终结值为false
+		animate->To = false;
+        //设置动画的目标属性为TextBox的Visible属性
+		animate->Target = txtbox->GetVisible();
+        //设置动画重复运行
+		animate->Repeat = true;
+        //设置动画执行时间为1s
+		animate->duration.timeSpan = 1.0;
+        //设置动画延迟执行时间为1s
+		animate->delayDuration.timeSpan = 1.0;
+        //将动画添加至TextBox的画板里
+		txtbox->storybord.AddAnimation(animate);
+        //开始动画，动画不一定在此处就开始，这只是一个演示
+		txtbox->BeginAnimation();
+        //设置TextBox的边框大小为10px
+		txtbox->SetBorderSize(10);
+        //设置TextBox的边框颜色为黄色
+		txtbox->SetBorderBrush(0xffffff00);
+        //设置TextBox的字体大小为20px
+		txtbox->fontSize.set(20);
+        //设置TextBox的背景色为蓝色
+		txtbox->SetBackground(0xff0000ff);
+        //设置TextBox的行列值，第0行第0列
+		grid->setRC(txtbox, 0, 0);
+        //设置TextBox的所占行数，TextBox会占据从其指定行算起，总计纵跨两行
+		grid->setRowSpan(txtbox, 2);
+        //实例化一个新的Grid布局容器
+		Grid* gChild = new Grid();
+        //设置该容器背景色为红色
+		gChild->SetBackground(0xffff0000);
+		grid->setRC(gChild, 0, 1);
+        //实例化一个TextBlock控件
+		TextBlock* tb = new TextBlock();
+        //设置控件字体大小为20px
+		tb->fontSize.set(20);
+        //设置控件背景色为绿色
+		tb->SetBackground(0xff00ff00);
+		grid->setRC(tb, 1, 1);
+        //添加实例化的TextBox控件至Grid控件
+		grid->AddChild(txtbox);
+        //添加实例化的Grid控件至Grid控件
+		grid->AddChild(gChild);
+        //添加实例化的TextBlock控件至Grid控件
+		grid->AddChild(tb);
+        //设置TextBlock的文字
+		tb->text.set(L"你好啊,\r\n再见");
+        //设置窗口的Content为Grid控件
+		setContent(grid);
+	}
+# 结构以及类说明
+    ·没有找到合适的UML图工具，目前只能文字描述了。
+        CAI目前的主体架构为：环境初始化---控件，架构非常的简单。对于环境初始化 Application类作为程序运行的一个全局监管，其主要用于初始化环境，监控特殊事件（特殊事件是指，事件需要进行二次处理后才能放入控件的事件流程中，或者直接指定事件的分发）。
+    Application类目前只有RenderEngine类组合而成，RenderEngine类是图形渲染的基本，其负责渲染环境的初始化，包括Opengl上下文获取，窗口的创建，着色器程序的编译，渲染循环，控件所用到的渲染设备类的
+    创建以及字体库加载。Application类的初始化环境中包括了调用RenderEngine的渲染环境的初始化。其他框架构成则是控件部分。
+        PaintDevice：渲染设备句柄，该类由RenderEngine实例化，也由其删除。负责对顶点数据进行渲染
+        一般控件的继承结构如下：Visual->UIElement->Control/Panel/ContetnControl->Button/Textbox/grid...Window。
+        Visual：可视化控件的渲染部分，该类负责控件渲染数据的初步解析，并负责调用从RenderEngine获取的渲染设备类PaintDevice来渲染控件。Visual类具有控件渲染的基本属性：Width(控件宽度)，Height
+    (控件高度)，Background(控件背景)，BoderSize(边框大小)，Corner(控件角，还未实装)，Visual类还实现了鼠标的点击测试和焦点属性。
+        UIElement：继承至Visual，在其之上，增加了各个事件的处理，暂时预留了一个特殊的接口，在以往的版本中你可能会发现，UIElement类包含了一个ControlTemplate类型的数据，该类型的数据适用于覆写
+    控件原有显示样式的数据。也就是说该接口运行你为其指定不一样的外观形式。
+        Control：继承至UIElment，该类型进一步明确了控件的特性，Control类型增加了外边距，可以动态的调整控件位置。
+        ContetnControl ：继承至Control，该类型明确表示其只能拥有一个子控件，也是每个独立控件的基类，button，Textbox等都继承此控件。
+        Panel ：继承至Control，该类型可以包括多个子控件，其主要功能是对子控件进行布局。
+        Grid ：继承至Panel，Grid类型为网格布局，所谓网格布局就是Grid控件会按照网格的形式，将其子控件根据设定的不同网格行列放置在不同的位置，如果可见网格，那么你会发现其子控件的位置在网格对应的
+    格子内部。
+        Window：继承至ContentControl，属于内容控件之一，但具有环境初始化的能力。完全的环境初始化需要获取一个窗体后，生成Opengl上下文在加载其他资源，但是窗体的创建和Window类又是两种完全不同的类型
+    因此，将RenderEngine的初始化，延迟到第一个窗口创建是进行。第一个Window实例对象的会调用RenderEngine的环境初始化，并从中获取RenderEngine创建的抽口句柄，并将该类对象绑定到窗口部分事件回调上，主要
+    事件为，鼠标移动事件和键盘事件，至于窗口大小调整由于进度问题需要后期制作。
 # Notice
-    ·程序开发IDE使用的是vs2022，字符编码为unicode。关于Opengl的部分库，可以根据自己喜好替换，因此，本仓库并没有上传，本仓库的项目代码使用的是GLFW和glad。
-    ·目前程序数据计算精度并不高，部分函数参数存在精度转换问题，但问题不大。
+    ·程序开发IDE使用的是vs2022，字符编码为unicode。
+    ·程序运行的所有依赖库已打包到仓库中，需要注意的是，请不要将resources/fonts/Windows里面的字体库用于商业开发，自己用来调试即可，fonts目录下的另一个Source_Han_Serif_SC_Light_Light.otf字体库可用于商业
+    ·程序使用Opengl作为图形渲染基础。
 # 开发日志图形渲染
 [2024.10.9]
 

@@ -172,6 +172,7 @@
   <ItemGroup>
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
+    <None Include="resources\Shaders\RectWithCornerFragment.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>

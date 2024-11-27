@@ -63,9 +63,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\openglLIB\glad\src\glad.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\UI\UIElement.cpp">
       <Filter>源文件\UI</Filter>
     </ClCompile>
@@ -133,6 +130,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Datas\VisualCollection.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLLibs\glad\src\glad.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation\BoolAnimation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation\DoubleAnimation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation\StoryBord.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation\TimeLine\Duration.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controls\Path.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -263,11 +278,33 @@
     <ClInclude Include="src\Datas\VisualCollection.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Animation\AnimationAbstract.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation\BoolAnimation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation\DoubleAnimation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation\StoryBord.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation\TimeLine\Duration.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls\Path.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\SizeChangedEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
+    <None Include="resources\Shaders\RectWithCornerFragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf">
