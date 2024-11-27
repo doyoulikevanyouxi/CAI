@@ -8,9 +8,8 @@ class ControlTemplate;
 class Size;
 
 /// <summary>
-/// 所有可视化元素的基类，定义了可视化元素必须的量：位置，大小，颜色
-/// 位置和大小采用了矩阵运算，目前矩阵是在cpu上计算，后续将矩阵迁移至
-/// GPU进行计算
+/// 继承至Visual，在其基础上添加了事件的响应和动画
+/// 事件部分不完善仍需开发
 /// </summary>
 class UIElement : public Object, public Visual
 {
@@ -22,10 +21,14 @@ public:
 	virtual ~UIElement() noexcept;
 
 public:
-	//会有一个属性继承关系
+	//重载了Visual的渲染：需要添加动画效果
 	virtual void Render() override;
 	void SetParent(UIElement* parent);
+	//开始动画
 	void BeginAnimation();
+/// <summary>
+/// 以下为事件响应函数，Pre-Event事件是从上往下传递的事件
+/// </summary>
 protected:
 	virtual void OnPreMouseDown(PreMouseButtonDownEvent& e);
 	virtual void OnMouseLeftButtonDown(MouseLeftButtonDownEvent& e);
@@ -47,6 +50,7 @@ protected:
 	ControlTemplate* style;
 	UIElement* parent;
 public:
+	//故事板，包括了该控件的所有，同一时段下所有动画
 	StoryBord storybord;
 };
 

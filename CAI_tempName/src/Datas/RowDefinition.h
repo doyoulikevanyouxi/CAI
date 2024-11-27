@@ -1,5 +1,7 @@
 #pragma once
 #include "Object.h"
+///该文件主要是Grid控件在使用
+
 /// <summary>
 /// 定义了一行的属性
 /// </summary>

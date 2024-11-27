@@ -5,7 +5,13 @@
 #include "Draw.h"
 class PaintDevice;
 class VisualCollection;
+//这是记录最大的z值，因为需要知道z值分布
 extern float zmax;
+
+/// <summary>
+/// 可视化控件的基类，所有控件的最总绘制都在此处
+/// 这是原型，仍需要优化
+/// </summary>
 class Visual 
 {
 	friend class Application;
@@ -16,17 +22,22 @@ public:
 public:
 	//用于获取绘制元素的绘制设备句柄
 	virtual bool Init();
+	//调用绘制句柄绘制
 	virtual void Render();
+	//设置可视元素的父元素
 	void SetVisualParent(Visual* parent);
+	//添加可视元素子元素
 	void AddVisualChild(Visual* child);
+	//获取可视元素父元素
 	inline Visual* GetVisualParent() { return parent; }
+	//获取可视化树---可视化子元素几何
 	inline VisualCollection* GetVisulTree() { return visualTree; }
 	inline Size& GetGlobalAreaSize() const { return vData.GlobalAreaSize(); }
 public:
 	void operator=(const Visual& other);
 public:
+	//以下为获取或设置元素外观：大小，边框，颜色等
 	bool* GetVisible() { return &(vData.visibale); }
-
 	virtual void SetHeight(float value);
 	virtual void SetWidth(float value);
 	virtual void SetZindex(float value);
@@ -47,11 +58,17 @@ public:
 	void CheckSize(const Size& size) noexcept;
 	Size& GetSize();
 protected:
+	//测量自身的元素位置以及大小，并初始化绘制数据
 	virtual Size Measure(const Size& size) noexcept;
 	virtual void Aeasure(const Size& size) noexcept;
 private:
+	//设置实际的高度
 	inline void SetActualHeight(float value);
+	//设置实际的宽度
 	inline void SetActualWidth(float value);
+/// <summary>
+/// 可是元素的固有属性
+/// </summary>
 public:
 	DependencyProperty<float> width{ "Width" };
 	DependencyProperty<float> height{ "Height" };
@@ -67,9 +84,13 @@ public:
 	DependencyProperty<bool> visible{ "Visible" };
 
 public:
+	//是否是焦点
 	bool focus = false;
+	//鼠标在元素内是否移动
 	bool isMouseOver = false;
+	//鼠标的直接指向是否是该元素
 	bool isMouseDirectOver = false;
+	//鼠标是否进入
 	bool isMouseEnter = false;
 protected:
 	float actualWidth = 0.f;
@@ -77,10 +98,14 @@ protected:
 	bool validWidth = false;
 	bool validHeight = false;
 protected:
+	//可视化父元素
 	Visual* parent;
+	//绘制数据
 	VisualData vData;
+	//可视化树
 	VisualCollection* visualTree;
 protected:
+	//绘制设备
 	PaintDevice* pDevice;
 	
 };

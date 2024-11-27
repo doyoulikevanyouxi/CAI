@@ -16,15 +16,22 @@ public:
 	//VisualData(VisualData&& other) noexcept;
 	~VisualData()	noexcept;
 public:
+	//返回元素的size
 	inline Size& AreaSize() const noexcept { return *areaSize; }
+	//返回元素允许绘制的范围size
 	inline Size& ClipSize() const noexcept { return *clipSize; }
+	//返回元素内容的size
 	inline Size& ContentSize() const noexcept { return *contentSize; }
+	//其实是分辨率
 	inline Size& GlobalAreaSize() const noexcept { return *globalAreaSize; }
+	//返回元素的笔刷
 	inline Draw::Brush& AreaBrush() const noexcept { return *areaBrush; }
 	inline unsigned int VertexSize() const noexcept { return vertexSize; }
 	inline unsigned int IndexSize() const noexcept { return indexSize; }
+	//设置边框大小
 	void SetBorderSize(double value) noexcept;
 	double* VertexData() const noexcept;
+	//初始化渲染数据
 	void InitData();
 	unsigned int* VertexIndexData() const noexcept;
 
@@ -51,6 +58,7 @@ public:
 	bool hasBorder;
 	bool needClip;
 private:
+	//是否可见
 	bool visibale = true;
 	//绘制区域大小
 	Size* areaSize;

@@ -1,9 +1,12 @@
 #pragma once
 namespace Math {
-	//矩阵模板 版本 ： 缺点 过多使用栈空间，如果矩阵数量过多则会造成错误
-	//					  限定了矩阵的类型，一旦确定了大小则无法更改
-	//				 优点 可以在编译器确定矩阵运算是否符合规定，不用担心
-	//					  矩阵数据的位置
+
+	/// <summary>
+	/// 矩阵模板 
+	/// 使用的是行主序，与Opengl相反
+	/// </summary>
+	/// <typeparam name="R">矩阵行数</typeparam>
+	/// <typeparam name="C">矩阵列数</typeparam>
 	template<int R, int C>
 	class Matrix {
 	public:
@@ -45,6 +48,7 @@ namespace Math {
 			}
 			return str;
 		}
+		//转置
 		Matrix<C, R> Transpose() const noexcept {
 			Matrix<C, R> tmp;
 			for (int i = 0; i < R; ++i)

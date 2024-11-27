@@ -5,6 +5,7 @@
 #include <UI/Application.h>
 #include <Animation/BoolAnimation.h>
 using Brush = Draw::Brush;
+//用于测试鼠标事件用
 class Gridg : public Grid {
 	
 protected:
@@ -17,6 +18,9 @@ protected:
 	}*/
 
 };
+/// <summary>
+/// 主窗口，也是程序的入口点
+/// </summary>
 class MainWindow : public Window
 {
 public:
