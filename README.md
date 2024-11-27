@@ -1,7 +1,12 @@
 # CAI_tempName
     从0开始的图形渲染框架搭建。
-    CAI(Cpp Auto Interface Constructor)即c++ 界面自动构建工具。
-    这是一款从0开始的项目，因此项目周期会比较长。
+    CAI(Cpp Auto Interface Constructor)即c++ 界面自动构建工具。目的是使得c++Gui开发更加轻松，更加快速，更加便捷，更加Nice。
+    Qt要钱，我不要，Qt有的我要全都有
+    开发分为3个阶段：
+        ·图形渲染                                   80%完成度
+        ·xml类文件解析并生成代码或不生成代码        40%完成度
+        ·自动化                                      0%完成度
+    这是一款从0开始的项目，因此项目周期会比较长.
 # Usage
    程序的调用如下：
    在MainWindow.hpp文件中，MainWindow的构造函数里，你需要为Winodw指定一个Content内容，在以下示例的最后一行操作。如果没有指定那么不会显示任何内容。
