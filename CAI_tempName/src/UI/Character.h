@@ -1,46 +1,48 @@
+ï»¿// ft2build.h  of this software are copyright Â© <2006> The FreeType
+// Project(www.freetype.org).All rights reserved.
 #pragma once
 #include "Object.h"
 #include "Draw.h"
 #include <glad/glad.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
-//×ÖÌå³¬³öäÖÈ¾·¶Î§µÄ²Ù×÷
+//å­—ä½“è¶…å‡ºæ¸²æŸ“èŒƒå›´çš„æ“ä½œ
 enum TextOverRangeOperator {
-	//Ä¬ÈÏ£¬²»×öÈÎºÎ²Ù×÷
+	//é»˜è®¤ï¼Œä¸åšä»»ä½•æ“ä½œ
 	Default,
-	//»»ĞĞ
+	//æ¢è¡Œ
 	Wrap
 };
 
 /// <summary>
-/// ×ÖÌåÉèÖÃ
+/// å­—ä½“è®¾ç½®
 /// </summary>
 struct FontSetting
 {
-	//×ÖÌå´óĞ¡
+	//å­—ä½“å¤§å°
 	unsigned int size;
-	//×ÖÌåÑÕÉ«
+	//å­—ä½“é¢œè‰²
 	Draw::Color color;
-	//³¬³ö²¿·ÖµÄ²Ù×÷
+	//è¶…å‡ºéƒ¨åˆ†çš„æ“ä½œ
 	TextOverRangeOperator operation;
 };
 
 /// <summary>
-/// ×Ö·ûÏà¹ØÊı¾İ
+/// å­—ç¬¦ç›¸å…³æ•°æ®
 /// </summary>
 struct Character
 {
-	//×Ö·û¼ÓÔØÊ±µÄÎÆÀíID
+	//å­—ç¬¦åŠ è½½æ—¶çš„çº¹ç†ID
 	GLuint textureID;
-	float width;	//×ÖÌåÊµ¼Ê¿í¶È //×ÖÌå¿í¶È£¬×ÖÌå¸ß¶È µ¥Î»£ºÏñËØ
-	float height;//×ÖÌåÊµ¼Ê¸ß¶È 
-	float bearingX;//´Ó»ù×¼Ïßµ½×ÖĞÎ×ó²¿ µ¥Î»£ºÏñËØ
-	float bearingY;//´Ó»ù×¼Ïßµ½¶¥²¿µÄÆ«ÒÆÖµ 
-	unsigned int Advance;    // Ô­µã¾àÏÂÒ»¸ö×ÖĞÎÔ­µãµÄ¾àÀë ´óĞ¡Îª 1/64ÏñËØ
+	float width;	//å­—ä½“å®é™…å®½åº¦ //å­—ä½“å®½åº¦ï¼Œå­—ä½“é«˜åº¦ å•ä½ï¼šåƒç´ 
+	float height;//å­—ä½“å®é™…é«˜åº¦ 
+	float bearingX;//ä»åŸºå‡†çº¿åˆ°å­—å½¢å·¦éƒ¨ å•ä½ï¼šåƒç´ 
+	float bearingY;//ä»åŸºå‡†çº¿åˆ°é¡¶éƒ¨çš„åç§»å€¼ 
+	unsigned int Advance;    // åŸç‚¹è·ä¸‹ä¸€ä¸ªå­—å½¢åŸç‚¹çš„è·ç¦» å¤§å°ä¸º 1/64åƒç´ 
 };
 /// <summary>
-/// ×ÖÌå¿â
-/// ¸ÃÀà»á¸ù¾İ×ÖÌå¿âÎÄ¼şºÍ·ûºÅµÄunicodeÖµ»ñÈ¡ÎÆÀí
+/// å­—ä½“åº“
+/// è¯¥ç±»ä¼šæ ¹æ®å­—ä½“åº“æ–‡ä»¶å’Œç¬¦å·çš„unicodeå€¼è·å–çº¹ç†
 /// </summary>
 class Font : public Object
 {
@@ -48,25 +50,25 @@ public:
 	Font() noexcept;
 	~Font() noexcept;
 public:
-	//¼ÓÔØµ¥¸ö×Ö·ûÎÆÀí
-	//²ÎÊıÎª×Ö·ûµÄunicode£¬ÓÉÓÚµ¥×Ö½ÚºÍ¶à×Ö½ÚµÄunicode×Ö½Ú²»Ò»Ñù£¬ËùÒÔÍ³Ò»ÓÃ¿í×Ö·û´æ´¢
+	//åŠ è½½å•ä¸ªå­—ç¬¦çº¹ç†
+	//å‚æ•°ä¸ºå­—ç¬¦çš„unicodeï¼Œç”±äºå•å­—èŠ‚å’Œå¤šå­—èŠ‚çš„unicodeå­—èŠ‚ä¸ä¸€æ ·ï¼Œæ‰€ä»¥ç»Ÿä¸€ç”¨å®½å­—ç¬¦å­˜å‚¨
 	void Load(const wchar_t& ch);
-	//¼ÓÔØËùÓĞ×Ö·û
-	//²»½¨ÒéÊ¹ÓÃ£¬ÒòÎª×ÖÌå¿â±¾Éí×Ö·û¾ÍºÜ¶à£¬¼ÓÔØÂı£¬ÇÒºÄ·Ñ¼«´óµÄÄÚ´æ¿Õ¸ÅÄî
+	//åŠ è½½æ‰€æœ‰å­—ç¬¦
+	//ä¸å»ºè®®ä½¿ç”¨ï¼Œå› ä¸ºå­—ä½“åº“æœ¬èº«å­—ç¬¦å°±å¾ˆå¤šï¼ŒåŠ è½½æ…¢ï¼Œä¸”è€—è´¹æå¤§çš„å†…å­˜ç©ºæ¦‚å¿µ
 	void Load();
-	//»ñÈ¡×Ö·û
+	//è·å–å­—ç¬¦
 	Character& GetCharacter(unsigned int unicode) noexcept;
 public:
-	unsigned int fontSize; //×ÖÌåÆÚÍû´óĞ¡
+	unsigned int fontSize; //å­—ä½“æœŸæœ›å¤§å°
 private:
-	//freetype¿âÓÃ£¬ft±íÊ¾ÀàËÆÓÚ×ÖÌå¿âÎÄ¼ş
+	//freetypeåº“ç”¨ï¼Œftè¡¨ç¤ºç±»ä¼¼äºå­—ä½“åº“æ–‡ä»¶
 	FT_Library ft;
-	//µ±Ç°×Ö·ûµÄÏà¹ØÊôĞÔ£¬²ÎÕÕCharacter£¬µ«ÊÇÃ»ÓĞÎÆÀíID
+	//å½“å‰å­—ç¬¦çš„ç›¸å…³å±æ€§ï¼Œå‚ç…§Characterï¼Œä½†æ˜¯æ²¡æœ‰çº¹ç†ID
 	FT_Face face;
-	//´æ´¢ÒÑ¼ÓÔØµÄ×Ö·û
+	//å­˜å‚¨å·²åŠ è½½çš„å­—ç¬¦
 	std::map<wchar_t, Character> characters;
 	friend class PaintDevice;
-	//×Ö·û×¨ÓÃOpenglµÄbuffer
+	//å­—ç¬¦ä¸“ç”¨Openglçš„buffer
 	GLuint VAO;
 	GLuint VBO;
 };
