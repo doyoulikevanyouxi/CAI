@@ -59,6 +59,7 @@ bool Window::Init()
 	projection[3][2] = 1;
 	Application::app.renderEngine->SetColorProjection(colorProjection);
 	Application::app.renderEngine->SetWindowProjection(projection);
+	Application::app.renderEngine->SetResolution(width.get(),height.get());
 	return true;
 }
 

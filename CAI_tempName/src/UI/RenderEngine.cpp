@@ -9,7 +9,7 @@
 #include "Application.h"
 
 #include "log/log.h"
-RenderEngine::RenderEngine() noexcept : mainWinHd(nullptr), squareShader(nullptr), fontShader(nullptr),
+RenderEngine::RenderEngine() noexcept : mainWinHd(nullptr), squareShader(nullptr), fontShader(nullptr), lineShader(nullptr),
 font(nullptr),initComplete(false)
 {
 	name = CAISTR(RenderEngine);
@@ -68,6 +68,8 @@ inline bool RenderEngine::InitResources()
 		fontShader = nullptr;
 		return false;
 	}
+	lineShader = new Shader("resources/Shaders/LineVertexShader.glsl", "resources/Shaders/LineFragmentShader.glsl", "resources/Shaders/LineGeometryShader.glsl");
+	lineShader->ComplieShader();
 	font = new Font();
 	return true;
 }
@@ -104,8 +106,8 @@ PaintDevice* RenderEngine::GetPaintDevice()
 	PaintDevice* device = new PaintDevice();
 	device->fontShader = fontShader;
 	device->rectShader = squareShader;
+	device->geometryShader = lineShader;
 	paintDevices.emplace_back(device);
-
 	return device;
 }
 
@@ -136,18 +138,29 @@ void RenderEngine::SetWindowProjection(const Math::TransMatrix& mt)
 {
 	squareShader->SetMat4("projection", mt);
 	fontShader->SetMat4("projection", mt);
+	lineShader->SetMat4("projection", mt);
 }
 
 void RenderEngine::SetColorProjection(const Math::TransMatrix& mt)
 {
 	squareShader->SetMat4("projection_color", mt);
 	fontShader->SetMat4("projection_color", mt);
+	lineShader->SetMat4("projection_color", mt);
 }
 
 void RenderEngine::SetColorProjection(float* mt)
 {
 	squareShader->SetMat4("projection_color", mt);
 	fontShader->SetMat4("projection_color", mt);
+	lineShader->SetMat4("projection_color", mt);
+}
+
+void RenderEngine::SetResolution(double width, double height)
+{
+	
+	squareShader->SetVec2("iResolution", width,height);
+	fontShader->SetVec2("iResolution", width, height);
+	lineShader->SetVec2("iResolution", width, height);
 }
 
 Window* RenderEngine::FindWindowByHD(GLFWwindow* HD)

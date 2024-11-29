@@ -83,6 +83,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Controls\Shap\Line.cpp" />
+    <ClCompile Include="src\Controls\Shap\Shape.cpp" />
+    <ClCompile Include="src\Datas\Geometry\CircleGeometry.cpp" />
+    <ClCompile Include="src\Datas\Geometry\RectGeometry.cpp" />
+    <ClCompile Include="src\Datas\Geometry\LineGeometry.cpp" />
+    <ClCompile Include="src\Datas\Geometry\Geometry.cpp" />
+    <ClCompile Include="src\UI\ContentElement.cpp" />
     <ClCompile Include="OpenGLLibs\glad\src\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -91,7 +98,7 @@
     <ClCompile Include="src\Animation\StoryBord.cpp" />
     <ClCompile Include="src\Animation\TimeLine\Duration.cpp" />
     <ClCompile Include="src\Controls\Content.cpp" />
-    <ClCompile Include="src\Controls\Path.cpp" />
+    <ClCompile Include="src\Controls\Shap\Path.cpp" />
     <ClCompile Include="src\UI\Application.cpp" />
     <ClCompile Include="src\Common\caipch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -119,13 +126,20 @@
     <ClCompile Include="src\Datas\VisualCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Controls\Shap\Line.h" />
+    <ClInclude Include="src\Controls\Shap\Shape.h" />
+    <ClInclude Include="src\Datas\Geometry\CircleGeometry.h" />
+    <ClInclude Include="src\Datas\Geometry\RectGeometry.h" />
+    <ClInclude Include="src\Datas\Geometry\LineGeometry.h" />
+    <ClInclude Include="src\Datas\Geometry\Geometry.h" />
+    <ClInclude Include="src\UI\ContentElement.h" />
     <ClInclude Include="src\Animation\AnimationAbstract.h" />
     <ClInclude Include="src\Animation\BoolAnimation.h" />
     <ClInclude Include="src\Animation\DoubleAnimation.h" />
     <ClInclude Include="src\Animation\StoryBord.h" />
     <ClInclude Include="src\Animation\TimeLine\Duration.h" />
     <ClInclude Include="src\Controls\Content.h" />
-    <ClInclude Include="src\Controls\Path.h" />
+    <ClInclude Include="src\Controls\Shap\Path.h" />
     <ClInclude Include="src\Events\InputEvents.h" />
     <ClInclude Include="src\Events\MouseEvents.h" />
     <ClInclude Include="src\Events\SizeChangedEvent.h" />
@@ -170,6 +184,9 @@
     <ClInclude Include="src\Datas\VisualCollection.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\Shaders\LineFragmentShader.glsl" />
+    <None Include="resources\Shaders\LineGeometryShader.glsl" />
+    <None Include="resources\Shaders\LineVertexShader.glsl" />
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
     <None Include="resources\Shaders\RectWithCornerFragment.glsl" />

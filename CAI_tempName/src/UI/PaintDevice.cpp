@@ -7,8 +7,9 @@
 #include "Shader.h"
 #include "stbimge/stb_image.h"
 #include "Application.h"
+#include "Datas/Geometry/LineGeometry.h"
 
-PaintDevice::PaintDevice() noexcept : fontShader(nullptr),rectShader(nullptr), VAO(0), VBO(0), EBO(0)
+PaintDevice::PaintDevice() noexcept : fontShader(nullptr),rectShader(nullptr),geometryShader(nullptr), VAO(0), VBO(0), EBO(0), lineVAO(0), lineVBO(0)
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -25,6 +26,21 @@ PaintDevice::PaintDevice() noexcept : fontShader(nullptr),rectShader(nullptr), V
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, NULL, GL_STATIC_DRAW);
 	glBindVertexArray(0);
+	
+
+	//画线用的buffer--暂时
+	glGenVertexArrays(1, &lineVAO);
+	glGenBuffers(1, &lineVBO);
+	glBindVertexArray(lineVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
+	glBufferData(GL_ARRAY_BUFFER,sizeof(double)*14,NULL,GL_STATIC_DRAW);
+	//顶点
+	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void*)0);
+	glEnableVertexAttribArray(0);
+	//顶点颜色
+	glVertexAttribPointer(1, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), (void*)(6*sizeof(double)));
+	glEnableVertexAttribArray(1);
+	glBindVertexArray(0);
 }
 
 
@@ -34,6 +50,9 @@ PaintDevice::~PaintDevice() noexcept
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
+
+	glDeleteVertexArrays(1, &lineVAO);
+	glDeleteBuffers(1, &lineVBO);
 }
 
 void PaintDevice::UpdateData(const double* vertexData, const double* colorData,const unsigned int* indexData)
@@ -61,6 +80,27 @@ void PaintDevice::UpdataColor(const double* data)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferSubData(GL_ARRAY_BUFFER, 12 * sizeof(double), sizeof(double) * 16, data);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void PaintDevice::DrawLine(const Size& size,const LineGeometry* data)
+{
+	double line[] = {
+		data->GetFirstPoint().X(),data->GetFirstPoint().Y(),size.Z() + 1,
+		data->GetSecondPoint().X(),data->GetSecondPoint().Y(),size.Z() + 1
+	};
+	double color[] = {
+		255,0.0,0.0,255,
+		255,0.0,0.0,255
+	};
+	geometryShader->Use();
+	geometryShader->SetMat4("model", size.TransMatrix());
+	glBindVertexArray(lineVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double) * 6, line);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(double) * 6, sizeof(double) * 8, color);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDrawArrays(GL_LINES, 0, 2);
+	glBindVertexArray(0);
 }
 
 /// <summary>

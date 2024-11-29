@@ -107,6 +107,5 @@ protected:
 protected:
 	//ªÊ÷∆…Ë±∏
 	PaintDevice* pDevice;
-	
 };
 //VisualCollection

@@ -2,11 +2,14 @@
 #include "Object.h"
 #include "Datas/Coordinate.h"
 #include "Datas/VisualData.h"
-class Shader;
 namespace Draw {
 	class Brush;
 }
 struct FontSetting;
+class Geometry;
+class LineGeometry;
+class Shader;
+
 class Window;
 using Brush = Draw::Brush;
 
@@ -28,6 +31,8 @@ public:
 	void UpdataVertex(const double* data);
 	//更新顶点颜色数据
 	void UpdataColor(const double* data);
+	//画线
+	void DrawLine(const Size& size,const LineGeometry* data);
 	//绘制文字
 	void DrawText(const std::wstring& str, const Size& size, const FontSetting& fontSet) noexcept;
 	//绘制元素
@@ -37,12 +42,15 @@ private:
 	Shader* fontShader;
 	//绘制矩形所需着色器，由RenderEngine提供
 	Shader* rectShader;
+	Shader* geometryShader;
 	//顶点数组
 	unsigned int VAO;
 	//顶点缓冲对象
 	unsigned int VBO;
 	//索引缓冲对象
 	unsigned int EBO;
+	unsigned int lineVAO;
+	unsigned int lineVBO;
 
 };
 

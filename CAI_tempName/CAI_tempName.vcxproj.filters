@@ -147,7 +147,28 @@
     <ClCompile Include="src\Animation\TimeLine\Duration.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Controls\Path.cpp">
+    <ClCompile Include="src\Controls\Shap\Path.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\ContentElement.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Datas\Geometry\Geometry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Datas\Geometry\LineGeometry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Datas\Geometry\RectGeometry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Datas\Geometry\CircleGeometry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controls\Shap\Shape.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Controls\Shap\Line.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -293,10 +314,31 @@
     <ClInclude Include="src\Animation\TimeLine\Duration.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Controls\Path.h">
+    <ClInclude Include="src\Controls\Shap\Path.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Events\SizeChangedEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\ContentElement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Datas\Geometry\Geometry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Datas\Geometry\LineGeometry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Datas\Geometry\RectGeometry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Datas\Geometry\CircleGeometry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls\Shap\Shape.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controls\Shap\Line.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -305,6 +347,9 @@
     <None Include="resources\Shaders\RectVertexShader.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
     <None Include="resources\Shaders\RectWithCornerFragment.glsl" />
+    <None Include="resources\Shaders\LineFragmentShader.glsl" />
+    <None Include="resources\Shaders\LineVertexShader.glsl" />
+    <None Include="resources\Shaders\LineGeometryShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf">

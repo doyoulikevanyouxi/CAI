@@ -48,6 +48,7 @@ public:
 	//设置颜色的投射矩阵
 	void SetColorProjection(const Math::TransMatrix& mt);
 	void SetColorProjection(float* mt);
+	void SetResolution(double width,double height);
 private:
 	Window* FindWindowByHD(GLFWwindow* HD);
 private:
@@ -61,6 +62,7 @@ private:
 	Shader* squareShader;
 	//字体渲染着色器
 	Shader* fontShader;
+	Shader* lineShader;
 	//字体库
 	Font* font;
 	//创建的所有窗口的集合
