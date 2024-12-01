@@ -155,7 +155,11 @@ void PaintDevice::DrawLine(const Size& size, const LineGeometry* data)
 /// <param name="fontSet">×ÖÌåÉèÖÃ</param>
 void PaintDevice::DrawText(const std::wstring& str, const Size& size, const FontSetting& fontSet) noexcept
 {
-
+	Point pt(size.X(), size.Y());
+	Point::TranslatTo(pt, size.ModelMatrix());
+	Point::Reverse(pt, size.ResolutionHeight());
+	Point::SetToLeftBottom(pt, size.Height());
+	glScissor(pt.X(),pt.Y(), size.Width(),size.Height());
 	Font* ft = Application::app.renderEngine->GetFont();
 	//Ëõ·Å
 	float scal = fontSet.size / (float)ft->fontSize;

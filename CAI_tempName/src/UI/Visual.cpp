@@ -177,13 +177,13 @@ Size Visual::Measure(const Size& size) noexcept
 			vData.Visible() = false;
 	}
 	//设置分辨率
-	vData.AreaSize().SetResolution(size.ResolutionWidth(), size.ResolutionHeight());
-	
+	vData.SetResolution(size.ResolutionWidth(), size.ResolutionHeight());
 	//设置裁减区域
 	Point pt(size.X(), size.Y());
 	Point::TranslatTo(pt, size.ModelMatrix());
-	Point::SetToLeftBottom(pt,size.ResolutionHeight());
-	vData.SetClipSize(Size(pt.X(),pt.Y()-size.Height(), size.Z(), size.Width(), size.Height()));
+	Point::Reverse(pt, size.ResolutionHeight());
+	Point::SetToLeftBottom(pt,size.Height());
+	vData.SetClipSize(Size(pt.X(),pt.Y(), size.Z(), size.Width(), size.Height()));
 	
 	//未设置宽度值时，采用传递过来的大小
 	if (width.IsInvalid()) {
@@ -208,25 +208,14 @@ Size Visual::Measure(const Size& size) noexcept
 	else
 		z = size.Z() + 1;
 	vData.SetPoint(vData.AreaSize().X(), vData.AreaSize().Y(), z);
-	vData.AreaSize().ModelMatrix() = size.ModelMatrix() * tMatrix;
-	vData.AreaSize().ProjectionMatrix() = size.ProjectionMatrix();
+	vData.SetModel(size.ModelMatrix() * tMatrix);
+	vData.SetProjection(size.ProjectionMatrix());
+
 	if (zmax < z)
 		zmax = z;
-	//如果有边框，就将边框加入
-	/*if (!borderSize.IsInvalid()) {
-		vData.SetBorderSize(borderSize.get());
-	}*/
 	//初始化控件顶点数据
 	pDevice->UpdateData(vData.VertexData(),vData.SizeData(),vData.VertexColorData(),vData.RadiusData(),vData.BorderSizeData(),vData.BorderColorData());
-	float contentX = vData.AreaSize().X() + vData.BorderSize();
-	float contentY = vData.AreaSize().Y() + vData.BorderSize();
-	float contentWidth = vData.AreaSize().Width() - vData.BorderSize() * 2;
-	float contentHeight = vData.AreaSize().Height() - vData.BorderSize() * 2;
-	Size contentSize(vData.AreaSize());
-	contentSize.SetX(contentX);
-	contentSize.SetY(contentY);
-	contentSize.SetWH(contentWidth, contentHeight);
-	return contentSize;
+	return vData.ContentSize();;
 }
 
 void Visual::Aeasure(const Size& size) noexcept

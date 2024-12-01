@@ -33,7 +33,7 @@ public:
 	
 		
 		Gridg* grid = new Gridg();
-		grid->SetBackground(0xffffff00);
+		grid->SetBackground(0xffffffff);
 		grid->addColumDefinition(ColumDefinition());
 		grid->addColumDefinition(ColumDefinition(400,true));
 		grid->addRowDefinition(RowDefinition());
@@ -50,6 +50,7 @@ public:
 		txtbox->BeginAnimation();*/
 		txtbox->SetBorderSize(10);
 		txtbox->SetBorderBrush(0xffff00ff);
+		txtbox->SetRadius(50);
 		txtbox->fontSize.set(20);
 		txtbox->SetBackground(0xff0000ff);
 		grid->setRC(txtbox, 0, 0);

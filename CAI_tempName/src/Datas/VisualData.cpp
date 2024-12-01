@@ -4,13 +4,33 @@
 void VisualData::SetPoint(const float& x, const float& y, const float& z)
 {	
 	areaSize.SetXYZ(x, y, z);
+	contentSize.SetXYZ(x+borderSize,y+borderSize,z);
 	UpdateVertexPoint();
 }
 
 void VisualData::SetWH(const float& width, const float& height)
 {
 	areaSize.SetWH(width, height);
+	contentSize.SetWH(width - 2.0 * borderSize, height - 2.0 * borderSize);
 	UpdateRectSize();
+}
+
+void VisualData::SetModel(const Math::mat4& model)
+{
+	areaSize.ModelMatrix() = model;
+	contentSize.ModelMatrix() = model;
+}
+
+void VisualData::SetProjection(const Math::mat4& projection)
+{
+	areaSize.ProjectionMatrix() = projection;
+	contentSize.ProjectionMatrix() = projection;
+}
+
+void VisualData::SetResolution(const float& width, const float height)
+{
+	areaSize.SetResolution(width, height);
+	contentSize.SetResolution(width, height);
 }
 
 void VisualData::SetAreaBrush(const Draw::Brush& brush)
@@ -28,6 +48,8 @@ void VisualData::SetBorderBursh(const Draw::Brush& brush)
 void VisualData::SetBorderSize(const float& value)
 {
 	borderSize = value;
+	contentSize.SetXYZ(areaSize.X() + value, areaSize.Y() + value, areaSize.Z());
+	contentSize.SetWH(areaSize.Width() - 2.0 * value, areaSize.Height() - 2.0 * value);
 }
 
 void VisualData::SetClipSize(const Size& size)

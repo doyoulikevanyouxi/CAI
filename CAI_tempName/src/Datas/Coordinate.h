@@ -17,8 +17,11 @@ public:
 		pt.x = newValue[0][0];
 		pt.y = newValue[1][0];
 	}
+	static void Reverse(Point& pt, const float& resolutionHeight) {
+		pt.y = resolutionHeight - pt.y;
+	}
 	static void SetToLeftBottom(Point& globalpt, float height) {
-		globalpt.y = height - globalpt.y;
+		globalpt.y = globalpt.y-height ;
 	}
 	static void SetOriginTo(Point& globalpt, const Point& newOrigin) {
 		globalpt.x = -(newOrigin.x - globalpt.x);
