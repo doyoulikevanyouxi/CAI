@@ -4,7 +4,7 @@
 #include <glfw3.h>
 #include "Shader.h"
 #include "Character.h"
-#include "PaintDevice.h"
+#include "UI/PaintDeivces/PaintDevice.h"
 #include "Controls/ContentControls/Window.h"
 #include "Application.h"
 
@@ -54,7 +54,7 @@ inline bool RenderEngine::InitGLFunction()
 
 inline bool RenderEngine::InitResources()
 {
-	squareShader = new Shader("resources/Shaders/RectVertexShader.glsl", "resources/Shaders/RectFragmentShader.glsl", "");
+	squareShader = new Shader("resources/Shaders/RectVertexShader.glsl", "resources/Shaders/RectFragmentShader.glsl", "resources/Shaders/RectGeometryShader.glsl");
 	if (!squareShader->ComplieShader()) {
 		delete squareShader;
 		squareShader = nullptr;
@@ -134,26 +134,22 @@ void RenderEngine::SetWindowSize(GLFWwindow* win, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void RenderEngine::SetWindowProjection(const Math::TransMatrix& mt)
+void RenderEngine::SetWindowProjection(const Math::mat4& mt)
 {
 	squareShader->SetMat4("projection", mt);
 	fontShader->SetMat4("projection", mt);
 	lineShader->SetMat4("projection", mt);
 }
 
-void RenderEngine::SetColorProjection(const Math::TransMatrix& mt)
+
+void RenderEngine::SetColorProjection(float mt)
 {
-	squareShader->SetMat4("projection_color", mt);
-	fontShader->SetMat4("projection_color", mt);
-	lineShader->SetMat4("projection_color", mt);
+	squareShader->SetFloat("colorResolution", mt);
+	fontShader->SetFloat("colorResolution", mt);
+	lineShader->SetFloat("colorResolution", mt);
+	
 }
 
-void RenderEngine::SetColorProjection(float* mt)
-{
-	squareShader->SetMat4("projection_color", mt);
-	fontShader->SetMat4("projection_color", mt);
-	lineShader->SetMat4("projection_color", mt);
-}
 
 void RenderEngine::SetResolution(double width, double height)
 {

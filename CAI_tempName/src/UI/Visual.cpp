@@ -2,7 +2,7 @@
 #include "Visual.h"
 #include "Application.h"
 #include "RenderEngine.h"
-#include "PaintDevice.h"
+#include "PaintDeivces/PaintDevice.h"
 #include "Draw.h"
 #include "Datas/VisualData.h"
 #include "Datas/VisualCollection.h"
@@ -137,24 +137,30 @@ void Visual::SetMaxWidth(float value)
 void Visual::SetBackground(const Draw::Brush& color)
 {
 	background.set(color);
-	vData.AreaBrush() = color;
+	vData.SetAreaBrush(color);
 }
 
 void Visual::SetBackground(const uint32_t color)
 {
 	background.set(Draw::Brush(color));
-	vData.AreaBrush() = Draw::Brush(color);
+	vData.SetAreaBrush(color);
 }
 
 void Visual::SetBorderBrush(const Draw::Brush& color)
 {
-	*(vData.borderBrush) = color;
+	vData.SetBorderBursh(color);
 }
 
 void Visual::SetVisible(const bool visible)
 {
 	this->visible.set(visible);
-	vData.visibale = visible;
+	vData.Visible() = visible;
+}
+
+void Visual::SetRadius(const float& value)
+{
+	radius.set(value);
+	vData.SetRadius(value, value, value, value);
 }
 
 void Visual::CheckSize(const Size& size) noexcept
@@ -166,22 +172,18 @@ void Visual::CheckSize(const Size& size) noexcept
 Size Visual::Measure(const Size& size) noexcept
 {
 	if (parent != nullptr) {
-		if (!parent->vData.visibale)
-			vData.visibale = false;
+		if (!parent->vData.Visible())
+			vData.Visible() = false;
 	}
-	vData.AreaSize().SetGlobalWidth(size.GlobalWidth());
-	vData.AreaSize().SetGlobalHeight(size.GlobalHeight());
-	Point tmp(size.X(), size.Y());
-	tmp.Y() += size.Height();
-	Point::TranslatTo(tmp, size.TransMatrix());
-	Point::SetToLeftBottom(tmp, size.GlobalHeight());
-	if (tmp.Y() < 0)
-		tmp.Y() = 0;
+	//设置分辨率
+	vData.AreaSize().SetResolution(size.ResolutionWidth(), size.ResolutionHeight());
+	
 	//设置裁减区域
-	vData.clipSize->setX(tmp.X());
-	vData.clipSize->setY(tmp.Y());
-	vData.clipSize->SetWidth(size.Width());
-	vData.clipSize->SetHeight(size.Height());
+	Point pt(size.X(), size.Y());
+	Point::TranslatTo(pt, size.ModelMatrix());
+	Point::SetToLeftBottom(pt,size.ResolutionHeight());
+	vData.SetClipSize(Size(pt.X(),pt.Y()-size.Height(), size.Z(), size.Width(), size.Height()));
+	
 	//未设置宽度值时，采用传递过来的大小
 	if (width.IsInvalid()) {
 		SetActualWidth(size.Width());
@@ -189,30 +191,40 @@ Size Visual::Measure(const Size& size) noexcept
 	if (height.IsInvalid()) {
 		SetActualHeight(size.Height());
 	}
-	vData.AreaSize().SetWidth(actualWidth);
-	vData.AreaSize().SetHeight(actualHeight);
+	vData.SetWH(actualWidth, actualHeight);
+	
 	//接着将根据给定的父变换矩阵来设置控件自身的变换矩阵
-	Math::SquareMatrix<4> tMatrix = {
-									1,0,0,0,
-									0,1,0,0,
-									0,0,1,0,
-									size.X(),size.Y(),0,1
+	Math::mat4 tMatrix = {
+						1,0,0,0,
+						0,1,0,0,
+						0,0,1,0,
+						(float)size.X(),(float)size.Y(),0,1
 	};
 	//如果z值未设置，那么将继承上个z值并+1
+	double z = 0;
 	if (!zIndex.IsInvalid())
-		vData.AreaSize().setZ(zIndex.get());
+		z = zIndex.get();
 	else
-		vData.AreaSize().setZ(size.Z() + 1);
-	vData.AreaSize().TransMatrix() = size.TransMatrix() * tMatrix;
-	if (zmax < vData.AreaSize().Z())
-		zmax = vData.AreaSize().Z();
+		z = size.Z() + 1;
+	vData.SetPoint(vData.AreaSize().X(), vData.AreaSize().Y(), z);
+	vData.AreaSize().ModelMatrix() = size.ModelMatrix() * tMatrix;
+	vData.AreaSize().ProjectionMatrix() = size.ProjectionMatrix();
+	if (zmax < z)
+		zmax = z;
 	//如果有边框，就将边框加入
 	if (!borderSize.IsInvalid())
 		vData.SetBorderSize(borderSize.get());
 	//初始化控件顶点数据
-	vData.InitData();
-	pDevice->UpdateData(vData.vertexData, vData.vertexColorData,vData.vertexIndexData);
-	return vData.ContentSize();
+	pDevice->UpdateData(vData.VertexData(),vData.SizeData(),vData.VertexColorData(),vData.RadiusData(),vData.BorderSizeData(),vData.BorderColorData());
+	double contentX = vData.AreaSize().X() + vData.BorderSize();
+	double contentY = vData.AreaSize().Y() + vData.BorderSize();
+	double contentWidth = vData.AreaSize().Width() - vData.BorderSize() * 2;
+	double contentHeight = vData.AreaSize().Height() - vData.BorderSize() * 2;
+	Size contentSize(vData.AreaSize());
+	contentSize.SetX(contentX);
+	contentSize.SetY(contentY);
+	contentSize.SetWH(contentWidth, contentHeight);
+	return contentSize;
 }
 
 void Visual::Aeasure(const Size& size) noexcept

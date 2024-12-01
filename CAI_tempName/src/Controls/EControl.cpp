@@ -2,7 +2,7 @@
 #include "EControl.h"
 #include "Datas/ControlStyle.h"
 #include "Datas/Coordinate.h"
-
+#include "UI/PaintDeivces/PaintDevice.h"
 Control::Control() noexcept 
 {
 	horizontAlalignment.set(Center);
@@ -24,8 +24,8 @@ void Control::setMargin(float left, float top, float right, float bottom) noexce
 	Size& size = vData.AreaSize();
 	float x = size.X();
 	float y = size.Y();
-	size.setX(x+left-right);
-	size.setY(y+top-bottom);
+	size.SetX(x+left-right);
+	size.SetY(y+top-bottom);
 	marginL.set(left);
 	marginR.set(right);
 	marginT.set(top);
@@ -93,8 +93,8 @@ Size Control::Measure(const Size& size) noexcept
 	Size& sz = vData.AreaSize();
 	float xz = sz.X();
 	float yz = sz.Y();
-	sz.setX(xz + x);
-	sz.setY(yz + y);
+	vData.SetPoint(xz + x, yz + y, sz.Z());
+	pDevice->UpdateVertex(vData.VertexData());
 	return sz;
 }
 

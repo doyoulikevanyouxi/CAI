@@ -19,7 +19,7 @@ public:
 protected:
 	VisualCollection childs;
 protected:
-	Math::TransMatrix transMatrix;
+	Math::mat4 transMatrix;
 	/// <summary>
 	/// xÔöÁ¿
 	/// </summary>

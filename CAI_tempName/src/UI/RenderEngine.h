@@ -44,10 +44,9 @@ public:
 	//设置窗口大小
 	void SetWindowSize(GLFWwindow* win, int width, int height);
 	//设置窗口的投射矩阵
-	void SetWindowProjection(const Math::TransMatrix& mt);
+	void SetWindowProjection(const Math::mat4& mt);
 	//设置颜色的投射矩阵
-	void SetColorProjection(const Math::TransMatrix& mt);
-	void SetColorProjection(float* mt);
+	void SetColorProjection(float mt);
 	void SetResolution(double width,double height);
 private:
 	Window* FindWindowByHD(GLFWwindow* HD);

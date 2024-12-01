@@ -32,12 +32,10 @@ public:
 	inline Visual* GetVisualParent() { return parent; }
 	//获取可视化树---可视化子元素几何
 	inline VisualCollection* GetVisulTree() { return visualTree; }
-	inline Size& GetGlobalAreaSize() const { return vData.GlobalAreaSize(); }
 public:
 	void operator=(const Visual& other);
 public:
 	//以下为获取或设置元素外观：大小，边框，颜色等
-	bool* GetVisible() { return &(vData.visibale); }
 	virtual void SetHeight(float value);
 	virtual void SetWidth(float value);
 	virtual void SetZindex(float value);
@@ -51,12 +49,14 @@ public:
 	void SetBackground(const uint32_t color);
 	void SetBorderBrush(const Draw::Brush& color);
 	void SetVisible(const bool visible);
+	void SetRadius(const float& value);
 	inline float GetActualWidth() const noexcept { return actualWidth; }
 	inline float GetActualHeight() const noexcept { return actualHeight; }
 public:
 	//为自己测量控件大小和位置
 	void CheckSize(const Size& size) noexcept;
 	Size& GetSize();
+	bool* GetVisible() { return &(vData.Visible()); }
 protected:
 	//测量自身的元素位置以及大小，并初始化绘制数据
 	virtual Size Measure(const Size& size) noexcept;
@@ -82,6 +82,7 @@ public:
 	DependencyProperty<float> shadow{ "Border-Size" };
 	DependencyProperty<float> fontSize{ "FontSize" };
 	DependencyProperty<bool> visible{ "Visible" };
+	DependencyProperty<float> radius{ "Radius" };
 
 public:
 	//是否是焦点

@@ -137,7 +137,6 @@ namespace Math {
 	/// <typeparam name="m">m为方阵的行</typeparam>
 	template<int m>
 	using SquareMatrix = Matrix<m, m>;
-	using TransMatrix = Matrix<4, 4>;
 	/// <summary>
 	/// 具有3个分量的向量
 	/// </summary>
@@ -148,4 +147,5 @@ namespace Math {
 	using vec4 = Matrix<4, 1>;
 	using vec4_t = Matrix<1, 4>;
 	using vec2 = Matrix<2, 1>;
+	using mat4 = Matrix<4, 4>;
 }

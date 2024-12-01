@@ -1,12 +1,14 @@
+#version 330 core
 in vec2 TexCoords;
 out vec4 color;
 
 uniform sampler2D text;
 uniform vec4 textColor;
-uniform mat4 projection_color; //颜色投影矩阵
+uniform float colorResolution; //颜色分辨率
+
 void main()
 {   
-    vec4 sampled =  vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
-    vec4 tColor = projection_color * textColor;
+    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
+    vec4 tColor = textColor / colorResolution;
     color = tColor * sampled;
 }

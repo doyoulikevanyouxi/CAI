@@ -78,7 +78,7 @@
     <ClCompile Include="src\Controls\PanelControls\Grid.cpp">
       <Filter>源文件\Contorls</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\PaintDevice.cpp">
+    <ClCompile Include="src\UI\PaintDeivces\PaintDevice.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Shader.cpp">
@@ -212,7 +212,7 @@
     <ClInclude Include="src\Controls\EControl.h">
       <Filter>头文件\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\PaintDevice.h">
+    <ClInclude Include="src\UI\PaintDeivces\PaintDevice.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\RenderEngine.h">
@@ -346,10 +346,10 @@
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
-    <None Include="resources\Shaders\RectWithCornerFragment.glsl" />
     <None Include="resources\Shaders\LineFragmentShader.glsl" />
     <None Include="resources\Shaders\LineVertexShader.glsl" />
     <None Include="resources\Shaders\LineGeometryShader.glsl" />
+    <None Include="resources\Shaders\RectGeometryShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\fonts\Source_Han_Serif_SC_Light_Light.otf">

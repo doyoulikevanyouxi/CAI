@@ -26,11 +26,20 @@ public:
 	~PaintDevice() noexcept;
 public:
 	//更新数据（所有数据，顶点，颜色，索引）
-	void UpdateData(const double* vertexData, const double* ColorData, const unsigned int* indexData);
+	void UpdateData(const double* vertexData, const double* size, const double* color, const double* radius, const double* borderSize, const double* borderColor);
 	//更新顶点数据
-	void UpdataVertex(const double* data);
+	void UpdateVertex(const double* data);
+	//更新矩形大小
+	void UpdateSize(const double* size);
+
 	//更新顶点颜色数据
-	void UpdataColor(const double* data);
+	void UpdateColor(const double* data);
+	//更新角半径
+	void UpdateRadius(const double* data);
+	//更新边框大小
+	void UpdateBorderSize(const double* data);
+	//更新边框颜色
+	void UpdateBoderColor(const double* data);
 	//画线
 	void DrawLine(const Size& size,const LineGeometry* data);
 	//绘制文字
@@ -47,8 +56,7 @@ private:
 	unsigned int VAO;
 	//顶点缓冲对象
 	unsigned int VBO;
-	//索引缓冲对象
-	unsigned int EBO;
+	
 	unsigned int lineVAO;
 	unsigned int lineVBO;
 

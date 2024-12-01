@@ -4,6 +4,7 @@
 #include "UI/Application.h"
 Window::Window() noexcept :winHd(nullptr)
 {
+	vData.invalid = true;
 }
 
 Window::Window(int width, int height) noexcept:Window()
@@ -28,37 +29,33 @@ bool Window::Init()
 	float DPH = 1 / height.get() * 2;
 	float DPW = 1 / width.get() * 2;
 	//投影矩阵
-	Math::SquareMatrix<4> projection = {
+	Math::mat4 projection = {
 		DPW,0,0,0,
 		0,-DPH,0,0,
 		0,0,1,0,
 		-1,1,0,1
 	};
-	//颜色投影矩阵
-	float colorProjection[] = {
-		1.f / 255,0,0,0,
-		0,1.f / 255,0,0,
-		0,0,1.f / 255,0,
-		0,0,0,1.f / 255
-	};
+	
 	//模型矩阵
-	Math::TransMatrix mt = {
+	Math::mat4 mt = {
 		1,0,0,0,
 		0,1,0,0,
 		0,0,1,0,
 		0,0,0,1
 	};
 
+
 	Size sizeT(0, 0, 0, width.get(), height.get());
-	sizeT.SetGlobalHeight(height.get());
-	sizeT.SetGlobalWidth(width.get());
+	sizeT.SetResolution(width.get(), height.get());
+	
 	this->size = sizeT;
-	size.TransMatrix() = mt;
+	size.ModelMatrix() = mt;
+	//size.ProjectionMatrix() = projection;
 	CheckSize(size);
 	projection[2][2] = -1.f / zmax;
 	projection[3][2] = 1;
-	Application::app.renderEngine->SetColorProjection(colorProjection);
 	Application::app.renderEngine->SetWindowProjection(projection);
+	Application::app.renderEngine->SetColorProjection(255);
 	Application::app.renderEngine->SetResolution(width.get(),height.get());
 	return true;
 }

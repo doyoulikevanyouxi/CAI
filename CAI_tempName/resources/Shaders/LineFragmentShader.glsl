@@ -3,8 +3,10 @@
 in vec4 vertexColor;
 //使用该着色器我们需要一个几何着色器，因为传入的顶点是两个顶点，我们需要将其变成矩形,利用几何着色器增加顶点输出
 out vec4 fragColor;
-//分辨率
+//线类型
+uniform int line_type;
 uniform mat4 projection_color; //颜色投影矩阵
+//分辨率
 uniform vec2 iResolution;
 //a表示该函数的x坐标，b表示y坐标，thickness表示线的宽度，edge_thickness表示平滑区间
 //该函数的a,b其实并不是坐标，而是告诉在a的哪些范围内的b可以绘制，所以线的定义在函数外定义

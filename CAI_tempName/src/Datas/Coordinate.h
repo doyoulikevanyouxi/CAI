@@ -11,7 +11,7 @@ public:
 	Point(const Point& p) noexcept { x = p.x; y = p.y; }
 	~Point() noexcept {}
 public:
-	static void TranslatTo(Point& pt, const Math::TransMatrix& trans) {
+	static void TranslatTo(Point& pt, const Math::mat4& trans) {
 		Math::vec4 tmp = { pt.x,pt.y,1,1 };
 		Math::vec4 newValue = trans * tmp;
 		pt.x = newValue[0][0];
@@ -41,92 +41,73 @@ private:
 
 class Size : public Object {
 public:
-	Size() noexcept : width(0.f), height(0.f),globalWidth(0.f),globalHeight(0.f), x(0.f), y(0.f), z(0.f) {
-		invalid = true;
-		sizeCoord[0][0] = x;
-		sizeCoord[1][0] = y;
-		sizeCoord[2][0] = 1;
-		sizeCoord[3][0] = 1;
-	}
-	Size(const Point& point, float width, float height) noexcept :width(width), height(height), globalWidth(0.f), globalHeight(0.f), x(point.X()), y(point.Y()),z(0.f){
-		sizeCoord[0][0] = x;
-		sizeCoord[1][0] = y;
-		sizeCoord[2][0] = 1;
-		sizeCoord[3][0] = 1;
-	}
-	Size(float x, float y, float z,float width, float height) noexcept : width(width), height(height), globalWidth(0.f), globalHeight(0.f), x(x), y(y),z(z){
-		sizeCoord[0][0] = x;
-		sizeCoord[1][0] = y;
-		sizeCoord[2][0] = z;
-		sizeCoord[3][0] = 1;
-	}
+	Size()noexcept :resolutionWidth(0.0),resolutionHeight(0.0),x(0.0), y(0.0), z(0.0), height(0.0), width(0.0) {}
+	Size(const double& x, const double& y, const double& z, const double& width, const double& height) noexcept :resolutionWidth(0.0), resolutionHeight(0.0),x(x), y(y), z(z), height(height), width(width) {}
+	~Size() = default;
 	Size(const Size& other) noexcept {
-		width = other.width;
-		height = other.height;
-		globalHeight = other.globalHeight;
-		globalWidth = other.globalWidth;
-		x = other.x;
-		y = other.y;
-		z = other.z;
-		mode = other.mode;
-		sizeCoord = other.sizeCoord;
+		*this = other;
 	}
 public:
-	void setX(float value) { x = value; sizeCoord[0][0] = x; }
-	void setY(float value) { y = value; sizeCoord[1][0] = y; }
-	void setZ(float value) { z = value; sizeCoord[2][0] = z; }
-	void SetGlobalWidth(float value)  {  globalWidth = value; }
-	void SetGlobalHeight(float value)  {  globalHeight = value; }
-	void setCoordinat(float x, float y) { this->x = x; this->y = y; sizeCoord[0][0] = x; sizeCoord[1][0] = y; }
-	void setCoordinat(float x, float y, float z) { this->x = x; this->y = y;  this->z = z; sizeCoord[0][0] = x; sizeCoord[1][0] = y; sizeCoord[2][0] = z; }
-	void setCoordinat(Math::vec4& vec) { 
-		sizeCoord = vec;
-		this->x = sizeCoord[0][0];
-		this->y = sizeCoord[1][0];
-		this->z = sizeCoord[2][0];
-	}
-	float X() const { return x; }
-	float Y() const { return y; }
-	float Z() const { return z; }
-	float GlobalWidth() const{ return globalWidth; }
-	float GlobalHeight() const { return globalHeight; }
-	float Width() const { return width; }
-	float Height() const { return height; }
-	Math::TransMatrix& TransMatrix() const { return mode; }
-	Math::vec4& Coordinate() const{ return sizeCoord; }
-	void SetWidth(const float value) { width = value; }
-	void SetHeight(const float value) { height = value; }
-	bool PointIn(const float& x, const float& y) const{
+	
+
+	inline double& X() { return x; }
+	inline double& Y() { return y; }
+	inline double& Z() { return z; }
+	inline double& Width() { return width; }
+	inline double& Height() { return height; }
+	inline double& ResolutionWidth() { return resolutionWidth; }
+	inline double& ResolutionHeight() { return resolutionHeight; }
+	inline Math::mat4& ModelMatrix() { return mode; }
+	inline Math::mat4& ProjectionMatrix() { return projection; }
+
+	inline const double& X() const { return x; }
+	inline const double& Y() const { return y; }
+	inline const double& Z() const { return z; }
+	inline const double& Width()  const { return width; }
+	inline const double& Height() const { return height; }
+	inline const double& ResolutionWidth() const { return resolutionWidth; }
+	inline const double& ResolutionHeight() const { return resolutionHeight; }
+	inline const  Math::mat4& ModelMatrix() const { return mode; }
+	inline const Math::mat4& ProjectionMatrix() const { return projection; }
+
+	inline void SetX(const double& value) { x = value; }
+	inline void SetY(const double& value) { y = value; }
+	inline void SetZ(const double& value) { z = value; }
+	inline void SetXYZ(const double& x, const double& y, const double& z) { this->x = x; this->y = y; this->z = z; }
+	inline void SetWidth(const double& value) { width = value; }
+	inline void SetHeight(const double& value) { height = value; }
+	inline void SetWH(const double& width, const double& height) { this->width = width; this->height = height; }
+	inline void SetResolution(const double& x, const double& y) { resolutionWidth = x; resolutionHeight = y; }
+	bool PointIn(const float& x, const float& y) const {
 		return (x >= this->x && x <= this->x + width) && (y >= this->y && y <= this->y + height);
 	}
 public:
 	Size& operator=(const Size& other) {
+		resolutionWidth = other.resolutionWidth;
+		resolutionHeight = other.resolutionHeight;
 		width = other.width;
 		height = other.height;
-		globalHeight = other.globalHeight;
-		globalWidth = other.globalWidth;
 		x = other.x;
 		y = other.y;
 		z = other.z;
 		mode = other.mode;
-		sizeCoord = other.sizeCoord;
+		projection = other.projection;
 		return *this;
 	}
 private:
-	friend class VisualData;
-	//可视化的空间宽度
-	float width;
-	//可视化的空间高度
-	float height;
-	float globalWidth;
-	float globalHeight;
+	double resolutionWidth;
+	double resolutionHeight;
 	//局部坐标X，空间左上角
-	float x;
+	double x;
 	//局部坐标Y，空间左上角
-	float y;
-	float z;
+	double y;
+	double z;
+	//可视化的空间宽度
+	double width;
+	//可视化的空间高度
+	double height;
 	//模型矩阵--用于将自身的坐标转换成全局坐标
-	mutable Math::TransMatrix mode;
-	//由x,y,z组成的顶点数据----图形左上角的顶点数据
-	mutable Math::vec4 sizeCoord;
+	Math::mat4 mode;
+	//投影矩阵
+	Math::mat4 projection;
 };

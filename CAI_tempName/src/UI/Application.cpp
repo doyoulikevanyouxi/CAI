@@ -69,7 +69,9 @@ void Application::OnTextInput(unsigned int code)
 
 void Application::MousePositionHandle(MouseMoveEvent& e, UIElement*& element, size_t mouseOverElemntIndex)
 {
-	const Size& size = element->vData.GlobalAreaSize();
+	Point pt(element->vData.AreaSize().X(), element->vData.AreaSize().Y());
+	Point::TranslatTo(pt, element->vData.AreaSize().ModelMatrix());
+	Size size(pt.X(),pt.Y(), element->vData.AreaSize().Z(), element->vData.AreaSize().Width(), element->vData.AreaSize().Height());
 	
 	//如果控件不可见就返回
 	/*if (element) {
@@ -275,6 +277,7 @@ void Application::RaisePreMouseUpEvent(int button, int mods)
 
 void Application::RaiseMouseDownEvent(int button, int mods)
 {
+	
 	switch (button)
 	{
 	case MOUSE_LEFT_BUTTON:

@@ -4,13 +4,13 @@
 #include"Datas/Collection.h"
 #include"Datas/coordinate.h"
 #include<glad/glad.h>
-#include"PaintDevice.h"
+#include"PaintDeivces/PaintDevice.h"
 #include"Shader.h"
 #include"RenderEngine.h"
 #include "Events/Events.h"
 UIElement::UIElement(UIElement* parent) noexcept :Visual(parent), style(new ControlTemplate()), parent(parent)
 {
-	
+
 }
 
 UIElement::UIElement(const UIElement& other) noexcept :UIElement(nullptr)
@@ -103,38 +103,38 @@ void UIElement::OnEvent(EventAbstract& e)
 	//Ìí¼Ó¹ýÂË£¬¹ýÂËµô±ÜÃâ¼ÌÐø´«µÝ
 	/*if (eventDispatcher.filter(e))
 		return;*/
-	/*switch (e.GetEventPreType())
-	{
-	case	 EventType::InputEvent:
-		OnTextInput((InputEvent&)e);
-		break;
-	default:
-		break;
-	}
-	switch (e.GetEventType())
-	{
-	default:
-		break;
-	}
-	if (e.handled)
-		return;
-	switch (e.sType)
-	{
-	case EventSpreadType::Tunnel:
-		for (auto& child : style->visualTree) {
-			child->OnEvent(e);
-			if (e.handled)
-				return;
+		/*switch (e.GetEventPreType())
+		{
+		case	 EventType::InputEvent:
+			OnTextInput((InputEvent&)e);
+			break;
+		default:
+			break;
 		}
-		break;
-	case EventSpreadType::Bubble:
-		parent->OnEvent(e);
-		break;
-	case EventSpreadType::Direct:
-		break;
-	default:
-		break;
-	}*/
+		switch (e.GetEventType())
+		{
+		default:
+			break;
+		}
+		if (e.handled)
+			return;
+		switch (e.sType)
+		{
+		case EventSpreadType::Tunnel:
+			for (auto& child : style->visualTree) {
+				child->OnEvent(e);
+				if (e.handled)
+					return;
+			}
+			break;
+		case EventSpreadType::Bubble:
+			parent->OnEvent(e);
+			break;
+		case EventSpreadType::Direct:
+			break;
+		default:
+			break;
+		}*/
 }
 
 void UIElement::RaiseEvent(EventAbstract& e)

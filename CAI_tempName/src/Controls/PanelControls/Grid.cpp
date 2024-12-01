@@ -258,9 +258,10 @@ void Grid::Aeasure(const Size& size) noexcept
 			x = columDeinitions[C].x;
 		}
 		Size tmp(x, y,size.Z(), sizeW, sizeH);
-		tmp.SetGlobalHeight(size.GlobalHeight());
-		tmp.SetGlobalWidth(size.GlobalWidth());
-		tmp.TransMatrix() = vData.AreaSize().TransMatrix();
+		tmp.SetResolution(size.ResolutionWidth(), size.ResolutionHeight());
+		
+		tmp.ModelMatrix() = vData.AreaSize().ModelMatrix();
+		tmp.ProjectionMatrix() = vData.AreaSize().ProjectionMatrix();
 		child->CheckSize(tmp);
 	}
 }

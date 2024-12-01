@@ -1,97 +1,59 @@
 #pragma once
 #include "Object.h"
-class Size;
-namespace Draw {
-	class Brush;
-}
+#include "Coordinate.h"
+#include "UI/Draw.h"
+#include "Mathmatics/Math.hpp"
 /// <summary>
 /// 包含了一个控件的所有绘制数据
 /// </summary>
-class VisualData final : public Object {
-	friend class Visual;
-	friend class PaintDevice;
+class VisualData:public Object {
 public:
-	VisualData() noexcept;
-	VisualData(const VisualData& other) noexcept;
-	//VisualData(VisualData&& other) noexcept;
-	~VisualData()	noexcept;
-public:
-	//返回元素的size
-	inline Size& AreaSize() const noexcept { return *areaSize; }
-	//返回元素允许绘制的范围size
-	inline Size& ClipSize() const noexcept { return *clipSize; }
-	//返回元素内容的size
-	inline Size& ContentSize() const noexcept { return *contentSize; }
-	//其实是分辨率
-	inline Size& GlobalAreaSize() const noexcept { return *globalAreaSize; }
-	//返回元素的笔刷
-	inline Draw::Brush& AreaBrush() const noexcept { return *areaBrush; }
-	inline unsigned int VertexSize() const noexcept { return vertexSize; }
-	inline unsigned int IndexSize() const noexcept { return indexSize; }
-	//设置边框大小
-	void SetBorderSize(double value) noexcept;
-	double* VertexData() const noexcept;
-	//初始化渲染数据
-	void InitData();
-	unsigned int* VertexIndexData() const noexcept;
+	inline  Size& AreaSize() { return areaSize; }
+	inline  Size& ClipSize() { return clipSize; }
+	inline bool& Visible() { return visible; }
+	inline double& BorderSize() { return borderSize; }
+	inline const double* VertexData() const { return &vertexPoint[0]; }
+	inline const double* SizeData() const { return &rectSize[0]; }
+	inline const double* VertexColorData() const { return &vertexColor[0]; }
+	inline const double* RadiusData() const { return &radius[0]; }
+	inline const double* BorderSizeData() const { return &borderSize; }
+	inline const double* BorderColorData() const { return &borderColor[0]; }
+
+	inline const Size& AreaSize() const { return areaSize; }
+	inline const Size& ClipSize() const { return clipSize; }
+	inline const bool& Visuble() const { return visible; }
+	inline  const double& BorderSize() const { return borderSize; }
 
 public:
-	VisualData& operator=(const VisualData& other) noexcept;
-
-	//交换两个对象的资源太麻烦了，暂时不写移动赋值
-	/*VisualData& operator=(VisualData&& other) noexcept {
-		areaSize = other.areaSize;
-		areaBrush = other.areaBrush;
-		vertexData = other.vertexData;
-		vertexStride = other.vertexStride;
-		colorStride = other.colorStride;
-		vertexSize = other.vertexSize;
-		indexSize = other.indexSize;
-		invalid = other.invalid;
-		other.areaSize = nullptr;
-		other.areaBrush = nullptr;
-		other.vertexData = nullptr;
-		return *this;
-	}*/
-public:
-	bool isDataHasBeenPushToGpu;
-	bool hasBorder;
-	bool needClip;
+	void SetPoint(const double& x, const double& y, const double& z);
+	void SetWH(const double& width, const double& height);
+	void SetAreaBrush(const Draw::Brush& brush);
+	void SetBorderBursh(const Draw::Brush& brush);
+	void SetBorderSize(const double& value);
+	void SetClipSize(const Size& size);
+	void SetRadius(const double& r1, const double& r2, const double& r3, const double& r4);
 private:
-	//是否可见
-	bool visibale = true;
-	//绘制区域大小
-	Size* areaSize;
+	inline void UpdateVertexPoint();
+	inline void UpdateRectSize();
+	inline void UpdateVertexColor();
+	inline void UpdateBorderColor();
+private:
+	//控件区域---包含控件的左上角坐标，控件的大小，控件的模型矩阵
+	Size areaSize;
+	//裁剪区域---该区域设置控件Opengl渲染区域，超出区域的地方不会渲染，也不会清除已近渲染的像素
+	Size clipSize;
+	Draw::Brush areaBrush;
+	Draw::Brush borderBrush;
+	bool visible = true;
+	//以下内容用于将控件区域数据绑定到GPU中
 	//边框大小
 	double borderSize;
-	//除去边框的内容大小---所有子控件将在此区域内绘制
-	Size* contentSize;
-	//裁减空间---只绘制该区域的内容，超出该区域的内容将不会处理
-	Size* clipSize;
-	Size* globalAreaSize;
-	//绘制区域颜色刷
-	Draw::Brush* areaBrush;
-	Draw::Brush* borderBrush;
-	//绘制顶点数据
-	double* vertexData;
-	//顶点颜数据
-	double* vertexColorData;
-	//边框顶点数据
-	double* borderVertexData;
-	//边框顶点颜色数据
-	double* borderVertexColorData;
-	//纹理索引数据
-	double* textureIndexData;
-	//顶点索引数据
-	unsigned int* vertexIndexData;
-	//边框的绘制数据--实际上边框的绘制数据是控件整个Size，本程序采用模板测试来丢弃内容区域的绘制
-	//边框的绘制可以衍生控件阴影的绘制---但要注意文字这个东西，因为采用模板来丢弃会导致文字也能够产生阴影效果，如果不想文字也有阴影那么需要特殊处理文字渲染这块
-	//顶点数据个数
-	unsigned int vertexSize;
-	//索引数据个数
-	unsigned int indexSize;
-	//content的纹理ID
-	unsigned int texture;
-	//边框的纹理ID
-	unsigned int textureBorder;
+	//顶点数据
+	std::array<double, 3> vertexPoint;
+	std::array<double, 2> rectSize;
+	//顶点颜色
+	std::array<double, 4> vertexColor;
+	std::array<double, 4> radius;
+	//边框颜色
+	std::array<double, 4> borderColor;
 };

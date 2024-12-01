@@ -111,7 +111,7 @@
     <ClCompile Include="src\Controls\EControl.cpp" />
     <ClCompile Include="src\Controls\PanelControls\Grid.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\UI\PaintDevice.cpp" />
+    <ClCompile Include="src\UI\PaintDeivces\PaintDevice.cpp" />
     <ClCompile Include="src\Controls\PanelControls\Panel.cpp" />
     <ClCompile Include="src\UI\RenderEngine.cpp" />
     <ClCompile Include="src\UI\Shader.cpp" />
@@ -165,7 +165,7 @@
     <ClInclude Include="src\MainWindow.hpp" />
     <ClInclude Include="src\Mathmatics\Math.hpp" />
     <ClInclude Include="src\Object.h" />
-    <ClInclude Include="src\UI\PaintDevice.h" />
+    <ClInclude Include="src\UI\PaintDeivces\PaintDevice.h" />
     <ClInclude Include="src\Controls\PanelControls\Panel.h" />
     <ClInclude Include="src\Datas\Property.hpp" />
     <ClInclude Include="src\UI\RenderEngine.h" />
@@ -188,8 +188,8 @@
     <None Include="resources\Shaders\LineGeometryShader.glsl" />
     <None Include="resources\Shaders\LineVertexShader.glsl" />
     <None Include="resources\Shaders\RectFragmentShader.glsl" />
+    <None Include="resources\Shaders\RectGeometryShader.glsl" />
     <None Include="resources\Shaders\RectVertexShader.glsl" />
-    <None Include="resources\Shaders\RectWithCornerFragment.glsl" />
     <None Include="resources\Shaders\TextVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #include "caipch.h"
 #include "TextBlock.h"
-#include "UI/PaintDevice.h"
+#include "UI/PaintDeivces/PaintDevice.h"
 #include "Datas/ControlStyle.h"
 #include "UI/Character.h"
 TextBlock::TextBlock() noexcept
@@ -28,5 +28,5 @@ void TextBlock::Render() noexcept
 	UIElement::Render();
 	if (text.get().empty())
 		return;
-	pDevice->DrawText(text.get(), vData.ContentSize(), { fontSize.get(),fontBrush.get(),overranging.get() });
+	pDevice->DrawText(text.get(), vData.AreaSize(), { fontSize.get(),fontBrush.get(),overranging.get() });
 }
