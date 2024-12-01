@@ -47,7 +47,7 @@ public:
 	void SetWindowProjection(const Math::mat4& mt);
 	//设置颜色的投射矩阵
 	void SetColorProjection(float mt);
-	void SetResolution(double width,double height);
+	void SetResolution(float width,float height);
 private:
 	Window* FindWindowByHD(GLFWwindow* HD);
 private:

@@ -1,7 +1,7 @@
  #include "caipch.h"
 #include "Path.h"
 
-void Path::AddPoint(const double& x, const double& y)
+void Path::AddPoint(const float& x, const float& y)
 {
 	if (y > height.get())
 		height.set(y);

@@ -1,13 +1,13 @@
 #include "caipch.h"
 #include "VisualData.h"
 
-void VisualData::SetPoint(const double& x, const double& y, const double& z)
+void VisualData::SetPoint(const float& x, const float& y, const float& z)
 {	
 	areaSize.SetXYZ(x, y, z);
 	UpdateVertexPoint();
 }
 
-void VisualData::SetWH(const double& width, const double& height)
+void VisualData::SetWH(const float& width, const float& height)
 {
 	areaSize.SetWH(width, height);
 	UpdateRectSize();
@@ -25,7 +25,7 @@ void VisualData::SetBorderBursh(const Draw::Brush& brush)
 	UpdateBorderColor();
 }
 
-void VisualData::SetBorderSize(const double& value)
+void VisualData::SetBorderSize(const float& value)
 {
 	borderSize = value;
 }
@@ -35,7 +35,7 @@ void VisualData::SetClipSize(const Size& size)
 	clipSize = size;
 }
 
-void VisualData::SetRadius(const double& r1, const double& r2, const double& r3, const double& r4)
+void VisualData::SetRadius(const float& r1, const float& r2, const float& r3, const float& r4)
 {
 	radius[0] = r1;
 	radius[1] = r2;

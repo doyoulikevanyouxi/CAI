@@ -11,27 +11,27 @@ public:
 	inline  Size& AreaSize() { return areaSize; }
 	inline  Size& ClipSize() { return clipSize; }
 	inline bool& Visible() { return visible; }
-	inline double& BorderSize() { return borderSize; }
-	inline const double* VertexData() const { return &vertexPoint[0]; }
-	inline const double* SizeData() const { return &rectSize[0]; }
-	inline const double* VertexColorData() const { return &vertexColor[0]; }
-	inline const double* RadiusData() const { return &radius[0]; }
-	inline const double* BorderSizeData() const { return &borderSize; }
-	inline const double* BorderColorData() const { return &borderColor[0]; }
+	inline float& BorderSize() { return borderSize; }
+	inline const float* VertexData() const { return &vertexPoint[0]; }
+	inline const float* SizeData() const { return &rectSize[0]; }
+	inline const float* VertexColorData() const { return &vertexColor[0]; }
+	inline const float* RadiusData() const { return &radius[0]; }
+	inline const float* BorderSizeData() const { return &borderSize; }
+	inline const float* BorderColorData() const { return &borderColor[0]; }
 
 	inline const Size& AreaSize() const { return areaSize; }
 	inline const Size& ClipSize() const { return clipSize; }
 	inline const bool& Visuble() const { return visible; }
-	inline  const double& BorderSize() const { return borderSize; }
+	inline  const float& BorderSize() const { return borderSize; }
 
 public:
-	void SetPoint(const double& x, const double& y, const double& z);
-	void SetWH(const double& width, const double& height);
+	void SetPoint(const float& x, const float& y, const float& z);
+	void SetWH(const float& width, const float& height);
 	void SetAreaBrush(const Draw::Brush& brush);
 	void SetBorderBursh(const Draw::Brush& brush);
-	void SetBorderSize(const double& value);
+	void SetBorderSize(const float& value);
 	void SetClipSize(const Size& size);
-	void SetRadius(const double& r1, const double& r2, const double& r3, const double& r4);
+	void SetRadius(const float& r1, const float& r2, const float& r3, const float& r4);
 private:
 	inline void UpdateVertexPoint();
 	inline void UpdateRectSize();
@@ -47,13 +47,13 @@ private:
 	bool visible = true;
 	//以下内容用于将控件区域数据绑定到GPU中
 	//边框大小
-	double borderSize;
+	float borderSize;
 	//顶点数据
-	std::array<double, 3> vertexPoint;
-	std::array<double, 2> rectSize;
+	std::array<float, 3> vertexPoint;
+	std::array<float, 2> rectSize;
 	//顶点颜色
-	std::array<double, 4> vertexColor;
-	std::array<double, 4> radius;
+	std::array<float, 4> vertexColor;
+	std::array<float, 4> radius;
 	//边框颜色
-	std::array<double, 4> borderColor;
+	std::array<float, 4> borderColor;
 };

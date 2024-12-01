@@ -93,6 +93,7 @@ void Visual::SetZindex(float value)
 void Visual::SetBorderSize(float value)
 {
 	borderSize.set(value);
+	vData.SetBorderSize(value);
 }
 
 void Visual::SetWidthAndHeight(float width, float height)
@@ -201,7 +202,7 @@ Size Visual::Measure(const Size& size) noexcept
 						(float)size.X(),(float)size.Y(),0,1
 	};
 	//如果z值未设置，那么将继承上个z值并+1
-	double z = 0;
+	float z = 0;
 	if (!zIndex.IsInvalid())
 		z = zIndex.get();
 	else
@@ -212,14 +213,15 @@ Size Visual::Measure(const Size& size) noexcept
 	if (zmax < z)
 		zmax = z;
 	//如果有边框，就将边框加入
-	if (!borderSize.IsInvalid())
+	/*if (!borderSize.IsInvalid()) {
 		vData.SetBorderSize(borderSize.get());
+	}*/
 	//初始化控件顶点数据
 	pDevice->UpdateData(vData.VertexData(),vData.SizeData(),vData.VertexColorData(),vData.RadiusData(),vData.BorderSizeData(),vData.BorderColorData());
-	double contentX = vData.AreaSize().X() + vData.BorderSize();
-	double contentY = vData.AreaSize().Y() + vData.BorderSize();
-	double contentWidth = vData.AreaSize().Width() - vData.BorderSize() * 2;
-	double contentHeight = vData.AreaSize().Height() - vData.BorderSize() * 2;
+	float contentX = vData.AreaSize().X() + vData.BorderSize();
+	float contentY = vData.AreaSize().Y() + vData.BorderSize();
+	float contentWidth = vData.AreaSize().Width() - vData.BorderSize() * 2;
+	float contentHeight = vData.AreaSize().Height() - vData.BorderSize() * 2;
 	Size contentSize(vData.AreaSize());
 	contentSize.SetX(contentX);
 	contentSize.SetY(contentY);

@@ -26,20 +26,20 @@ public:
 	~PaintDevice() noexcept;
 public:
 	//更新数据（所有数据，顶点，颜色，索引）
-	void UpdateData(const double* vertexData, const double* size, const double* color, const double* radius, const double* borderSize, const double* borderColor);
+	void UpdateData(const float* vertexData, const float* size, const float* color, const float* radius, const float* borderSize, const float* borderColor);
 	//更新顶点数据
-	void UpdateVertex(const double* data);
+	void UpdateVertex(const float* data);
 	//更新矩形大小
-	void UpdateSize(const double* size);
+	void UpdateSize(const float* size);
 
 	//更新顶点颜色数据
-	void UpdateColor(const double* data);
+	void UpdateColor(const float* data);
 	//更新角半径
-	void UpdateRadius(const double* data);
+	void UpdateRadius(const float* data);
 	//更新边框大小
-	void UpdateBorderSize(const double* data);
+	void UpdateBorderSize(const float* data);
 	//更新边框颜色
-	void UpdateBoderColor(const double* data);
+	void UpdateBoderColor(const float* data);
 	//画线
 	void DrawLine(const Size& size,const LineGeometry* data);
 	//绘制文字

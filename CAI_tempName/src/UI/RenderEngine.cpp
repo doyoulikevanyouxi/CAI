@@ -151,7 +151,7 @@ void RenderEngine::SetColorProjection(float mt)
 }
 
 
-void RenderEngine::SetResolution(double width, double height)
+void RenderEngine::SetResolution(float width, float height)
 {
 	
 	squareShader->SetVec2("iResolution", width,height);

@@ -4,7 +4,7 @@
 class Path : public Shape
 {
 public:
-	void AddPoint(const double& x,const double& y);
+	void AddPoint(const float& x,const float& y);
 private:
 	LineGeometry lineGeometry;
 };

@@ -16,6 +16,8 @@ out VS_OUT{
 	vec4 rectColor;
 	vec4 rectRadius;
 	vec2 rectSize;
+	float border_size;
+	vec4 border_color;
 }vs_out;
  
 void main(){
@@ -23,4 +25,6 @@ void main(){
 	vs_out.rectSize = size / iResolution*2.0;
 	vs_out.rectColor = color / colorResolution;
 	vs_out.rectRadius = conerRadius /iResolution.x*2.0;
+	vs_out.border_size = borderSize / iResolution.x * 2.0;
+	vs_out.border_color = borderColor / colorResolution;
 }

@@ -49,7 +49,7 @@ public:
 		txtbox->storybord.AddAnimation(animate);
 		txtbox->BeginAnimation();*/
 		txtbox->SetBorderSize(10);
-		txtbox->SetBorderBrush(0xffffff00);
+		txtbox->SetBorderBrush(0xffff00ff);
 		txtbox->fontSize.set(20);
 		txtbox->SetBackground(0xff0000ff);
 		grid->setRC(txtbox, 0, 0);
@@ -58,7 +58,6 @@ public:
 		gChild->SetBackground(0xffff0000);
 		grid->setRC(gChild, 0, 1);
 		TextBlock* tb = new TextBlock();
-		tb->setMargin(0, 10, 0, 0);
 		tb->SetRadius(20);
 		tb->fontSize.set(20);
 		tb->SetBackground(0xff00ff00);

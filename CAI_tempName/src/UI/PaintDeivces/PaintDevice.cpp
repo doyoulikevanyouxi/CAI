@@ -15,25 +15,25 @@ PaintDevice::PaintDevice() noexcept : fontShader(nullptr), rectShader(nullptr), 
 	glGenBuffers(1, &VBO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(double) * 13, NULL, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 18, NULL, GL_STATIC_DRAW);
 	//顶点
-	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	//大小
-	glVertexAttribPointer(1, 2, GL_DOUBLE, GL_FALSE, 2 * sizeof(double), (void*)(sizeof(double) * 3));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(sizeof(float) * 3));
 	glEnableVertexAttribArray(1);
 	//颜色
-	glVertexAttribPointer(2, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), (void*)(sizeof(double) * 5));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(sizeof(float) * 5));
 	glEnableVertexAttribArray(2);
 	//半径
-	glVertexAttribPointer(3, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), (void*)(sizeof(double) * 9));
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(sizeof(float) * 9));
 	glEnableVertexAttribArray(3);
-	////边框大小
-	//glVertexAttribPointer(4, 1, GL_DOUBLE, GL_FALSE, 1*sizeof(double), (void*)(sizeof(double) * 13));
-	//glEnableVertexAttribArray(4);
-	////边框颜色
-	//glVertexAttribPointer(5, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), (void*)(sizeof(double) * 14));
-	//glEnableVertexAttribArray(5);
+	//边框大小
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, 1*sizeof(float), (void*)(sizeof(float) * 13));
+	glEnableVertexAttribArray(4);
+	//边框颜色
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(sizeof(float) * 14));
+	glEnableVertexAttribArray(5);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
@@ -43,12 +43,12 @@ PaintDevice::PaintDevice() noexcept : fontShader(nullptr), rectShader(nullptr), 
 	glGenBuffers(1, &lineVBO);
 	glBindVertexArray(lineVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(double) * 14, NULL, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 14, NULL, GL_STATIC_DRAW);
 	//顶点
-	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	//顶点颜色
-	glVertexAttribPointer(1, 4, GL_DOUBLE, GL_FALSE, 4 * sizeof(double), (void*)(6 * sizeof(double)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 }
@@ -64,75 +64,75 @@ PaintDevice::~PaintDevice() noexcept
 	glDeleteBuffers(1, &lineVBO);
 }
 
-void PaintDevice::UpdateData(const double* vertexData, const double* size, const double* color,const double* radius,const double* borderSize,const double* borderColor)
+void PaintDevice::UpdateData(const float* vertexData, const float* size, const float* color,const float* radius,const float* borderSize,const float* borderColor)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(double), vertexData);
-	glBufferSubData(GL_ARRAY_BUFFER, 3*sizeof(double), 2 * sizeof(double), size);
-	glBufferSubData(GL_ARRAY_BUFFER, 5*sizeof(double), 4 * sizeof(double), color);
-	glBufferSubData(GL_ARRAY_BUFFER, 9*sizeof(double), 4 * sizeof(double), radius);
-	/*glBufferSubData(GL_ARRAY_BUFFER, 13*sizeof(double), 1 * sizeof(double), borderSize);
-	glBufferSubData(GL_ARRAY_BUFFER, 14*sizeof(double), 4 * sizeof(double), borderColor);*/
+	glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(float), vertexData);
+	glBufferSubData(GL_ARRAY_BUFFER, 3*sizeof(float), 2 * sizeof(float), size);
+	glBufferSubData(GL_ARRAY_BUFFER, 5*sizeof(float), 4 * sizeof(float), color);
+	glBufferSubData(GL_ARRAY_BUFFER, 9*sizeof(float), 4 * sizeof(float), radius);
+	glBufferSubData(GL_ARRAY_BUFFER, 13*sizeof(float), 1 * sizeof(float), borderSize);
+	glBufferSubData(GL_ARRAY_BUFFER, 14*sizeof(float), 4 * sizeof(float), borderColor);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
-void PaintDevice::UpdateVertex(const double* data)
+void PaintDevice::UpdateVertex(const float* data)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double) * 3, data);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 3, data);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void PaintDevice::UpdateSize(const double* size)
+void PaintDevice::UpdateSize(const float* size)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 3*sizeof(double), sizeof(double) * 2, size);
+	glBufferSubData(GL_ARRAY_BUFFER, 3*sizeof(float), sizeof(float) * 2, size);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void PaintDevice::UpdateColor(const double* data)
+void PaintDevice::UpdateColor(const float* data)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(double), sizeof(double) * 4, data);
+	glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(float), sizeof(float) * 4, data);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void PaintDevice::UpdateRadius(const double* data)
+void PaintDevice::UpdateRadius(const float* data)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(double), sizeof(double) * 4, data);
+	glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(float), sizeof(float) * 4, data);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void PaintDevice::UpdateBorderSize(const double* data)
+void PaintDevice::UpdateBorderSize(const float* data)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 13 * sizeof(double), sizeof(double), data);
+	glBufferSubData(GL_ARRAY_BUFFER, 13 * sizeof(float), sizeof(float), data);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void PaintDevice::UpdateBoderColor(const double* data)
+void PaintDevice::UpdateBoderColor(const float* data)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 14 * sizeof(double), sizeof(double) * 4, data);
+	glBufferSubData(GL_ARRAY_BUFFER, 14 * sizeof(float), sizeof(float) * 4, data);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void PaintDevice::DrawLine(const Size& size, const LineGeometry* data)
 {
-	double line[] = {
+	float line[] = {
 		data->GetFirstPoint().X(),data->GetFirstPoint().Y(),size.Z() + 1,
 		data->GetSecondPoint().X(),data->GetSecondPoint().Y(),size.Z() + 1
 	};
-	double color[] = {
+	float color[] = {
 		255,0.0,0.0,255,
 		255,0.0,0.0,255
 	};
@@ -140,8 +140,8 @@ void PaintDevice::DrawLine(const Size& size, const LineGeometry* data)
 	geometryShader->SetMat4("model", size.ModelMatrix());
 	glBindVertexArray(lineVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double) * 6, line);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(double) * 6, sizeof(double) * 8, color);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 6, line);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 6, sizeof(float) * 8, color);
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDrawArrays(GL_LINES, 0, 2);
 	glBindVertexArray(0);
