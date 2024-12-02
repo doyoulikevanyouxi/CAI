@@ -1,25 +1,41 @@
 #version 330 core
-layout (lines) in;
+layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-in VS_OUT {
-	vec4  pcolor;
+
+in VS_OUT{
+	vec4 rectColor;
+	vec2 rectSize;
+	vec2 pt1;
+	vec2 pt2;
+	float lthickness;
 }gs_in[];
 
-out vec4 vertexColor;
+out vec2 center;
+out vec2 size;
+out vec4 color;
+out vec2 startPoint;
+out vec2 endPoint;
+out float line_thickness;
 
 void main(){
-	vec3 pt1 = gl_in[0].gl_Position.xyz;
-	vec3 pt2 = gl_in[1].gl_Position.xyz;
-	vertexColor = gs_in[1].pcolor;
-	gl_Position = vec4(pt1,1.0);
+	size = gs_in[0].rectSize;
+	center = gl_in[0].gl_Position.xy+vec2(size.x,-size.y)*0.5;
+	color = gs_in[0].rectColor;
+	startPoint = gs_in[0].pt1;
+	endPoint = gs_in[0].pt2;
+	line_thickness = gs_in[0].lthickness;
+	//左上
+	gl_Position = gl_in[0].gl_Position;
 	EmitVertex();
-	gl_Position = vec4(pt2.x,pt1.y,pt1.z,1.0);
+	//右上
+	gl_Position = vec4(gl_in[0].gl_Position.x+size.x,gl_in[0].gl_Position.yzw);
 	EmitVertex();
-	gl_Position = vec4(pt1.x,pt2.y,pt1.z,1.0);
+	//左下
+	gl_Position = vec4(gl_in[0].gl_Position.x,gl_in[0].gl_Position.y-size.y,gl_in[0].gl_Position.zw);
 	EmitVertex();
-	vertexColor = gs_in[1].pcolor;
-	gl_Position = vec4(pt2,1.0);
+	//右下
+	gl_Position = vec4(gl_in[0].gl_Position.x+size.x,gl_in[0].gl_Position.y-size.y,gl_in[0].gl_Position.zw);
 	EmitVertex();
 	EndPrimitive();
 }

@@ -41,7 +41,7 @@ public:
 	//更新边框颜色
 	void UpdateBoderColor(const float* data);
 	//画线
-	void DrawLine(const Size& size,const LineGeometry* data);
+	void DrawLine(const VisualData& data, const LineGeometry& lineData, float lineThickness);
 	//绘制文字
 	void DrawText(const std::wstring& str, const Size& size, const FontSetting& fontSet) noexcept;
 	//绘制元素

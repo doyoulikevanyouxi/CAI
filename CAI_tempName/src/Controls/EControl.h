@@ -8,7 +8,8 @@ enum RelativeLocation
 	Left,
 	Top,
 	Right,
-	Bottom
+	Bottom,
+	Defualt
 };
 class Control : public UIElement
 {

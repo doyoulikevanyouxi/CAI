@@ -1,6 +1,8 @@
 #include "caipch.h"
 #include "Duration.h"
 
+Duration::Duration(double time) :TimeUp(false), timeSpan(time) {}
+
 void Duration::Start()
 {
 	startTimePoint = std::chrono::high_resolution_clock::now();

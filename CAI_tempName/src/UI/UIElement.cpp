@@ -47,6 +47,14 @@ void UIElement::BeginAnimation()
 	storybord.BeginAnimation();
 }
 
+void UIElement::OnFocus()
+{
+}
+
+void UIElement::OnLostFocus()
+{
+}
+
 void UIElement::OnPreMouseDown(PreMouseButtonDownEvent& e)
 {
 }
@@ -91,6 +99,14 @@ void UIElement::OnPreMouseOver(PreMouseOverEvent& e)
 }
 
 void UIElement::OnMouseOver(MouseOverEvent& e)
+{
+}
+
+void UIElement::OnKeyPress(KeyPressedEvent& e)
+{
+}
+
+void UIElement::OnKeyUp(KeyUpEvent& e)
 {
 }
 

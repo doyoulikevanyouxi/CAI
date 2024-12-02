@@ -6,6 +6,15 @@ void StoryBord::AddAnimation(AnimationAbstract* animation)
 	animations.push_back(animation);
 }
 
+void StoryBord::StopAnimation()
+{
+	for (auto& animation : animations) {
+		animation->Stop();
+	}
+	isbegin = false;
+	animations.clear();
+}
+
 void StoryBord::BeginAnimation()
 {
 	for (auto& animation : animations) {

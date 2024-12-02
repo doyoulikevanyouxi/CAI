@@ -18,5 +18,9 @@ public:
 private:
 	//是否已经开始执行
 	bool isStart;
+	bool originValue;
+	// 通过 AnimationAbstract 继承
+	void Stop() override;
+	void Pause() override;
 };
 

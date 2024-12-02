@@ -5,8 +5,8 @@
 #include "UI/PaintDeivces/PaintDevice.h"
 Control::Control() noexcept 
 {
-	horizontAlalignment.set(Center);
-	verticalAlignment.set(Center);
+	horizontAlalignment.set(Defualt);
+	verticalAlignment.set(Defualt);
 	marginL.set(0);
 	marginR.set(0);
 	marginT.set(0);
@@ -95,6 +95,6 @@ Size Control::Measure(const Size& size) noexcept
 	float yz = sz.Y();
 	vData.SetPoint(xz + x, yz + y, sz.Z());
 	pDevice->UpdateVertex(vData.VertexData());
-	return sz;
+	return vData.ContentSize();
 }
 

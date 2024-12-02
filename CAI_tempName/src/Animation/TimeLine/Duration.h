@@ -4,6 +4,10 @@
 class Duration
 {
 public:
+	Duration() = default;
+	Duration(double time);
+	~Duration() = default;
+public:
 	bool TimeUp;
 public:
 	//开始记时间

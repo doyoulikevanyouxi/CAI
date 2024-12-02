@@ -225,10 +225,16 @@ void Application::MouseButtonHandle(int button, int buttonStatus, int mods)
 	}
 	//ÉèÖÃ½¹µã
 	if (focusElement != mouseDirectOverElement) {
-		if (focusElement != nullptr)
+		if (focusElement != nullptr) {
 			focusElement->focus = false;
-		mouseDirectOverElement->focus = true;
-		focusElement = mouseDirectOverElement;
+			focusElement->OnLostFocus();
+		}
+		if (mouseDirectOverElement->focusable) {
+			mouseDirectOverElement->focus = true;
+			focusElement = mouseDirectOverElement;
+			mouseDirectOverElement->OnFocus();
+		}
+		
 	}
 
 }
@@ -333,6 +339,14 @@ void Application::RaiseMouseUpEvent(int button, int mods)
 inline void Application::RaiseKeyInputEvent(UIElement& element, int key, int action, int mods)
 {
 	
+	if (action == GLFW_PRESS) {
+		KeyPressedEvent e(key, false);
+		element.OnKeyPress(e);
+	}
+	else {
+		KeyUpEvent e(key);
+		element.OnKeyUp(e);
+	}
 }
 
 inline void Application::RaiseTextInputEvent(UIElement& element, unsigned int code)
@@ -364,7 +378,6 @@ void LeaveWindowCallBack(GLFWwindow* winHD, int entered)
 void KeyInputCallBack(GLFWwindow* winHD, int key, int scancode, int action, int mods)
 {
 	Application::app.OnKeyInput(key, scancode, action, mods);
-
 }
 
 void TextInputCallBack(GLFWwindow* winHD, unsigned int code)

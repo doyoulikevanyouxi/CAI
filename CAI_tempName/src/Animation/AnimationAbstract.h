@@ -22,6 +22,8 @@ public:
 	virtual void BeginAnimation() = 0;
 	//执行的具体操作
 	virtual void Excut() = 0;
+	virtual void Stop() = 0;
+	virtual void Pause() = 0;
 public:
 	bool Repeat;
 	bool Finish;

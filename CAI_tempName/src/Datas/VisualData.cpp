@@ -1,11 +1,46 @@
 #include "caipch.h"
 #include "VisualData.h"
 
+void VisualData::SetPoinX(const float& value)
+{
+	areaSize.SetX(value);
+	contentSize.SetX(value + borderSize);
+	vertexPoint[0] = value;
+}
+
+void VisualData::SetPoinY(const float& value)
+{
+	areaSize.SetY(value);
+	contentSize.SetY(value + borderSize);
+	vertexPoint[1] = value;
+}
+
+void VisualData::SetPoinZ(const float& value)
+{
+	areaSize.SetZ(value);
+	contentSize.SetZ(value);
+	vertexPoint[2] = value;
+}
+
 void VisualData::SetPoint(const float& x, const float& y, const float& z)
 {	
 	areaSize.SetXYZ(x, y, z);
 	contentSize.SetXYZ(x+borderSize,y+borderSize,z);
 	UpdateVertexPoint();
+}
+
+void VisualData::SetWidth(const float& value)
+{
+	areaSize.SetWidth(value);
+	contentSize.SetWidth(value - 2.0 * borderSize);
+	rectSize[0] = value;
+}
+
+void VisualData::SetHeight(const float& value)
+{
+	areaSize.SetHeight(value);
+	contentSize.SetHeight(value - 2.0 * borderSize);
+	rectSize[1] = value;
 }
 
 void VisualData::SetWH(const float& width, const float& height)

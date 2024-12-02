@@ -11,6 +11,7 @@ public:
 	inline bool Empty() { return animations.empty(); }
 	inline bool IsBegin() { return isbegin; }
 	void AddAnimation(AnimationAbstract* animation);
+	void StopAnimation();
 	void BeginAnimation();
 	void Excut();
 private:

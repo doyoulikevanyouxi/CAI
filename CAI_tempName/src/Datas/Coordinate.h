@@ -11,25 +11,35 @@ public:
 	Point(const Point& p) noexcept { x = p.x; y = p.y; }
 	~Point() noexcept {}
 public:
+	inline void SetX(const float& value) { x = value; }
+	inline void SetY(const float& value) { y = value; }
+	inline void SetXY(const float& valueX, const float& valueY) { x = valueX; y = valueY; }
+public:
+	//将点根据给定的矩阵，转换
 	static void TranslatTo(Point& pt, const Math::mat4& trans) {
 		Math::vec4 tmp = { pt.x,pt.y,1,1 };
 		Math::vec4 newValue = trans * tmp;
 		pt.x = newValue[0][0];
 		pt.y = newValue[1][0];
 	}
+	//反转Y坐标轴
 	static void Reverse(Point& pt, const float& resolutionHeight) {
 		pt.y = resolutionHeight - pt.y;
 	}
+	//设置点到对应矩形的左下点
 	static void SetToLeftBottom(Point& globalpt, float height) {
-		globalpt.y = globalpt.y-height ;
+		globalpt.y = globalpt.y - height;
 	}
 	static void SetOriginTo(Point& globalpt, const Point& newOrigin) {
 		globalpt.x = -(newOrigin.x - globalpt.x);
 		globalpt.y = newOrigin.y - globalpt.y;
 	}
 public:
-	float& X() const { return x; }
-	float& Y() const { return y; }
+	inline float& X() { return x; }
+	inline float& Y() { return y; }
+
+	inline const float& X() const { return x; }
+	inline const float& Y() const { return y; }
 
 public:
 	inline void swap(Point&& p) { x = p.x; y = p.y; }
@@ -38,20 +48,29 @@ public:
 	Point& operator=(const Point& p) noexcept { x = p.x; y = p.y; return *this; }
 	bool operator==(const Point& p) { return x == p.x && y == p.y; }
 private:
-	mutable float x;
-	mutable float y;
+	float x;
+	float y;
 };
 
 class Size : public Object {
 public:
-	Size()noexcept :resolutionWidth(0.0),resolutionHeight(0.0),x(0.0), y(0.0), z(0.0), height(0.0), width(0.0) {}
-	Size(const float& x, const float& y, const float& z, const float& width, const float& height) noexcept :resolutionWidth(0.0), resolutionHeight(0.0),x(x), y(y), z(z), height(height), width(width) {}
+	Size()noexcept :resolutionWidth(0.0), resolutionHeight(0.0), x(0.0), y(0.0), z(0.0), height(0.0), width(0.0) {}
+	Size(const float& x, const float& y, const float& z, const float& width, const float& height) noexcept :resolutionWidth(0.0), resolutionHeight(0.0), x(x), y(y), z(z), height(height), width(width) {}
 	~Size() = default;
 	Size(const Size& other) noexcept {
-		*this = other;
+		resolutionWidth = other.resolutionWidth;
+		resolutionHeight = other.resolutionHeight;
+		width = other.width;
+		height = other.height;
+		x = other.x;
+		y = other.y;
+		z = other.z;
+		mode = other.mode;
+		projection = other.projection;
+		//*this = other;
 	}
 public:
-	
+
 
 	inline float& X() { return x; }
 	inline float& Y() { return y; }

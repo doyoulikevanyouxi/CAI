@@ -215,7 +215,7 @@ Size Visual::Measure(const Size& size) noexcept
 		zmax = z;
 	//初始化控件顶点数据
 	pDevice->UpdateData(vData.VertexData(),vData.SizeData(),vData.VertexColorData(),vData.RadiusData(),vData.BorderSizeData(),vData.BorderColorData());
-	return vData.ContentSize();;
+	return vData.ContentSize();
 }
 
 void Visual::Aeasure(const Size& size) noexcept

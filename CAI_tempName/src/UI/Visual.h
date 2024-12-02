@@ -39,7 +39,7 @@ public:
 	virtual void SetHeight(float value);
 	virtual void SetWidth(float value);
 	virtual void SetZindex(float value);
-	void SetBorderSize(float value);
+	virtual void SetBorderSize(float value);
 	void SetWidthAndHeight(float width, float height);
 	void SetMinHeight(float value);
 	void SetMinWidth(float value);
@@ -86,6 +86,7 @@ public:
 
 public:
 	//是否是焦点
+	bool focusable = true;
 	bool focus = false;
 	//鼠标在元素内是否移动
 	bool isMouseOver = false;

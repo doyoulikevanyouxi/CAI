@@ -30,6 +30,8 @@ public:
 /// 以下为事件响应函数，Pre-Event事件是从上往下传递的事件
 /// </summary>
 protected:
+	virtual void OnFocus();
+	virtual void OnLostFocus();
 	virtual void OnPreMouseDown(PreMouseButtonDownEvent& e);
 	virtual void OnMouseLeftButtonDown(MouseLeftButtonDownEvent& e);
 	virtual void OnMouseRightButtonDown(MouseRightButtonDownEvent& e);
@@ -42,7 +44,8 @@ protected:
 	virtual void OnMouseEnter(MouseEnterEvent& e);
 	virtual void OnPreMouseOver(PreMouseOverEvent& e);
 	virtual void OnMouseOver(MouseOverEvent& e);
-
+	virtual void OnKeyPress(KeyPressedEvent& e);
+	virtual void OnKeyUp(KeyUpEvent& e);
 	virtual void OnTextInput(InputEvent& e);
 	virtual void OnEvent(EventAbstract& e);
 	virtual void RaiseEvent(EventAbstract& e);

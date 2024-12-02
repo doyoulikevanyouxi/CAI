@@ -186,11 +186,9 @@ void RenderEngine::RenderLoop(void)
 	glStencilFunc(GL_ALWAYS, 0, 0xff);
 	while (!glfwWindowShouldClose(mainWinHd))
 	{
-		glClearColor(1.f, 1.f, 1.f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		
 		for (auto& win : windows) {
 			glfwMakeContextCurrent(win->getWinHD());
-			squareShader->Use();
 			win->Render();
 			glfwSwapBuffers(win->getWinHD());
 		}

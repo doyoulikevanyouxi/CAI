@@ -27,7 +27,12 @@ public:
 	inline const float& BorderSize() const { return borderSize; }
 
 public:
+	void SetPoinX(const float& value);
+	void SetPoinY(const float& value);
+	void SetPoinZ(const float& value);
 	void SetPoint(const float& x, const float& y, const float& z);
+	void SetWidth(const float& value);
+	void SetHeight(const float& value);
 	void SetWH(const float& width, const float& height);
 	void SetModel(const Math::mat4& model);
 	void SetProjection(const Math::mat4& projection);

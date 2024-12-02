@@ -5,14 +5,14 @@
 class LineGeometry : public Geometry
 {
 public:
-	//Ìí¼Óµã
-	//void AddPoint(const Point& point);
-	inline const Point& GetFirstPoint() const { return firstPoint; }
-	inline const Point& GetSecondPoint() const { return secondPoint; }
-	inline void SetFirstPoint(const Point& point) { firstPoint = point; }
-	inline void SetSecondPoint(const Point& point) { secondPoint = point; }
+	inline Point& StartPoint() { return startPoint; }
+	inline Point& EndPoint() { return endPoint; }
+	inline const Point& StartPoint() const { return startPoint; }
+	inline const Point& EndPoint() const { return endPoint; }
+	inline void SetStart(const float& x, const float& y) { startPoint.SetXY(x, y); }
+	inline void SetEnd(const float& x, const float& y) { endPoint.SetXY(x, y); }
 protected:
-	Point firstPoint;
-	Point secondPoint;
+	Point startPoint;
+	Point endPoint;
 };
 

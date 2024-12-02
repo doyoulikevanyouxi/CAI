@@ -4,14 +4,20 @@
 class Line : public Shape
 {
 public:
+	Line() noexcept;
+	~Line() noexcept = default;
+public:
 	void Render() override;
 public:
-	inline void SetStart(const double& x, const double& y);
-	inline void SetEnd(const double& x, const double& y);
-	void SetPoint(const double x1, const double& y1, const double x2, const double& y2);
+	void SetLineThickness(const float& value);
+	void SetStart(const float& x, const float& y);
+	void SetEnd(const float& x, const float& y);
+	void SetPoint(const float x1, const float& y1, const float x2, const float& y2);
 private:
-	double x1, y1;
-	double x2, y2;
+	void CaculatWidthAndHeight();
+private:
 	LineGeometry lineData;
+	float lineThickness;
+private:
 };
 

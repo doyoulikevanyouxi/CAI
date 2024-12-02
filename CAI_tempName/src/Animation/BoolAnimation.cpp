@@ -4,8 +4,11 @@
 void BoolAnimation::BeginAnimation()
 {
 	//启动延迟和区间时间
+	originValue = *Target;
 	delayDuration.Start();
 	duration.Start();
+	Finish = false;
+	isStart = false;
 }
 
 void BoolAnimation::Excut()
@@ -44,4 +47,15 @@ EXUT:
 	else {
 		Finish = true;
 	}
+}
+
+void BoolAnimation::Stop()
+{
+	Finish = true;
+	isStart = false;
+	*Target = originValue;
+}
+
+void BoolAnimation::Pause()
+{
 }

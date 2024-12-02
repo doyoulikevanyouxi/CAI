@@ -4,7 +4,6 @@
 #include "UI/Application.h"
 Window::Window() noexcept :winHd(nullptr)
 {
-	vData.invalid = true;
 }
 
 Window::Window(int width, int height) noexcept:Window()

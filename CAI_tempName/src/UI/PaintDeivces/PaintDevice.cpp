@@ -29,7 +29,7 @@ PaintDevice::PaintDevice() noexcept : fontShader(nullptr), rectShader(nullptr), 
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(sizeof(float) * 9));
 	glEnableVertexAttribArray(3);
 	//边框大小
-	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, 1*sizeof(float), (void*)(sizeof(float) * 13));
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, 1 * sizeof(float), (void*)(sizeof(float) * 13));
 	glEnableVertexAttribArray(4);
 	//边框颜色
 	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(sizeof(float) * 14));
@@ -47,9 +47,17 @@ PaintDevice::PaintDevice() noexcept : fontShader(nullptr), rectShader(nullptr), 
 	//顶点
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	//顶点颜色
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(sizeof(float) * 3));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(sizeof(float) * 5));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(sizeof(float) * 9));
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(sizeof(float) * 11));
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 1 * sizeof(float), (void*)(sizeof(float) * 13));
+	glEnableVertexAttribArray(5);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
@@ -64,16 +72,16 @@ PaintDevice::~PaintDevice() noexcept
 	glDeleteBuffers(1, &lineVBO);
 }
 
-void PaintDevice::UpdateData(const float* vertexData, const float* size, const float* color,const float* radius,const float* borderSize,const float* borderColor)
+void PaintDevice::UpdateData(const float* vertexData, const float* size, const float* color, const float* radius, const float* borderSize, const float* borderColor)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(float), vertexData);
-	glBufferSubData(GL_ARRAY_BUFFER, 3*sizeof(float), 2 * sizeof(float), size);
-	glBufferSubData(GL_ARRAY_BUFFER, 5*sizeof(float), 4 * sizeof(float), color);
-	glBufferSubData(GL_ARRAY_BUFFER, 9*sizeof(float), 4 * sizeof(float), radius);
-	glBufferSubData(GL_ARRAY_BUFFER, 13*sizeof(float), 1 * sizeof(float), borderSize);
-	glBufferSubData(GL_ARRAY_BUFFER, 14*sizeof(float), 4 * sizeof(float), borderColor);
+	glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(float), 2 * sizeof(float), size);
+	glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(float), 4 * sizeof(float), color);
+	glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(float), 4 * sizeof(float), radius);
+	glBufferSubData(GL_ARRAY_BUFFER, 13 * sizeof(float), 1 * sizeof(float), borderSize);
+	glBufferSubData(GL_ARRAY_BUFFER, 14 * sizeof(float), 4 * sizeof(float), borderColor);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
@@ -90,7 +98,7 @@ void PaintDevice::UpdateSize(const float* size)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 3*sizeof(float), sizeof(float) * 2, size);
+	glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(float), sizeof(float) * 2, size);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -126,24 +134,33 @@ void PaintDevice::UpdateBoderColor(const float* data)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void PaintDevice::DrawLine(const Size& size, const LineGeometry* data)
+void PaintDevice::DrawLine(const VisualData& data, const LineGeometry& lineData,float lineThickness)
 {
-	float line[] = {
-		data->GetFirstPoint().X(),data->GetFirstPoint().Y(),size.Z() + 1,
-		data->GetSecondPoint().X(),data->GetSecondPoint().Y(),size.Z() + 1
+	if (!data.Visuble())
+		return;
+	float line1[] = {
+		lineData.StartPoint().X(),
+		lineData.StartPoint().Y()
 	};
-	float color[] = {
-		255,0.0,0.0,255,
-		255,0.0,0.0,255
+	float line2[] = {
+		lineData.EndPoint().X(),
+		lineData.EndPoint().Y()
 	};
 	geometryShader->Use();
-	geometryShader->SetMat4("model", size.ModelMatrix());
+	geometryShader->SetMat4("model", data.AreaSize().ModelMatrix());
+	geometryShader->SetVec2("iResolution", data.AreaSize().ResolutionWidth(), data.AreaSize().ResolutionHeight());
+
 	glBindVertexArray(lineVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 6, line);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 6, sizeof(float) * 8, color);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 3, data.VertexData());
+	glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(float), 2 * sizeof(float), data.SizeData());
+	glBufferSubData(GL_ARRAY_BUFFER, 5 * sizeof(float), 4 * sizeof(float), data.VertexColorData());
+	glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(float), 2 * sizeof(float), line1);
+	glBufferSubData(GL_ARRAY_BUFFER, 11 * sizeof(float), 2 * sizeof(float), line2);
+	glBufferSubData(GL_ARRAY_BUFFER, 13 * sizeof(float), 1 * sizeof(float), &lineThickness);
+
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDrawArrays(GL_LINES, 0, 2);
+	glDrawArrays(GL_POINTS, 0, 1);
 	glBindVertexArray(0);
 }
 
@@ -159,7 +176,7 @@ void PaintDevice::DrawText(const std::wstring& str, const Size& size, const Font
 	Point::TranslatTo(pt, size.ModelMatrix());
 	Point::Reverse(pt, size.ResolutionHeight());
 	Point::SetToLeftBottom(pt, size.Height());
-	glScissor(pt.X(),pt.Y(), size.Width(),size.Height());
+	glScissor(pt.X(), pt.Y(), size.Width(), size.Height());
 	Font* ft = Application::app.renderEngine->GetFont();
 	//缩放
 	float scal = fontSet.size / (float)ft->fontSize;
@@ -224,18 +241,15 @@ void PaintDevice::DrawText(const std::wstring& str, const Size& size, const Font
 
 void PaintDevice::Draw(VisualData& data)
 {
-	if (data.invalid)
+	if (!data.Visible())
 		return;
 	rectShader->Use();
 	//rectShader->SetMat4("projection", data.AreaSize().ProjectionMatrix());
 	rectShader->SetMat4("model", data.AreaSize().ModelMatrix());
-	rectShader->SetVec2("iResolution", data.AreaSize().ResolutionWidth(),data.AreaSize().ResolutionHeight());
-
+	rectShader->SetVec2("iResolution", data.AreaSize().ResolutionWidth(), data.AreaSize().ResolutionHeight());
 	glBindVertexArray(VAO);
 	glScissor(data.ClipSize().X(), data.ClipSize().Y(), data.ClipSize().Width(), data.ClipSize().Height());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	if (!data.Visible())
-		return;
 	glDrawArrays(GL_POINTS, 0, 1);
 	glBindVertexArray(0);
 }
